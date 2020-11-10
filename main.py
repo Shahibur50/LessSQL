@@ -1,7 +1,7 @@
 """
 STUDENT DATABASE MANAGEMENT SYSTEM (SDBMS)
 
-version 1.7.5
+version 1.7.5 (Beta)
 
 Copyright (C) 2020  Shahibur Rahaman
 
@@ -230,7 +230,7 @@ quit()   : To quit the program.
 def to_user():
     print("""
 WELCOME TO STUDENT DATABASE MANAGEMENT SYSTEM (SDBMS) :)
-Version: 1.7.5
+Version: 1.7.5 (Beta)
 Commands end with ()
 
 Copyright (C) 2020 Shahibur Rahaman
@@ -241,7 +241,7 @@ For details type 'details()'; For help type 'help()'
 
 def details():
     print("""
-VERSION: 1.7.5
+VERSION: 1.7.5 (Beta)
 STUDENT DATABASE MANAGEMENT SYSTEM (SDBMS)
 Copyright (C) 2020 Shahibur Rahaman
 
