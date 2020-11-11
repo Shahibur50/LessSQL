@@ -7,9 +7,9 @@ Copyright (C) 2020  Shahibur Rahaman
 
 Licensed under GNU GPLv3
 """
-
 from mysql.connector import connection
 from mysql.connector import errorcode
+from prettytable import from_db_cursor
 from prettytable import PrettyTable
 from datetime import datetime
 import time
@@ -18,7 +18,6 @@ import getpass
 
 
 PT = PrettyTable()
-
 connection = False
 
 usr_name = input("USER-NAME: ")
@@ -35,13 +34,9 @@ try:
     print("Checking connectivity...")
     time.sleep(2)
     print("\nCONNECTION ESTABLISHED!")
-    print("Server version:", db_Info := cnx.get_server_info())
-    print("\nYou are connected to" + " '" + db + "' " "database.")
-    
-   
 
     now = datetime.now()
-    print(now.strftime('%H:%M:%S%p'))
+    print(now.strftime('%H:%M:%S %p'))
     
     connection = True
 except mysql.connector.Error as err:
@@ -94,7 +89,9 @@ def insert():
         cnx.commit()
         print("")
     except mysql.connector.errors.ProgrammingError:
-        print("Something is wrong with your values!")
+        print("Syntax Error!")
+    except mysql.connector.errors.DataError:
+        print("Column count doesn't match value count")
 
 
 def create():
@@ -115,6 +112,8 @@ def create():
         cnx.commit()
     except ValueError:
         print("Please insert values properly!")
+    except mysql.connector.errors.ProgrammingError:
+        print("You have an error in your syntax!")
     finally:
         print("")
 
@@ -122,22 +121,12 @@ def create():
 def reveal():
     try:
         table_name = input("TABLE NAME: ")
-        
-        cursor.execute(f'DESC {table_name}')
-        all_fields = cursor.fetchall()
-        main_fields = [field[0] for field in all_fields]
-        PT.field_names = main_fields
-
         cursor.execute(f"SELECT * FROM {table_name}")
-        all_rows = cursor.fetchall()
-        for rows in all_rows:
-            PT.add_row(rows)
-        
-        print(PT)
-        PT.clear_rows()
-
-    except mysql.connector.errors.ProgrammingError:
-        print("Table not found!")
+        Table = from_db_cursor(cursor)
+        Table.align = "l"
+        print(Table)
+    except mysql.connector.Error as err:
+        print(f"Error: {err}")
     finally:
         print("")
 
@@ -158,7 +147,6 @@ def update():
         cursor.execute(command)
         cnx.commit()
         print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute}) to {updt_value} where data-item in ({column_name}) = {value}.")
-    
     except mysql.connector.errors.ProgrammingError:
         print("Data not found!")
     finally:
@@ -170,25 +158,15 @@ def search():
         table_name = input("TABLE NAME: ")
         column_name = input("COLUMN NAME: ")
         value = input("VALUE: ")
-        
-        cursor.execute(f'DESC {table_name}')
-        all_fields = cursor.fetchall()
-        main_fields = [field[0] for field in all_fields]
-        PT.field_names = main_fields
 
         if value == "NULL":
             command = f"SELECT * FROM {table_name} WHERE {column_name} IS {value}"
         else:
             command = f"SELECT * FROM {table_name} WHERE {column_name}={value}"
         cursor.execute(command)
-        rows = cursor.fetchall()
-        sep_rows = rows[0]
-        main_rows = [rows for rows in sep_rows]
-        PT.add_row(main_rows)
-        
-        print(PT)
-        PT.clear_rows()
-
+        Table = from_db_cursor(cursor)
+        Table.align = "l"
+        print(Table)
     except mysql.connector.errors.ProgrammingError:
         print("Data not found!")
     finally:
@@ -231,12 +209,16 @@ quit()   : To quit the program.
 
 
 def to_user():
-    print("""
+    print(f"""
 WELCOME TO STUDENT DATABASE MANAGEMENT SYSTEM (SDBMS) :)
 Version: 1.7.5 (Beta)
-Commands end with ()
 
 Copyright (C) 2020 Shahibur Rahaman
+
+Server version: {cnx.get_server_info()}
+You are connected to'{db}' database
+
+Commands end with ()
 
 For details type 'details()'; For help type 'help()'
 """)
