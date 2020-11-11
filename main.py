@@ -25,6 +25,7 @@ usr_name = input("USER-NAME: ")
 db = input('DATABASE: ')
 passwd = getpass.getpass()
 host = input("HOST: ")
+
 try:
     cnx = mysql.connector.connect(user=usr_name,
                                   database=db,
@@ -40,7 +41,7 @@ try:
    
 
     now = datetime.now()
-    print(now.strftime('%H: %M: %S %p'))
+    print(now.strftime('%H:%M:%S%p'))
     
     connection = True
 except mysql.connector.Error as err:
