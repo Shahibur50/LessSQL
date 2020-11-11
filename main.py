@@ -8,13 +8,14 @@ Copyright (C) 2020  Shahibur Rahaman
 Licensed under GNU GPLv3
 """
 
-import mysql.connector
 from mysql.connector import connection
-from prettytable import PrettyTable
-import time
 from mysql.connector import errorcode
-import getpass
+from prettytable import PrettyTable
 from datetime import datetime
+import time
+import mysql.connector
+import getpass
+
 
 PT = PrettyTable()
 
@@ -155,7 +156,8 @@ def update():
         
         cursor.execute(command)
         cnx.commit()
-        print(f"Query OK, updated the row(s)/record(s) in column/field {attribute} containing the data/value {value} to {updt_value}.")
+        print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute}) to {updt_value} where data-item in ({column_name}) = {value}.")
+    
     except mysql.connector.errors.ProgrammingError:
         print("Data not found!")
     finally:
