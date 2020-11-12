@@ -1,7 +1,7 @@
 """
 STUDENT DATABASE MANAGEMENT SYSTEM (SDBMS)
 
-version 1.7.5 (Beta)
+version 1.7.6 (Beta)
 
 Copyright (C) 2020  Shahibur Rahaman
 
@@ -23,7 +23,7 @@ connection = False
 usr_name = input("USER-NAME: ")
 db = input('DATABASE: ')
 passwd = getpass.getpass()
-host = input("HOST: ")
+host = "localhost"
 
 try:
     cnx = mysql.connector.connect(user=usr_name,
@@ -31,7 +31,7 @@ try:
                                   password=passwd,
                                   host=host)
     cursor = cnx.cursor()
-    print("Checking connectivity...")
+    print("Connecting to the server...")
     time.sleep(2)
     print("\nCONNECTION ESTABLISHED!")
 
@@ -210,31 +210,95 @@ quit()   : To quit the program.
 
 def to_user():
     print(f"""
-WELCOME TO STUDENT DATABASE MANAGEMENT SYSTEM (SDBMS) :)
-Version: 1.7.5 (Beta)
+WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)
+Version: 1.7.6 (Beta)
 
 Copyright (C) 2020 Shahibur Rahaman
+
+This program comes with ABSOLUTELY NO WARRANTY; for details type `show_w()'.
+This is free software, and you are welcome to redistribute it
+under certain conditions; type 'show_c()' for details.
 
 Server version: {cnx.get_server_info()}
 You are connected to'{db}' database
 
 Commands end with ()
 
-For details type 'details()'; For help type 'help()'
+For program info type 'info()'; For help type 'help()'
 """)
 
 
-def details():
+def show_w():
     print("""
-VERSION: 1.7.5 (Beta)
-STUDENT DATABASE MANAGEMENT SYSTEM (SDBMS)
-Copyright (C) 2020 Shahibur Rahaman
+THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
+APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
+HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY
+OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM
+IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
+ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
 
-This program comes with ABSOLUTELY NO WARRANTY.
-This is free software, and you are welcome to redistribute it,
-under certain conditions.
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
+WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS
+THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY
+GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE
+USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF
+DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD
+PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),
+EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
+SUCH DAMAGES.
 
-Licensed under the GNU GPLv3 license
+For license info visit: https://www.gnu.org/licenses/gpl-3.0.html
+""")
+
+
+def show_c():
+    print("""
+All rights granted under this License are granted for the term of
+copyright on the Program, and are irrevocable provided the stated
+conditions are met.  This License explicitly affirms your unlimited
+permission to run the unmodified Program.  The output from running a
+covered work is covered by this License only if the output, given its
+content, constitutes a covered work.  This License acknowledges your
+rights of fair use or other equivalent, as provided by copyright law.
+
+  You may make, run and propagate covered works that you do not
+convey, without conditions so long as your license otherwise remains
+in force.  You may convey covered works to others for the sole purpose
+of having them make modifications exclusively for you, or provide you
+with facilities for running those works, provided that you comply with
+the terms of this License in conveying all material for which you do
+not control copyright.  Those thus making or running the covered works
+for you must do so exclusively on your behalf, under your direction
+and control, on terms that prohibit them from making any copies of
+your copyrighted material outside their relationship with you.
+
+For license info visit: https://www.gnu.org/licenses/gpl-3.0.html
+""")
+
+def version():
+    print("""
+VERSION: 1.7.6 (Beta)
+
+SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)
+
+Copyright (C) 2020  Shahibur Rahaman
+License GPLv3+: GNU GPL version 3 or later
+
+This software is a database management system based on MySQL, with a goal
+to simplify the usage of a RDBMS for record keeping of students in schools.
+
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
 For license info visit: https://www.gnu.org/licenses/gpl-3.0.html
 """)
 
