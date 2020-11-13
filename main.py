@@ -1,11 +1,8 @@
 """
 STUDENT DATABASE MANAGEMENT SYSTEM (SDBMS)
 
-version 1.8.6 (Beta)
+version 1.8.7 (Beta)
 
-Copyright (C) 2020  Shahibur Rahaman
-
-Licensed under GNU GPLv3
 """
 from mysql.connector import connection
 from mysql.connector import errorcode
@@ -20,13 +17,12 @@ PT = PrettyTable()
 connection = False
 
 usr_name = input("USER-NAME: ")
-db = input('DATABASE: ')
+db = False
 passwd = getpass.getpass()
 host = "localhost"
 
 try:
     cnx = mysql.connector.connect(user=usr_name,
-                                  database=db,
                                   password=passwd,
                                   host=host)
     cursor = cnx.cursor()
@@ -60,22 +56,83 @@ def main():
             else:
                 if cmd == "quit()":
                     bye()
-                    cursor.close()
-                    cnx.close()
                     break
+                elif cmd == "help()":
+                    exec('instructions()')
                 else:
-                    if cmd == "help()":
-                        instructions()
-                    else:
-                        exec(cmd)
+                    exec(cmd)
         except NameError:
             print("Command not found!\n")
             continue
         except KeyboardInterrupt:
             print("\nSession forcefully closed by the user!\n")
             break
+
+
     cursor.close()
     cnx.close()
+
+
+def show_db():
+    command = f"SHOW DATABASES"
+    cursor.execute(command)
+    Table = from_db_cursor(cursor)
+    Table.align = "l"
+    print(Table)
+    print("")
+
+
+def create_db():
+    try:
+        database_name = input("       -> DATABASE NAME: ")
+        if "\c" in database_name:
+            print("Query cancelled, for creation of database.")
+        else:
+            command = f"CREATE DATABASE {database_name}"
+            cursor.execute(command)
+            cnx.commit()
+
+            print(f"\nQuery OK, Created database '{database_name}'.\n")
+    except mysql.connector.errors.ProgrammingError:
+        print("\nError! Please enter values properly.\n")
+    else:
+        print(mysql.connector.Error)
+
+
+def delete_db():
+    global db
+    try:
+        database_name = input("       -> DATABASE NAME: ")
+        if "\c" in database_name:
+                print("Query cancelled, for deletion of database.")
+        else:
+            command = f"DROP DATABASE {database_name}"
+            cursor.execute(command)
+            cnx.commit()
+            
+            if db == database_name:
+                db = False
+            
+            print(f"\nQuery OK, Deleted database '{database_name}'.\n")
+    except mysql.connector.Error as err:
+        if err.errno == errorcode.ER_BAD_DB_ERROR:
+            print("\nDatabase does not exist!\n")
+    else:
+        print("\nERROR!\n")
+
+
+def use_db():
+    global db
+    try:
+        database_name = input("       -> DATABASE NAME: ")
+        command = f"USE {database_name}"
+        cursor.execute(command)
+
+        db = database_name
+
+        print(f"\nQuery OK, Using database '{database_name}'.\n")
+    except mysql.connector.errors.ProgrammingError:
+        print(f"\nERROR! Unable to find the requested database.\n")
 
 
 def show_tb():
@@ -219,14 +276,13 @@ def delete():
 
 def instructions():
     print("""
-                                  INSTRUCTIONS
-                                  ------------
+                                INSTRUCTIONS
+                                ------------
+COMMANDS FOR DATABASE MANIPULATION:
 
-COMMANDS FOR SOFTWARE INFO:
-
-show_w() > Warranty info for this software.
-show_c() > Terms and conditions for redistribution of this software
-show_v() > To show info related to this software.
+show_db()   > To show all of the databases.
+create_db() > To create a new database.
+delete_db() > To delete an existing database.
 ______________________________________________________________________________
 
 COMMANDS FOR IN-TABLE QUERIES AND MANIPULATION:
@@ -254,89 +310,14 @@ quit() > To quit the program.
 def to_user():
     print(f"""
 WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)
-Version: 1.8.6 (Beta)
-
-Copyright (C) 2020 Shahibur Rahaman
-
-This program comes with ABSOLUTELY NO WARRANTY; for details type `show_w()'.
-This is free software, and you are welcome to redistribute it
-under certain conditions; type 'show_c()' for details.
+Version: 1.8.7 (Beta)
 
 Server version: {cnx.get_server_info()}
-You are connected to'{db}' database
+You are currently not connected to any database.
 
 Commands end with ()
 
-For program info type 'version()'; For help type 'help()'
-""")
-
-
-def show_w():
-    print("""
-THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
-APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
-HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY
-OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM
-IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
-ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
-
-IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING
-WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS
-THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY
-GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE
-USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF
-DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD
-PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS),
-EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF
-SUCH DAMAGES.
-
-For license info visit: https://www.gnu.org/licenses/gpl-3.0.html
-""")
-
-
-def show_c():
-    print("""
-All rights granted under this License are granted for the term of
-copyright on the Program, and are irrevocable provided the stated
-conditions are met.  This License explicitly affirms your unlimited
-permission to run the unmodified Program.  The output from running a
-covered work is covered by this License only if the output, given its
-content, constitutes a covered work.  This License acknowledges your
-rights of fair use or other equivalent, as provided by copyright law.
-
-  You may make, run and propagate covered works that you do not
-convey, without conditions so long as your license otherwise remains
-in force.  You may convey covered works to others for the sole purpose
-of having them make modifications exclusively for you, or provide you
-with facilities for running those works, provided that you comply with
-the terms of this License in conveying all material for which you do
-not control copyright.  Those thus making or running the covered works
-for you must do so exclusively on your behalf, under your direction
-and control, on terms that prohibit them from making any copies of
-your copyrighted material outside their relationship with you.
-
-For license info visit: https://www.gnu.org/licenses/gpl-3.0.html
-""")
-
-def show_v():
-    print("""
-VERSION: 1.8.6 (Beta)
-SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)
-
-Copyright (C) 2020  Shahibur Rahaman
-License GPLv3+: GNU GPL version 3 or later
-
-This program is a database management system based on MySQL, with a goal
-to simplify the usage of a RDBMS for record keeping of students in schools.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-For license info visit: https://www.gnu.org/licenses/gpl-3.0.html
+For help type 'help()'
 """)
 
 
@@ -344,6 +325,8 @@ def bye():
     print("Closing...")
     time.sleep(1)
     print("Bye...\n")
+    cursor.close()
+    cnx.close()
 
 if __name__ == "__main__":
     main()
