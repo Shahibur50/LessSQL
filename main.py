@@ -261,7 +261,6 @@ def update():
             print(f"\n{err}\n")
 
 
-
 def search():
     if db == False:
         print("\nNo database is in use!\n")
@@ -284,7 +283,6 @@ def search():
             print("Data not found!")
         except mysql.connector.Error as err:
                 print(f"\n{err}\n")
-
 
 
 def delete():
@@ -314,6 +312,7 @@ def instructions():
     print("""
                                 INSTRUCTIONS
                                 ------------
+
 COMMANDS FOR DATABASE MANIPULATION:
 
 show_db()   > To show all of the databases.
