@@ -1,0 +1,6 @@
+
+*.json
+*.sqlite
+.vs/student_administration/v16/.suo
+*.testlog
+*.manifest
