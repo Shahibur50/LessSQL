@@ -160,10 +160,10 @@ def create_tb():
             no_of_columns = int(input("       -> NO. OF COLUMNS: "))
             columns = ""
             for _ in range(no_of_columns - 1):
-                column_value_type = input("       -> COLUMN NAME AND VALUE-TYPE: ")
+                column_value_type = input("       -> COLUMN NAME AND DATA-TYPE: ")
                 columns += column_value_type + ', '
 
-            column_value_type = input("       -> COLUMN NAME AND VALUE-TYPE: ")
+            column_value_type = input("       -> COLUMN NAME AND DATA-TYPE: ")
             columns += column_value_type
 
             print(columns)
@@ -176,6 +176,22 @@ def create_tb():
             print("\nERROR! Please insert values properly!\n")
         except mysql.connector.errors.ProgrammingError:
             print("\nERROR! You have an error in your syntax!\n")
+
+
+def describe_tb():
+    if db == False:
+        print("\nNo database is in use!\n")
+    else:
+        try:
+            table_name = input("       -> TABLE NAME: ")
+            command = f"SHOW TABLES"
+            cursor.execute(command)
+            Table = from_db_cursor(cursor)
+            Table.align = "l"
+            print(Table)
+            print("")
+        except mysql.connector.Error as err:
+            print(f"\n{err}\n")
 
 
 def delete_tb():
@@ -194,6 +210,67 @@ def delete_tb():
             print("\nERROR! Table not found!\n")
         except mysql.connector.Error as err:
             print(f"\n{err}\n")
+
+
+def add_column():
+    if db == False:
+        print("\nNo database is in use!\n")
+    else:
+        try:
+            table_name = input("       -> TABLE NAME: ")
+            column = input("       -> NEW COLUMN NAME AND DATA-TYPE: ")
+            
+            command = f"ALTER TABLE {table_name} ADD {column}"
+            cursor.execute(command)
+            cnx.commit()
+            
+            column_name = column.split()[0]
+            data_type = column.split()[1]
+
+            print(f"\nQuery OK, added column '{column_name}' with data-type '{data_type}' to the table '{table_name}'\n")
+        except mysql.connector.errors.ProgrammingError:
+            print("Syntax Error!")
+        except mysql.connector.Error as err:
+                print(f"\n{err}\n")
+
+
+def delete_column():
+    if db == False:
+        print("\nNo database is in use!\n")
+    else:
+        try:
+            table_name = input("       -> TABLE NAME: ")
+            column = input("       -> NAME OF COLUMN TO BE DELETED: ")
+            
+            command = f"ALTER TABLE {table_name} DROP {column}"
+            cursor.execute(command)
+            cnx.commit()
+            print("")
+        
+        except mysql.connector.errors.ProgrammingError:
+            print("Syntax Error!")
+        except mysql.connector.Error as err:
+                print(f"\n{err}\n")
+
+
+def modify_column():
+    if db == False:
+        print("\nNo database is in use!\n")
+    else:
+        try:
+            table_name = input("       -> TABLE NAME: ")
+            column = input("       -> EXISTING COLUMN NAME AND DATA-TYPE: ")
+            
+            command = f"ALTER TABLE {table_name} MODIFY {column}"
+            cursor.execute(command)
+            cnx.commit()
+            print("")
+        
+        except mysql.connector.errors.ProgrammingError:
+            print("Syntax Error!")
+        except mysql.connector.Error as err:
+                print(f"\n{err}\n")
+
 
 
 def insert():
