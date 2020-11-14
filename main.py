@@ -184,7 +184,7 @@ def describe_tb():
     else:
         try:
             table_name = input("       -> TABLE NAME: ")
-            command = f"SHOW TABLES"
+            command = f"DESCRIBE {table_name}"
             cursor.execute(command)
             Table = from_db_cursor(cursor)
             Table.align = "l"
@@ -259,7 +259,8 @@ def modify_column():
     else:
         try:
             table_name = input("       -> TABLE NAME: ")
-            column = input("       -> EXISTING COLUMN NAME AND DATA-TYPE: ")
+            column = input("       -> EXISTING COLUMN NAME: ")
+            data_type = input("       -> NEW DATA-TYPE OF THE COLUMN: ")
             
             command = f"ALTER TABLE {table_name} MODIFY {column}"
             cursor.execute(command)
