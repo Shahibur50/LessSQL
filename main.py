@@ -227,7 +227,7 @@ def add_column():
             column_name = column.split()[0]
             data_type = column.split()[1]
 
-            print(f"\nQuery OK, added column '{column_name}' with data-type '{data_type}' to the table '{table_name}'\n")
+            print(f"\nQuery OK, added column '{column_name}' with data-type '{data_type}' to the table '{table_name}'.\n")
         except mysql.connector.errors.ProgrammingError:
             print("Syntax Error!")
         except mysql.connector.Error as err:
@@ -260,18 +260,17 @@ def modify_column():
         try:
             table_name = input("       -> TABLE NAME: ")
             column = input("       -> EXISTING COLUMN NAME: ")
-            data_type = input("       -> NEW DATA-TYPE OF THE COLUMN: ")
+            data_type = input("       -> NEW DATA-TYPE FOR THE COLUMN: ")
             
             command = f"ALTER TABLE {table_name} MODIFY {column}"
             cursor.execute(command)
             cnx.commit()
-            print("")
-        
+            
+            print(f"\nQuery OK, modified column '{column}' to new data-type '{data_type}' in table '{table_name}'.\n")
         except mysql.connector.errors.ProgrammingError:
             print("Syntax Error!")
         except mysql.connector.Error as err:
                 print(f"\n{err}\n")
-
 
 
 def insert():
