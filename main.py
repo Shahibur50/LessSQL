@@ -1,5 +1,5 @@
 """
-STUDENT DATABASE MANAGEMENT SYSTEM (SDBMS)
+SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)
 
 version 1.9.7 (Beta)
 
@@ -14,7 +14,7 @@ import mysql.connector
 import getpass
 
 PT = PrettyTable()
-connection = False
+connection_status = False
 
 usr_name = input("USER-NAME: ")
 db = False
@@ -32,17 +32,17 @@ try:
 
     now = datetime.now()
     print(now.strftime('%H:%M:%S %p'))
-    
-    connection = True
-except mysql.connector.Error as err:
-    if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+
+    connection_status = True
+except mysql.connector.Error as error:
+    if error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
         print("Something is wrong with your user name or password!")
     else:
-        print(f"\n{err}\n")
+        print(f"\n{error}\n")
 
 
 def main():
-    if not connection:
+    if not connection_status:
         exec('quit()')
     to_user()
     while True:
@@ -66,7 +66,6 @@ def main():
             print("\nSession forcefully closed by the user!\n")
             break
 
-
     cursor.close()
     cnx.close()
 
@@ -75,12 +74,12 @@ def show_db():
     try:
         command = f"SHOW DATABASES"
         cursor.execute(command)
-        Table = from_db_cursor(cursor)
-        Table.align = "l"
-        print(Table)
+        table = from_db_cursor(cursor)
+        table.align = "l"
+        print(table)
         print("")
-    except mysql.connector.Error as err:
-        print(f"\n{err}\n")
+    except mysql.connector.Error as error:
+        print(f"\n{error}\n")
 
 
 def create_db():
@@ -96,27 +95,27 @@ def create_db():
             print(f"\nQuery OK, Created database '{database_name}'.\n")
     except mysql.connector.errors.ProgrammingError:
         print("\nError! Please enter values properly.\n")
-    except mysql.connector.Error as err:
-        print(f"\n{err}\n")
- 
+    except mysql.connector.Error as error:
+        print(f"\n{error}\n")
+
 
 def delete_db():
     global db
     try:
         database_name = input("       -> DATABASE NAME: ")
         if "\c" in database_name:
-                print("Query cancelled, for deletion of database.")
+            print("Query cancelled, for deletion of database.")
         else:
             command = f"DROP DATABASE {database_name}"
             cursor.execute(command)
             cnx.commit()
-            
+
             if db == database_name:
                 db = False
-            
+
             print(f"\nQuery OK, Deleted database '{database_name}'.\n")
-    except mysql.connector.Error as err:
-        print("\nDatabase does not exist!\n")
+    except mysql.connector.Error as error:
+        print(f"\n{error}\n")
 
 
 def use_db():
@@ -124,7 +123,7 @@ def use_db():
     try:
         database_name = input("       -> DATABASE NAME: ")
         if "\c" in database_name:
-                print("Query cancelled, for usage of database.")
+            print("Query cancelled, for usage of database.")
         else:
             command = f"USE {database_name}"
             cursor.execute(command)
@@ -137,22 +136,22 @@ def use_db():
 
 
 def show_tb():
-    if db == False:
+    if not db:
         print("\nNo database is in use!\n")
     else:
         try:
             command = f"SHOW TABLES"
             cursor.execute(command)
-            Table = from_db_cursor(cursor)
-            Table.align = "l"
-            print(Table)
+            table = from_db_cursor(cursor)
+            table.align = "l"
+            print(table)
             print("")
-        except mysql.connector.Error as err:
-            print(f"\n{err}\n")
+        except mysql.connector.Error as error:
+            print(f"\n{error}\n")
 
 
 def create_tb():
-    if db == False:
+    if not db:
         print("\nNo database is in use!\n")
     else:
         try:
@@ -179,28 +178,28 @@ def create_tb():
 
 
 def describe_tb():
-    if db == False:
+    if not db:
         print("\nNo database is in use!\n")
     else:
         try:
             table_name = input("       -> TABLE NAME: ")
             command = f"DESCRIBE {table_name}"
             cursor.execute(command)
-            Table = from_db_cursor(cursor)
-            Table.align = "l"
-            print(Table)
+            table = from_db_cursor(cursor)
+            table.align = "l"
+            print(table)
             print("")
-        except mysql.connector.Error as err:
-            print(f"\n{err}\n")
+        except mysql.connector.Error as error:
+            print(f"\n{error}\n")
 
 
 def delete_tb():
-    if db == False:
+    if not db:
         print("\nNo database is in use!\n")
     else:
         try:
             table_name = input("      -> NAME OF TABLE TO BE DELETED: ")
-            
+
             command = f"DROP TABLE {table_name}"
             cursor.execute(command)
             cnx.commit()
@@ -208,133 +207,135 @@ def delete_tb():
             print(f"\nQuery OK, deleted the table ({table_name})\n")
         except mysql.connector.errors.ProgrammingError:
             print("\nERROR! Table not found!\n")
-        except mysql.connector.Error as err:
-            print(f"\n{err}\n")
+        except mysql.connector.Error as error:
+            print(f"\n{error}\n")
 
 
 def add_column():
-    if db == False:
+    if not db:
         print("\nNo database is in use!\n")
     else:
         try:
             table_name = input("       -> TABLE NAME: ")
             column = input("       -> NEW COLUMN NAME AND DATA-TYPE: ")
-            
+
             command = f"ALTER TABLE {table_name} ADD {column}"
             cursor.execute(command)
             cnx.commit()
-            
+
             column_name = column.split()[0]
             data_type = column.split()[1]
 
-            print(f"\nQuery OK, added column '{column_name}' with data-type '{data_type}' to the table '{table_name}'.\n")
+            print(
+                f"\nQuery OK, added column '{column_name}' with data-type '{data_type}' to the table '{table_name}'.\n")
         except mysql.connector.errors.ProgrammingError:
             print("Syntax Error!")
-        except mysql.connector.Error as err:
-                print(f"\n{err}\n")
+        except mysql.connector.Error as error:
+            print(f"\n{error}\n")
 
 
 def delete_column():
-    if db == False:
+    if not db:
         print("\nNo database is in use!\n")
     else:
         try:
             table_name = input("       -> TABLE NAME: ")
             column = input("       -> NAME OF COLUMN TO BE DELETED: ")
-            
+
             command = f"ALTER TABLE {table_name} DROP {column}"
             cursor.execute(command)
             cnx.commit()
             print("")
-        
+
         except mysql.connector.errors.ProgrammingError:
             print("Syntax Error!")
-        except mysql.connector.Error as err:
-                print(f"\n{err}\n")
+        except mysql.connector.Error as error:
+            print(f"\n{error}\n")
 
 
 def modify_column():
-    if db == False:
+    if not db:
         print("\nNo database is in use!\n")
     else:
         try:
             table_name = input("       -> TABLE NAME: ")
             column = input("       -> EXISTING COLUMN NAME: ")
             data_type = input("       -> NEW DATA-TYPE FOR THE COLUMN: ")
-            
+
             command = f"ALTER TABLE {table_name} MODIFY {column}"
             cursor.execute(command)
             cnx.commit()
-            
+
             print(f"\nQuery OK, modified column '{column}' to new data-type '{data_type}' in table '{table_name}'.\n")
         except mysql.connector.errors.ProgrammingError:
             print("Syntax Error!")
-        except mysql.connector.Error as err:
-                print(f"\n{err}\n")
+        except mysql.connector.Error as error:
+            print(f"\n{error}\n")
 
 
 def insert():
-    if db == False:
+    if not db:
         print("\nNo database is in use!\n")
     else:
         try:
             table_name = input("       -> TABLE NAME: ")
             column = input("       -> COLUMN NAMES: ")
             values = input("       -> VALUES: ")
-            
+
             command = f"INSERT INTO {table_name} ({column}) VALUES ({values})"
             cursor.execute(command)
             cnx.commit()
             print("")
-        
+
         except mysql.connector.errors.ProgrammingError:
             print("Syntax Error!")
         except mysql.connector.errors.DataError:
             print("Column count doesn't match value count")
-        except mysql.connector.Error as err:
-                print(f"\n{err}\n")
+        except mysql.connector.Error as error:
+            print(f"\n{error}\n")
 
 
 def reveal():
-    if db == False:
+    if not db:
         print("\nNo database is in use!\n")
     else:
         try:
             table_name = input("       -> TABLE NAME: ")
             cursor.execute(f"SELECT * FROM {table_name}")
-            Table = from_db_cursor(cursor)
-            Table.align = "l"
-            print(Table)
-    
+            table = from_db_cursor(cursor)
+            table.align = "l"
+            print(table)
+
         except mysql.connector.errors.ProgrammingError:
             print(f"ERROR! Table not found!")
-        except mysql.connector.Error as err:
-                    print(f"\n{err}\n")
+        except mysql.connector.Error as error:
+            print(f"\n{error}\n")
 
 
 def update():
-    if db == False:
+    if not db:
         print("\nNo database is in use!\n")
     else:
         try:
             table_name = input("       -> TABLE NAME: ")
             condition = input("       -> CONDITION: ")
             attribute = input("       -> COLUMN/FIELD TO BE UPDATED: ")
-            updt_value = input("       -> VALUE OF DATA-ITEM TO BE UPDATED: ")
+            updated_value = input("       -> VALUE OF DATA-ITEM TO BE UPDATED: ")
 
-            command = f"UPDATE {table_name} SET {attribute}={updt_value} WHERE {condition}" 
+            command = f"UPDATE {table_name} SET {attribute}={updated_value} WHERE {condition}"
             cursor.execute(command)
             cnx.commit()
-            print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute}) to {updt_value} where condition '{condition}' was satisfied.\n")
-        
+            print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute}) to {updated_value} where "
+                  f"condition '{condition}' was satisfied.\n")
+
         except mysql.connector.errors.ProgrammingError:
             print("\nData not found!\n")
-        except mysql.connector.Error as err:
-            print(f"\n{err}\n")
+        except mysql.connector.Error as error:
+            print(f"\n{error}\n")
 
 
 def search():
-    if db == False:
+    if not db:
         print("\nNo database is in use!\n")
     else:
         try:
@@ -352,18 +353,18 @@ def search():
                 print("Data not present in the table")
             else:
                 cursor.execute(command)
-                Table = from_db_cursor(cursor)
-                Table.align = "l"
-                print(Table)
-        
+                table = from_db_cursor(cursor)
+                table.align = "l"
+                print(table)
+
         except mysql.connector.errors.ProgrammingError:
             print("Data not found!")
-        except mysql.connector.Error as err:
-                print(f"\n{err}\n")
+        except mysql.connector.Error as error:
+            print(f"\n{error}\n")
 
 
 def delete():
-    if db == False:
+    if not db:
         print("\nNo database is in use!\n")
     else:
         try:
@@ -374,15 +375,15 @@ def delete():
             if "NULL" in value:
                 command = f"DELETE FROM {table_name} WHERE {column_name} IS {value}"
             else:
-                command = f"DELETE FROM {table_name} WHERE {column_name}={value}" 
+                command = f"DELETE FROM {table_name} WHERE {column_name}={value}"
             cursor.execute(command)
             cnx.commit()
             print(f"Query OK, deleted the row(s)/record(s) containing the value {value}.")
-        
+
         except mysql.connector.errors.ProgrammingError:
             print("Data not found!")
-        except mysql.connector.Error as err:
-                print(f"\n{err}\n")
+        except mysql.connector.Error as error:
+            print(f"\n{error}\n")
 
 
 def instructions():
@@ -404,7 +405,7 @@ insert() > To insert data into a specific table.
 delete() > To delete a row.
 reveal() > To show all of the data stored in the specific table.
 search() > To search for a particular row in a table.
-update() > To modify or change value of a data-item present in a coulmn/field.
+update() > To modify or change value of a data-item present in a column/field.
 ______________________________________________________________________________
 
 COMMANDS TO SHOW, CREATE AND DELETE TABLES:
@@ -440,6 +441,7 @@ def bye():
     print("Bye...\n")
     cursor.close()
     cnx.close()
+
 
 if __name__ == "__main__":
     main()
