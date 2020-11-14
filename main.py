@@ -1,12 +1,11 @@
 """
 STUDENT DATABASE MANAGEMENT SYSTEM (SDBMS)
 
-version 1.8.7 (Beta)
+version 1.9.7 (Beta)
 
 """
 from mysql.connector import connection
 from mysql.connector import errorcode
-from mysql.connector.connection import MySQLConnection
 from prettytable import PrettyTable
 from prettytable import from_db_cursor
 from datetime import datetime
@@ -38,10 +37,8 @@ try:
 except mysql.connector.Error as err:
     if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
         print("Something is wrong with your user name or password!")
-    elif err.errno == errorcode.ER_BAD_DB_ERROR:
-        print("Database does not exist!")
     else:
-        print(err)
+        print(f"\n{err}\n")
 
 
 def main():
@@ -119,36 +116,39 @@ def delete_db():
             
             print(f"\nQuery OK, Deleted database '{database_name}'.\n")
     except mysql.connector.Error as err:
-        if err.errno == errorcode.ER_BAD_DB_ERROR:
-            print("\nDatabase does not exist!\n")
-    else:
-        print("\nERROR!\n")
+        print("\nDatabase does not exist!\n")
 
 
 def use_db():
     global db
     try:
         database_name = input("       -> DATABASE NAME: ")
-        command = f"USE {database_name}"
-        cursor.execute(command)
+        if "\c" in database_name:
+                print("Query cancelled, for usage of database.")
+        else:
+            command = f"USE {database_name}"
+            cursor.execute(command)
 
-        db = database_name
+            db = database_name
 
-        print(f"\nQuery OK, now using database '{database_name}'.\n")
+            print(f"\nQuery OK, now using database '{database_name}'.\n")
     except mysql.connector.errors.ProgrammingError:
         print(f"\nERROR! Unable to find the requested database.\n")
 
 
 def show_tb():
-    try:
-        command = f"SHOW TABLES"
-        cursor.execute(command)
-        Table = from_db_cursor(cursor)
-        Table.align = "l"
-        print(Table)
-        print("")
-    except mysql.connector.Error as err:
-        print(f"\n{err}\n")
+    if db == False:
+        print("\nNo database is in use!\n")
+    else:
+        try:
+            command = f"SHOW TABLES"
+            cursor.execute(command)
+            Table = from_db_cursor(cursor)
+            Table.align = "l"
+            print(Table)
+            print("")
+        except mysql.connector.Error as err:
+            print(f"\n{err}\n")
 
 
 def create_tb():
@@ -225,11 +225,10 @@ def reveal():
         try:
             table_name = input("       -> TABLE NAME: ")
             cursor.execute(f"SELECT * FROM {table_name}")
-            
             Table = from_db_cursor(cursor)
             Table.align = "l"
             print(Table)
-        
+    
         except mysql.connector.errors.ProgrammingError:
             print(f"ERROR! Table not found!")
         except mysql.connector.Error as err:
@@ -268,16 +267,21 @@ def search():
         try:
             table_name = input("       -> TABLE NAME: ")
             column_name = input("       -> COLUMN NAME: ")
-            value = input("VALUE: ")
+            value = input("       -> VALUE: ")
 
             if value == "NULL":
                 command = f"SELECT * FROM {table_name} WHERE {column_name} IS {value}"
             else:
                 command = f"SELECT * FROM {table_name} WHERE {column_name}={value}"
             cursor.execute(command)
-            Table = from_db_cursor(cursor)
-            Table.align = "l"
-            print(Table)
+            data = cursor.fetchall()
+            if len(data) == 0:
+                print("Data not present in the table")
+            else:
+                cursor.execute(command)
+                Table = from_db_cursor(cursor)
+                Table.align = "l"
+                print(Table)
         
         except mysql.connector.errors.ProgrammingError:
             print("Data not found!")
@@ -315,6 +319,7 @@ def instructions():
 
 COMMANDS FOR DATABASE MANIPULATION:
 
+use_db()    > To use a database.
 show_db()   > To show all of the databases.
 create_db() > To create a new database.
 delete_db() > To delete an existing database.
@@ -345,7 +350,7 @@ quit() > To quit the program.
 def to_user():
     print(f"""
 WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)
-Version: 1.8.7 (Beta)
+Version: 1.9.7 (Beta)
 
 Server version: {cnx.get_server_info()}
 You are currently not connected to any database.
