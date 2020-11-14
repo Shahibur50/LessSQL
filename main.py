@@ -318,45 +318,15 @@ def update():
     else:
         try:
             table_name = input("       -> TABLE NAME: ")
-            column_name = input("       -> COLUMN/FIELD TO BE CHECKED: ")
-            value = input("       -> VALUE OF DATA-ITEM TO BE CHECKED: ")
+            condition = input("       -> CONDITION: ")
             attribute = input("       -> COLUMN/FIELD TO BE UPDATED: ")
             updt_value = input("       -> VALUE OF DATA-ITEM TO BE UPDATED: ")
 
-            if "NULL" in value:
-                command = f"UPDATE {table_name} SET {attribute}={updt_value} WHERE {column_name} IS {value}"
-            else:
-                command = f"UPDATE {table_name} SET {attribute}={updt_value} WHERE {column_name}={value}" 
+            command = f"UPDATE {table_name} SET {attribute}={updt_value} WHERE {condition}" 
             cursor.execute(command)
             cnx.commit()
-            print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute}) to {updt_value} where data-item in ({column_name}) = {value}.\n")
+            print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute}) to {updt_value} where condition '{condition}' was satisfied.\n")
         
-        except mysql.connector.errors.ProgrammingError:
-            print("\nData not found!\n")
-        except mysql.connector.Error as err:
-            print(f"\n{err}\n")
-
-
-def update_condition():
-    if db == False:
-        print("\nNo database is in use!\n")
-    else:
-        try:
-            table_name = input("       -> TABLE NAME: ")
-            column_name = input("       -> COLUMN/FIELD TO BE CHECKED: ")
-            condition = input("       -> CONDITION (> or <): ")
-            if len(condition) > 1:
-                print("Please enter condition sign properly!\n")
-            else:
-                value = input("       -> VALUE OF DATA-ITEM TO BE CHECKED: ")
-                attribute = input("       -> COLUMN/FIELD TO BE UPDATED: ")
-                updt_value = input("       -> VALUE OF DATA-ITEM TO BE UPDATED: ")
-
-                command = f"UPDATE {table_name} SET {attribute}={updt_value} WHERE {column_name}{condition}{value}" 
-                cursor.execute(command)
-                cnx.commit()
-                print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute}) to {updt_value} where data-item in ({column_name}) {condition} {value}.\n")
-            
         except mysql.connector.errors.ProgrammingError:
             print("\nData not found!\n")
         except mysql.connector.Error as err:
