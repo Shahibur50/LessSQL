@@ -399,12 +399,15 @@ create_db() > To create a new database.
 delete_db() > To delete an existing database.
 ______________________________________________________________________________
 
-COMMANDS TO SHOW, CREATE AND DELETE TABLES:
+COMMANDS TO MANIPULATE TABLES:
 
-show_tb()     > To show tables present in a database.
-create_tb()   > To create a new table.
-describe_tb() > To see the schema of a table.
-delete_tb()   > To delete a table completely.
+show_tb()       > To show tables present in a database.
+create_tb()     > To create a new table.
+describe_tb()   > To see the schema(structure) of a table.
+delete_tb()     > To delete a table completely.
+add_column()    > To add a new column to an existing table.
+delete_column() > To delete an exiting column inside a table.
+modify_column() > To change data-type of a column in a table.
 ______________________________________________________________________________
 
 COMMANDS FOR IN-TABLE QUERIES AND MANIPULATION:
