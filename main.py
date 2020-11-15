@@ -70,6 +70,23 @@ def main():
     cnx.close()
 
 
+def use_db():
+    global db
+    try:
+        database_name = input("       -> DATABASE NAME: ")
+        if "/c" in database_name:
+            print("Query cancelled, for usage of database.")
+        else:
+            command = f"USE {database_name}"
+            cursor.execute(command)
+
+            db = database_name
+
+            print(f"\nQuery OK, now using database '{database_name}'.\n")
+    except mysql.connector.errors.ProgrammingError:
+        print(f"\nERROR! Unable to find the requested database.\n")
+
+
 def show_db():
     try:
         command = f"SHOW DATABASES"
@@ -85,7 +102,7 @@ def show_db():
 def create_db():
     try:
         database_name = input("       -> DATABASE NAME: ")
-        if "\c" in database_name:
+        if "/c" in database_name:
             print("Query cancelled, for creation of database.")
         else:
             command = f"CREATE DATABASE {database_name}"
@@ -103,7 +120,7 @@ def delete_db():
     global db
     try:
         database_name = input("       -> DATABASE NAME: ")
-        if "\c" in database_name:
+        if "/c" in database_name:
             print("Query cancelled, for deletion of database.")
         else:
             command = f"DROP DATABASE {database_name}"
@@ -116,23 +133,6 @@ def delete_db():
             print(f"\nQuery OK, Deleted database '{database_name}'.\n")
     except mysql.connector.Error as error:
         print(f"\n{error}\n")
-
-
-def use_db():
-    global db
-    try:
-        database_name = input("       -> DATABASE NAME: ")
-        if "\c" in database_name:
-            print("Query cancelled, for usage of database.")
-        else:
-            command = f"USE {database_name}"
-            cursor.execute(command)
-
-            db = database_name
-
-            print(f"\nQuery OK, now using database '{database_name}'.\n")
-    except mysql.connector.errors.ProgrammingError:
-        print(f"\nERROR! Unable to find the requested database.\n")
 
 
 def show_tb():
@@ -399,6 +399,14 @@ create_db() > To create a new database.
 delete_db() > To delete an existing database.
 ______________________________________________________________________________
 
+COMMANDS TO SHOW, CREATE AND DELETE TABLES:
+
+show_tb()     > To show tables present in a database.
+create_tb()   > To create a new table.
+describe_tb() > To see the schema of a table.
+delete_tb()   > To delete a table completely.
+______________________________________________________________________________
+
 COMMANDS FOR IN-TABLE QUERIES AND MANIPULATION:
 
 insert() > To insert data into a specific table.
@@ -406,13 +414,6 @@ delete() > To delete a row.
 reveal() > To show all of the data stored in the specific table.
 search() > To search for a particular row in a table.
 update() > To modify or change value of a data-item present in a column/field.
-______________________________________________________________________________
-
-COMMANDS TO SHOW, CREATE AND DELETE TABLES:
-
-show_tb()   > To show tables present in a database.
-create_tb() > To create a new table.
-delete_tb() > To delete a table completely.
 ______________________________________________________________________________
 
 COMMAND TO EXIT THE PROGRAM:
