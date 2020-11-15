@@ -262,7 +262,7 @@ def modify_column():
             column = input("       -> EXISTING COLUMN NAME: ")
             data_type = input("       -> NEW DATA-TYPE FOR THE COLUMN: ")
 
-            command = f"ALTER TABLE {table_name} MODIFY {column}"
+            command = f"ALTER TABLE {table_name} MODIFY {column} {data_type}"
             cursor.execute(command)
             cnx.commit()
 
@@ -289,8 +289,8 @@ def insert():
 
         except mysql.connector.errors.ProgrammingError:
             print("Syntax Error!")
-        except mysql.connector.errors.DataError:
-            print("Column count doesn't match value count")
+        except mysql.connector.errors.DataError as error:
+            print(f"{error}")
         except mysql.connector.Error as error:
             print(f"\n{error}\n")
 
