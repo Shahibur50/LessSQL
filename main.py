@@ -234,6 +234,26 @@ def add_column():
             print(f"\n{error}\n")
 
 
+def modify_column():
+    if not db:
+        print("\nNo database is in use!\n")
+    else:
+        try:
+            table_name = input("       -> TABLE NAME: ")
+            column = input("       -> EXISTING COLUMN NAME: ")
+            data_type = input("       -> NEW DATA-TYPE FOR THE COLUMN: ")
+
+            command = f"ALTER TABLE {table_name} MODIFY {column} {data_type}"
+            cursor.execute(command)
+            cnx.commit()
+
+            print(f"\nQuery OK, modified column '{column}' to new data-type '{data_type}' in table '{table_name}'.\n")
+        except mysql.connector.errors.ProgrammingError:
+            print("Syntax Error!")
+        except mysql.connector.Error as error:
+            print(f"\n{error}\n")
+
+
 def delete_column():
     if not db:
         print("\nNo database is in use!\n")
@@ -253,22 +273,19 @@ def delete_column():
             print(f"\n{error}\n")
 
 
-def modify_column():
+def reveal():
     if not db:
         print("\nNo database is in use!\n")
     else:
         try:
             table_name = input("       -> TABLE NAME: ")
-            column = input("       -> EXISTING COLUMN NAME: ")
-            data_type = input("       -> NEW DATA-TYPE FOR THE COLUMN: ")
+            cursor.execute(f"SELECT * FROM {table_name}")
+            table = from_db_cursor(cursor)
+            table.align = "l"
+            print(table)
 
-            command = f"ALTER TABLE {table_name} MODIFY {column} {data_type}"
-            cursor.execute(command)
-            cnx.commit()
-
-            print(f"\nQuery OK, modified column '{column}' to new data-type '{data_type}' in table '{table_name}'.\n")
         except mysql.connector.errors.ProgrammingError:
-            print("Syntax Error!")
+            print(f"ERROR! Table not found!")
         except mysql.connector.Error as error:
             print(f"\n{error}\n")
 
@@ -291,23 +308,6 @@ def insert():
             print("Syntax Error!")
         except mysql.connector.errors.DataError as error:
             print(f"{error}")
-        except mysql.connector.Error as error:
-            print(f"\n{error}\n")
-
-
-def reveal():
-    if not db:
-        print("\nNo database is in use!\n")
-    else:
-        try:
-            table_name = input("       -> TABLE NAME: ")
-            cursor.execute(f"SELECT * FROM {table_name}")
-            table = from_db_cursor(cursor)
-            table.align = "l"
-            print(table)
-
-        except mysql.connector.errors.ProgrammingError:
-            print(f"ERROR! Table not found!")
         except mysql.connector.Error as error:
             print(f"\n{error}\n")
 
@@ -397,27 +397,45 @@ use_db()    > To use a database.
 show_db()   > To show all of the databases.
 create_db() > To create a new database.
 delete_db() > To delete an existing database.
-______________________________________________________________________________
 
-COMMANDS TO MANIPULATE TABLES:
+_______________________________________________________________________________
+_______________________________________________________________________________
 
-show_tb()       > To show tables present in a database.
-create_tb()     > To create a new table.
-describe_tb()   > To see the schema(structure) of a table.
-delete_tb()     > To delete a table completely.
+COMMANDS FOR TABLE MANIPULATION:
+
+show_tb()     > To show tables present in a database.
+create_tb()   > To create a new table.
+describe_tb() > To see the schema(structure) of a table.
+delete_tb()   > To delete a table completely.
+
+_______________________________________________________________________________
+_______________________________________________________________________________
+
+COMMANDS FOR COLUMN MANIPULATION:
+
 add_column()    > To add a new column to an existing table.
-delete_column() > To delete an exiting column inside a table.
 modify_column() > To change data-type of a column in a table.
-______________________________________________________________________________
+delete_column() > To delete an exiting column inside a table.
 
-COMMANDS FOR IN-TABLE QUERIES AND MANIPULATION:
+_______________________________________________________________________________
+_______________________________________________________________________________
 
-insert() > To insert data into a specific table.
-delete() > To delete a row.
-reveal() > To show all of the data stored in the specific table.
+COMMANDS FOR IN-TABLE QUERIES:
+
+reveal() > To show all of the data stored in a specific table.
 search() > To search for a particular row in a table.
+
+_______________________________________________________________________________
+_______________________________________________________________________________
+
+COMMANDS FOR  IN-TABLE MANIPULATION:
+
+insert() > To insert data in a table.
 update() > To modify or change value of a data-item present in a column/field.
-______________________________________________________________________________
+delete() > To delete row(s)/record(s).
+
+_______________________________________________________________________________
+_______________________________________________________________________________
 
 COMMAND TO EXIT THE PROGRAM:
 
