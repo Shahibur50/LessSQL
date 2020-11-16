@@ -1,17 +1,18 @@
 """
 SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)
 
-version 1.10.1 (Beta)
+version 1.10.2 (Beta)
 
 """
+import mysql.connector
+import time
+import getpass
 from mysql.connector import connection
 from mysql.connector import errorcode
 from prettytable import PrettyTable
 from prettytable import from_db_cursor
 from datetime import datetime
-import time
-import mysql.connector
-import getpass
+
 
 PT = PrettyTable()
 connection_status = False
@@ -30,25 +31,27 @@ for i in range(3):
         print("Connecting to the server...")
         time.sleep(2)
         print("\nCONNECTION ESTABLISHED!")
-
+        print(f"\nLOGGED IN AS: {usr_name}@{host}")
         now = datetime.now()
-        print(now.strftime('%H:%M:%S %p'))
-
+        print(f"TIME: {now.strftime('%H:%M:%S %p')}")
+        print(f"\nServer version: {cnx.get_server_info()}") 
         connection_status = True
         break
     except mysql.connector.Error as error:
         if error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print("Something is wrong with your user name or password!")
+            print("Something is wrong with your user name or password!\n")
             continue
         else:
             print(f"\n{error}\n")
             time.sleep(2)
             break
+else:
+    print("Wrong credentials entered 3 times.")
+    print("Exiting...")
+    time.sleep(2)
 
 
 def main():
-    if not connection_status:
-        exec('quit()')
     to_user()
     while True:
         print("COMMAND|> ", end="")
@@ -211,7 +214,8 @@ def describe_tb():
                 print(table)
                 print("")
         except mysql.connector.Error as error:
-            print(f"\n{error}\n")
+            err = str(error.msg).split("; ")[0]
+            print(f"\nERROR! {err}\n")
 
 
 def delete_tb():
@@ -223,7 +227,7 @@ def delete_tb():
             if "/c" in table_name:
                 print("Query cancelled, for schema of table.")
             else:
-                opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to delete the table '{table_name}'? (y/n)\n")
+                opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to delete the table '{table_name}'? (y/n)")
                 if opt == 'y' or opt == 'Y':
                     command = f"DROP TABLE {table_name}"
                     cursor.execute(command)
@@ -232,10 +236,9 @@ def delete_tb():
                     print(f"\nQuery OK, deleted the table ({table_name})\n")
                 else:
                     print("\nQuery cancelled, for deletion of table.\n")
-        except mysql.connector.errors.ProgrammingError:
-            print("\nERROR! Table not found!\n")
         except mysql.connector.Error as error:
-            print(f"\n{error}\n")
+            err = str(error.msg).split("; ")[0]
+            print(f"\nERROR! {err}\n")
 
 
 def add_column():
@@ -260,10 +263,9 @@ def add_column():
 
                     print(
                         f"\nQuery OK, added column '{column_name}' with data-type '{data_type}' to the table '{table_name}'.\n")
-        except mysql.connector.errors.ProgrammingError:
-            print("Syntax Error!")
         except mysql.connector.Error as error:
-            print(f"\n{error}\n")
+            err = str(error.msg).split("; ")[0]
+            print(f"\nERROR! {err}\n")
 
 
 def modify_column():
@@ -523,15 +525,16 @@ quit() > To quit the program.
 
 def to_user():
     print(f"""
-WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)
-Version: 1.10.1 (Beta)
-
-Server version: {cnx.get_server_info()}
-You are currently not connected to any database.
-
-Commands end with ()
-
-For help type 'help()'
++------------------------------------------------------+
+| WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS) |
+| Version: 1.10.2 (Beta)                               |
+|                                                      |
+| Commands end with ()                                 |
+|                                                      |
+| To cancel an input statement type '/c'               |
+|                                                      |
+| For help type 'help()'                               |
++------------------------------------------------------+
 """)
 
 
