@@ -47,8 +47,9 @@ for i in range(3):
             break
 else:
     print("Wrong credentials entered 3 times.")
-    print("Exiting...")
+    print("Exiting...\n")
     time.sleep(2)
+    quit()
 
 
 def main():
@@ -60,7 +61,7 @@ def main():
             if "()" not in cmd:
                 print("Not a valid command!")
             else:
-                if cmd == "quit()":
+                if cmd == "exit()":
                     bye()
                     break
                 elif cmd == "help()":
@@ -515,7 +516,7 @@ _______________________________________________________________________________
 
 COMMAND TO EXIT THE PROGRAM:
 
-quit() > To quit the program.
+exit() > To quit the program.
 """)
 
 
