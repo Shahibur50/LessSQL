@@ -1,7 +1,7 @@
 """
 SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)
 
-version 1.10.2 (Beta)
+version 2.7.11
 
 """
 import mysql.connector
@@ -523,7 +523,7 @@ def to_user():
     print(f"""
 +------------------------------------------------------+
 | WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS) |
-| Version: 1.10.2 (Beta)                               |
+| Version: 2.7.11                                      |
 |                                                      |
 | Commands end with ()                                 |
 |                                                      |
