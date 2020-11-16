@@ -91,8 +91,9 @@ def use_db():
             db = database_name
 
             print(f"\nQuery OK, now using database '{database_name}'.\n")
-    except mysql.connector.errors.ProgrammingError:
-        print(f"\nERROR! Unable to find the requested database.\n")
+    except mysql.connector.Error as error:
+            err = str(error.msg).split("; ")[0]
+            print(f"\nERROR! {err}\n")
 
 
 def show_db():
@@ -104,7 +105,8 @@ def show_db():
         print(table)
         print("")
     except mysql.connector.Error as error:
-        print(f"\n{error}\n")
+            err = str(error.msg).split("; ")[0]
+            print(f"\nERROR! {err}\n")
 
 
 def create_db():
@@ -118,10 +120,9 @@ def create_db():
             cnx.commit()
 
             print(f"\nQuery OK, Created database '{database_name}'.\n")
-    except mysql.connector.errors.ProgrammingError:
-        print("\nError! Please enter values properly.\n")
     except mysql.connector.Error as error:
-        print(f"\n{error}\n")
+            err = str(error.msg).split("; ")[0]
+            print(f"\nERROR! {err}\n")
 
 
 def delete_db():
@@ -141,10 +142,9 @@ def delete_db():
                 print(f"\nQuery OK, Deleted database '{database_name}'.\n")
             else:
                 print("\nQuery cancelled, for deletion of database.\n")
-    except mysql.connector.errors.ProgrammingError:
-        print("\nERROR! Database not found!\n")
     except mysql.connector.Error as error:
-        print(f"\n{error}\n")
+            err = str(error.msg).split("; ")[0]
+            print(f"\nERROR! {err}\n")
 
 
 def show_tb():
@@ -159,7 +159,8 @@ def show_tb():
             print(table)
             print("")
         except mysql.connector.Error as error:
-            print(f"\n{error}\n")
+            err = str(error.msg).split("; ")[0]
+            print(f"\nERROR! {err}\n")
 
 
 def create_tb():
@@ -192,10 +193,9 @@ def create_tb():
                     print(f"\nQuery OK, Created the '{table_name}' table.\n")
         except ValueError:
             print("\nERROR! Please enter values properly!\n")
-        except mysql.connector.errors.ProgrammingError:
-            print("\nERROR! You have an error in your syntax!\n")
         except mysql.connector.Error as error:
-            print(f"\n{error}\n")
+            err = str(error.msg).split("; ")[0]
+            print(f"\nERROR! {err}\n")
 
 
 def describe_tb():
@@ -227,7 +227,7 @@ def delete_tb():
             if "/c" in table_name:
                 print("Query cancelled, for schema of table.")
             else:
-                opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to delete the table '{table_name}'? (y/n)")
+                opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to delete the table '{table_name}'? (y/n) ")
                 if opt == 'y' or opt == 'Y':
                     command = f"DROP TABLE {table_name}"
                     cursor.execute(command)
@@ -290,10 +290,9 @@ def modify_column():
                         cnx.commit()
 
                         print(f"\nQuery OK, modified column '{column}' to new data-type '{data_type}' in table '{table_name}'.\n")
-        except mysql.connector.errors.ProgrammingError:
-            print("Syntax Error!")
         except mysql.connector.Error as error:
-            print(f"\n{error}\n")
+            err = str(error.msg).split("; ")[0]
+            print(f"\nERROR! {err}\n")
 
 
 def delete_column():
@@ -315,7 +314,8 @@ def delete_column():
                     
                     print(f"\nQuery OK, Deleted column '{column}' from table '{table_name}'.\n")
         except mysql.connector.Error as error:
-            print(f"\n{error}\n")
+            err = str(error.msg).split("; ")[0]
+            print(f"\nERROR! {err}\n")
 
 
 def reveal():
@@ -332,10 +332,9 @@ def reveal():
                 table.align = "l"
                 print(table)
 
-        except mysql.connector.errors.ProgrammingError:
-            print(f"ERROR! Table not found!")
         except mysql.connector.Error as error:
-            print(f"\n{error}\n")
+            err = str(error.msg).split("; ")[0]
+            print(f"\nERROR! {err}\n")
 
 
 def insert():
@@ -391,10 +390,9 @@ def update():
                             print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute}) to {updated_value} where "
                                 f"condition '{condition}' was satisfied.\n")
 
-        except mysql.connector.errors.ProgrammingError:
-            print("\nData not found!\n")
         except mysql.connector.Error as error:
-            print(f"\n{error}\n")
+            err = str(error.msg).split("; ")[0]
+            print(f"\nERROR! {err}\n")
 
 
 def search():
@@ -429,10 +427,9 @@ def search():
                             print(table)
                             print("")
 
-        except mysql.connector.errors.ProgrammingError:
-            print("Data not found!")
         except mysql.connector.Error as error:
-            print(f"\n{error}\n")
+            err = str(error.msg).split("; ")[0]
+            print(f"\nERROR! {err}\n")
 
 
 def delete():
@@ -460,10 +457,9 @@ def delete():
                             cnx.commit()
                             
                             print(f"\nQuery OK, deleted the row(s)/record(s) containing the value {value}.\n")
-        except mysql.connector.errors.ProgrammingError:
-            print("Data not found!")
         except mysql.connector.Error as error:
-            print(f"\n{error}\n")
+            err = str(error.msg).split("; ")[0]
+            print(f"\nERROR! {err}\n")
 
 
 def instructions():
