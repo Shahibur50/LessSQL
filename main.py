@@ -53,30 +53,36 @@ else:
 
 
 def main():
-    to_user()
-    while True:
-        print("COMMAND|> ", end="")
-        try:
-            cmd = input()
-            if "()" not in cmd:
-                print("Not a valid command!")
-            else:
-                if cmd == "exit()":
-                    bye()
-                    break
-                elif cmd == "help()":
-                    exec('instructions()')
+    if not connection_status:
+        print("Please check if the server is online.")
+        bye()
+    else:
+        to_user()
+        while True:
+            print("COMMAND|> ", end="")
+            try:
+                cmd = input()
+                if "()" not in cmd:
+                    print("Not a valid command!")
                 else:
-                    exec(cmd)
-        except NameError:
-            print("ERROR! Command not found!\n")
-            continue
-        except KeyboardInterrupt:
-            print("\nSession forcefully closed by the user!\n")
-            break
+                    if cmd == "exit()":
+                        bye()
+                        cursor.close()
+                        cnx.close()
+                        break
+                    elif cmd == "help()":
+                        exec('instructions()')
+                    else:
+                        exec(cmd)
+            except NameError:
+                print("ERROR! Command not found!\n")
+                continue
+            except KeyboardInterrupt:
+                print("\nSession forcefully closed by the user!\n")
+                break
 
-    cursor.close()
-    cnx.close()
+        cursor.close()
+        cnx.close()
 
 
 def use_db():
@@ -541,8 +547,6 @@ def bye():
     print("Closing...")
     time.sleep(1)
     print("Bye...\n")
-    cursor.close()
-    cnx.close()
 
 
 def instructions():
