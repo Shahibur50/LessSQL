@@ -347,18 +347,18 @@ def insert():
             if "/c" in table_name:
                 print("\nQuery cancelled, for modification of table.\n")
             else:
-                column = input("       -> COLUMN NAMES: ")
-                if "/c" in column:
+                column_name = input("       -> COLUMN NAMES: ")
+                if "/c" in column_name:
                     print("\nQuery cancelled, for modification of table.\n")
                 else:
                     values = input("       -> VALUES: ")
                     if "/c" in values:
                         print("\nQuery cancelled, for modification of table.\n")
                     else:
-                        command = f"INSERT INTO {table_name} ({column}) VALUES ({values})"
+                        command = f"INSERT INTO {table_name} ({column_name}) VALUES ({values})"
                         cursor.execute(command)
                         cnx.commit()
-                        print("")
+                        print(f"\nQuery OK, inserted value(s) '{values}' in column(s) '{column_name}' in table '{table_name}'\n")
         except mysql.connector.Error as error:
             err = str(error.msg).split("; ")[0]
             print(f"\nERROR! {err}\n")
