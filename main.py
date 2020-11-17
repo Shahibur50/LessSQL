@@ -1,7 +1,7 @@
 """
 SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)
 
-version 2.7.11
+version 2.8.11
 
 """
 import mysql.connector
@@ -463,6 +463,14 @@ def delete():
             print(f"\nERROR! {err}\n")
 
 
+def bye():
+    print("Closing...")
+    time.sleep(1)
+    print("Bye...\n")
+    cursor.close()
+    cnx.close()
+
+
 def instructions():
     print("""
                                 INSTRUCTIONS
@@ -521,33 +529,51 @@ exit() > To quit the program.
 
 
 def to_user():
-    print(f"""
-+---------------------------------------------------------------+
-| WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)          |
-| Version: 2.7.11                                               |
-|                                                               |
-| Copyright (C) 2020  Shahibur Rahaman                          |
-|                                                               |
-| This program comes with ABSOLUTELY NO WARRANTY;               |
-| for details type `show w'.                                    |
-| This is free software, and you are welcome to redistribute it |
-| under certain conditions; type `show c' for details.          |
-|                                                               |                                                        |
-| Commands end with ()                                          |
-|                                                               |
-| To cancel an input statement type '/c'                        |
-|                                                               |
-| For help type 'help()'                                        |
-+---------------------------------------------------------------+
+    print("""
++----------------------------------------------------------------+
+| WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)           |
+| Version: 2.8.11                                                |
+|                                                                |
+| Copyright (C) 2020  Shahibur Rahaman                           |
+|                                                                |
+| This program comes with ABSOLUTELY NO WARRANTY;                |
+| for details type 'show_w()'.                                   |
+| This is free software, and you are welcome to redistribute it  |
+| under certain conditions; type 'show_c()' for details.         |
+|                                                                |
+| Commands end with ()                                           |
+|                                                                |
+| To cancel an input statement type '/c'                         |
+|                                                                |
+| For help type 'help()'                                         |
++----------------------------------------------------------------+
 """)
 
 
-def bye():
-    print("Closing...")
-    time.sleep(1)
-    print("Bye...\n")
-    cursor.close()
-    cnx.close()
+def show_w():
+    print("""
+THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
+APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
+HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY
+OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
+THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM
+IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
+ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+
+For license info visit: https://www.gnu.org/licenses/
+""")
+
+
+def show_c():
+    print("""
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+For license info visit: https://www.gnu.org/licenses/
+""")
 
 
 if __name__ == "__main__":
