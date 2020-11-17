@@ -85,7 +85,7 @@ def use_db():
         database_name = input("       -> DATABASE NAME: ")
         if "/c" in database_name:
             print("Query cancelled, for usage of database.")
-        elif "" in database_name:
+        elif not database_name:
             print("\nPlease enter values properly!\n")
         else:
             command = f"USE {database_name}"
@@ -117,7 +117,7 @@ def create_db():
         database_name = input("       -> DATABASE NAME: ")
         if "/c" in database_name:
             print("Query cancelled, for creation of database.")
-        elif "" in database_name:
+        elif not database_name:
                 print("\nPlease enter values properly!\n")
         else:
             command = f"CREATE DATABASE {database_name}"
@@ -136,7 +136,7 @@ def delete_db():
         database_name = input("       -> DATABASE NAME: ")
         if "/c" in database_name:
             print("Query cancelled, for deletion of database.")
-        elif "" in database_name:
+        elif not database_name:
                 print("\nPlease enter values properly!\n")
         else:
             opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want to delete the table '{database_name}'? (y/n) ")
@@ -178,13 +178,13 @@ def create_tb():
             table_name = input("       -> NAME OF TABLE TO BE CREATED: ")
             if "/c" in table_name:
                 print("Query cancelled, for creation of table.")
-            elif "" in table_name:
+            elif not table_name:
                 print("\nPlease enter values properly!\n")
             else:
                 no_of_columns = input("       -> NO. OF COLUMNS: ")
                 if "/c" in no_of_columns:
                     print("Query cancelled, for creation of table.")
-                elif "" in no_of_columns:
+                elif not no_of_columns:
                     print("\nPlease enter values properly!\n")
                 else:
                     no_of_columns = int(no_of_columns)
@@ -196,7 +196,6 @@ def create_tb():
                     column_value_type = input("       -> COLUMN NAME AND DATA-TYPE: ")
                     columns += column_value_type
 
-                    print(columns)
                     command = f"CREATE TABLE {table_name}({columns})"
                     cursor.execute(command)
                     cnx.commit()
@@ -217,7 +216,7 @@ def describe_tb():
             table_name = input("       -> TABLE NAME: ")
             if "/c" in table_name:
                 print("Query cancelled, for schema of table.")
-            elif "" in table_name:
+            elif not table_name:
                 print("\nPlease enter values properly!\n")
             else:
                 command = f"DESCRIBE {table_name}"
@@ -239,7 +238,7 @@ def delete_tb():
             table_name = input("      -> NAME OF TABLE TO BE DELETED: ")
             if "/c" in table_name:
                 print("Query cancelled, for schema of table.")
-            elif "" in table_name:
+            elif not table_name:
                 print("\nPlease enter values properly!\n")
             else:
                 opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to delete the table '{table_name}'? (y/n) ")
@@ -264,13 +263,13 @@ def add_column():
             table_name = input("       -> TABLE NAME: ")
             if "/c" in table_name:
                 print("Query cancelled, for creation of database.")
-            elif "" in table_name:
+            elif not table_name:
                 print("\nPlease enter values properly!\n")
             else:
                 column = input("       -> NEW COLUMN NAME AND DATA-TYPE: ")
                 if "/c" in column:
                     print("Query cancelled, for creation of database.")
-                elif "" in column:
+                elif not column:
                     print("\nPlease enter values properly!\n")
                 else:
                     command = f"ALTER TABLE {table_name} ADD {column}"
@@ -294,19 +293,19 @@ def modify_column():
             table_name = input("       -> TABLE NAME: ")
             if "/c" in table_name:
                 print("\nQuery cancelled, for modification of table.\n")
-            elif "" in table_name:
+            elif not table_name:
                 print("\nPlease enter values properly!\n")
             else:
                 column = input("       -> EXISTING COLUMN NAME: ")
                 if "/c" in column:
                     print("\nQuery cancelled, for modification of table.\n")
-                elif "" in column:
+                elif not column:
                     print("\nPlease enter values properly!\n")
                 else:
                     data_type = input("       -> NEW DATA-TYPE FOR THE COLUMN: ")
                     if "/c" in data_type:
                         print("\nQuery cancelled, for modification of table.\n")
-                    elif "" in data_type:
+                    elif not data_type:
                         print("\nPlease enter values properly!\n")
                     else:
                         command = f"ALTER TABLE {table_name} MODIFY {column} {data_type}"
@@ -327,13 +326,13 @@ def delete_column():
             table_name = input("       -> TABLE NAME: ")
             if "/c" in table_name:
                 print("\nQuery cancelled, for modification of table.\n")
-            elif "" in table_name:
+            elif not table_name:
                 print("\nPlease enter values properly!\n")
             else:
                 column = input("       -> NAME OF COLUMN TO BE DELETED: ")
                 if "/c" in column:
                     print("\nQuery cancelled, for modification of table.\n")
-                elif "" in column:
+                elif not column:
                     print("\nPlease enter values properly!\n")
                 else:
                     opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to delete the table '{table_name}'? (y/n) ")
@@ -358,7 +357,7 @@ def reveal():
             table_name = input("       -> TABLE NAME: ")
             if "/c" in table_name:
                 print("\nQuery cancelled, for modification of table.\n")
-            elif "" in table_name:
+            elif not table_name:
                 print("\nPlease enter values properly!\n")
             else:
                 cursor.execute(f"SELECT * FROM {table_name}")
@@ -379,13 +378,13 @@ def insert():
             table_name = input("       -> TABLE NAME: ")
             if "/c" in table_name:
                 print("\nQuery cancelled, for modification of table.\n")
-            elif "" in table_name:
+            elif not table_name:
                 print("\nPlease enter values properly!\n")
             else:
                 column_name = input("       -> COLUMN NAMES: ")
                 if "/c" in column_name:
                     print("\nQuery cancelled, for modification of table.\n")
-                elif "" in column_name:
+                elif not column_name:
                     print("\nPlease enter values properly!\n")
                 else:
                     values = input("       -> VALUES: ")
@@ -411,25 +410,25 @@ def update():
             table_name = input("       -> TABLE NAME: ")
             if "/c" in table_name:
                 print("\nQuery cancelled, for updatation of table.\n")
-            elif "" in table_name:
+            elif not table_name:
                 print("\nPlease enter values properly!\n")
             else:
                 condition = input("       -> CONDITION: ")
                 if "/c" in condition:
                     print("\nQuery cancelled, for updatation of table.\n")
-                elif "" in condition:
+                elif not condition:
                     print("\nPlease enter values properly!\n")
                 else:
                     attribute = input("       -> COLUMN/FIELD TO BE UPDATED: ")
                     if "/c" in attribute:
                         print("\nQuery cancelled, for updatation of table.\n")
-                    elif "" in attribute:
+                    elif not attribute:
                         print("\nPlease enter values properly!\n")
                     else:
                         updated_value = input("       -> VALUE OF DATA-ITEM TO BE UPDATED: ")
                         if "/c" in updated_value:
                             print("\nQuery cancelled, for updatation of table.\n")
-                        elif "" in updated_value:
+                        elif not updated_value:
                             print("\nPlease enter values properly!\n")
                         else:
                             command = f"UPDATE {table_name} SET {attribute}={updated_value} WHERE {condition}"
@@ -451,19 +450,19 @@ def search():
             table_name = input("       -> TABLE NAME: ")
             if "/c" in table_name:
                 print("\nQuery cancelled, for searching of row(s) table.\n")
-            elif "" in table_name:
+            elif not table_name:
                 print("\nPlease enter values properly!\n")
             else:
                 column_name = input("       -> COLUMN NAME: ")
                 if "/c" in column_name:
                     print("\nQuery cancelled, for updatation of table.\n")
-                elif "" in column_name:
+                elif not column_name:
                     print("\nPlease enter values properly!\n")
                 else:
                     value = input("       -> VALUE: ")
                     if "/c" in value:
                         print("\nQuery cancelled, for updatation of table.\n")
-                    elif "" in value:
+                    elif not value:
                         print("\nPlease enter values properly!\n")
                     else:
                         if value == "NULL":
@@ -493,19 +492,19 @@ def delete():
             table_name = input("       -> TABLE NAME: ")
             if "/c" in table_name:
                 print("\nQuery cancelled, for searching of row(s) table.\n")
-            elif "" in table_name:
+            elif not table_name:
                 print("\nPlease enter values properly!\n")
             else:
                 column_name = input("       -> COLUMN/FIELD NAME: ")
                 if "/c" in column_name:
                     print("\nQuery cancelled, for searching of row(s) table.\n")
-                elif "" in column_name:
+                elif not column_name:
                     print("\nPlease enter values properly!\n")
                 else:
                     value = input("       -> DATA-ITEM VALUE: ")
                     if "/c" in value:
                         print("\nQuery cancelled, for searching of row(s) table.\n")
-                    elif "" in value:
+                    elif not value:
                         print("\nPlease enter values properly!\n")
                     else:
                         if "NULL" in value:
