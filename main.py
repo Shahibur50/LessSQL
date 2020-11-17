@@ -390,7 +390,7 @@ def insert():
                     values = input("       -> VALUES: ")
                     if "/c" in values:
                         print("\nQuery cancelled, for modification of table.\n")
-                    elif "" in values:
+                    elif not values:
                         print("\nPlease enter values properly!\n")
                     else:
                         command = f"INSERT INTO {table_name} ({column_name}) VALUES ({values})"
