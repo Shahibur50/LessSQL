@@ -603,7 +603,7 @@ def to_user():
 |                                                                |
 | To cancel any input statement type /c                          |
 |                                                                |
-| For help type help()                                           |
+| For help type help(); To exit the program type exit()          |
 +----------------------------------------------------------------+
 """)
 
