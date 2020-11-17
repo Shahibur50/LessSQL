@@ -1,7 +1,7 @@
 """
 SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)
 
-version 2.9.11
+version 2.10.11
 
 """
 import mysql.connector
@@ -590,7 +590,7 @@ def to_user():
     print("""
 +----------------------------------------------------------------+
 | WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)           |
-| Version: 2.9.11                                                |
+| Version: 2.10.11                                               |
 |                                                                |
 | Copyright (C) 2020  Shahibur Rahaman                           |
 |                                                                |
