@@ -189,18 +189,35 @@ def create_tb():
                 else:
                     no_of_columns = int(no_of_columns)
                     columns = ""
-                    for _ in range(no_of_columns - 1):
-                        column_value_type = input("       -> COLUMN NAME AND DATA-TYPE: ")
-                        columns += column_value_type + ', '
+                    for i in range(1, no_of_columns):
+                        column_value_type = input(f"       -> COLUMN ({i}) NAME AND DATA-TYPE: ")
+                        if "/c" in column_value_type:
+                            print("Query cancelled, for creation of table.")
+                        elif not column_value_type:
+                            print("\nPlease enter values properly!\n")
+                        else:
+                            columns += column_value_type + ', '
 
-                    column_value_type = input("       -> COLUMN NAME AND DATA-TYPE: ")
-                    columns += column_value_type
+                    column_value_type = input(f"       -> COLUMN ({i + 1}) NAME AND DATA-TYPE: ")
+                    if "/c" in column_value_type:
+                        print("Query cancelled, for creation of table.")
+                    elif not column_value_type:
+                        print("\nPlease enter values properly!\n")
+                    else:
+                        columns += column_value_type
+                
+                        primary_key = input("       -> PRIMARY KEY: ")
+                        if "/c" in primary_key:
+                            print("Query cancelled, for creation of table.")
+                        elif not primary_key:
+                            print("\nPlease enter values properly!\n") 
+                        else:
+                            command = f"CREATE TABLE {table_name}({columns}, PRIMARY KEY ({primary_key}))"
+                            print(command)
+                            cursor.execute(command)
+                            cnx.commit()
 
-                    command = f"CREATE TABLE {table_name}({columns})"
-                    cursor.execute(command)
-                    cnx.commit()
-
-                    print(f"\nQuery OK, Created the '{table_name}' table.\n")
+                            print(f"\nQuery OK, Created the '{table_name}' table.\n")
         except ValueError:
             print("\nERROR! Please enter values properly!\n")
         except mysql.connector.Error as error:
