@@ -522,16 +522,23 @@ exit() > To quit the program.
 
 def to_user():
     print(f"""
-+------------------------------------------------------+
-| WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS) |
-| Version: 2.7.11                                      |
-|                                                      |
-| Commands end with ()                                 |
-|                                                      |
-| To cancel an input statement type '/c'               |
-|                                                      |
-| For help type 'help()'                               |
-+------------------------------------------------------+
++---------------------------------------------------------------+
+| WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)          |
+| Version: 2.7.11                                               |
+|                                                               |
+| Copyright (C) 2020  Shahibur Rahaman                          |
+|                                                               |
+| This program comes with ABSOLUTELY NO WARRANTY;               |
+| for details type `show w'.                                    |
+| This is free software, and you are welcome to redistribute it |
+| under certain conditions; type `show c' for details.          |
+|                                                               |                                                        |
+| Commands end with ()                                          |
+|                                                               |
+| To cancel an input statement type '/c'                        |
+|                                                               |
+| For help type 'help()'                                        |
++---------------------------------------------------------------+
 """)
 
 
