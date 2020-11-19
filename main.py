@@ -1,7 +1,7 @@
 """
 SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)
 
-version 2.10.11
+version 2.11.11
 
 """
 import mysql.connector
@@ -18,10 +18,15 @@ PT = PrettyTable()
 connection_status = False
 
 for i in range(3):
-    usr_name = input("USER-NAME: ")
-    db = False
-    passwd = getpass.getpass()
-    host = "localhost"
+    try:
+        usr_name = input("USER-NAME: ")
+        db = False
+        passwd = getpass.getpass()
+        host = "localhost"
+    except EOFError:
+        print("Exiting...\n")
+        time.sleep(1)
+        exit()
 
     try:
         cnx = mysql.connector.connect(user=usr_name,
@@ -49,7 +54,7 @@ else:
     print("Wrong credentials entered 3 times.")
     print("Exiting...\n")
     time.sleep(2)
-    quit()
+    exit()
 
 
 def main():
@@ -62,10 +67,19 @@ def main():
             print("COMMAND|> ", end="")
             try:
                 cmd = input()
-                if "()" not in cmd:
-                    print("Not a valid command!")
+                if cmd == "":
+                    print("")
+                    continue
+                elif "()" not in cmd:
+                    print("\nNot a valid command!\n")
                 else:
-                    if cmd == "exit()":
+                    if cmd == "main()":
+                        print("\nERROR! Command not found!\n")
+                    elif cmd == "()":
+                        print("")                   
+                    elif cmd == "instructions()":
+                        print("\nERROR! Command not found!\n")
+                    elif cmd == "exit()":
                         bye()
                         cursor.close()
                         cnx.close()
@@ -74,8 +88,13 @@ def main():
                         exec('instructions()')
                     else:
                         exec(cmd)
+            
+            except EOFError:
+                print("Exiting...")
+                time.sleep(1)
+                exit()
             except NameError:
-                print("ERROR! Command not found!\n")
+                print("\nERROR! Command not found!\n")
                 continue
             except KeyboardInterrupt:
                 print("\nSession forcefully closed by the user!\n")
@@ -219,7 +238,7 @@ def create_tb():
                             print("\nPlease enter values properly!\n") 
                         else:
                             command = f"CREATE TABLE {table_name}({columns}, PRIMARY KEY ({primary_key}))"
-                            print(command)
+                            
                             cursor.execute(command)
                             cnx.commit()
 
@@ -610,7 +629,7 @@ def to_user():
     print("""
 +----------------------------------------------------------------+
 | WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)           |
-| Version: 2.10.11                                               |
+| Version: 2.11.11                                               |
 |                                                                |
 | Copyright (C) 2020  Shahibur Rahaman                           |
 |                                                                |
