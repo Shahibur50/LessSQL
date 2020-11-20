@@ -46,10 +46,9 @@ for i in range(3):
         if error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             print("Something is wrong with your user name or password!\n")
             continue
-        else:
-            print(f"\n{error}\n")
-            time.sleep(2)
-            break
+        print(f"\n{error}\n")
+        time.sleep(2)
+        break
 else:
     print("Wrong credentials entered 3 times.")
     print("Exiting...\n")
@@ -70,7 +69,7 @@ def main():
                 if cmd == "":
                     print("")
                     continue
-                elif "()" not in cmd:
+                if "()" not in cmd:
                     print("\nNot a valid command!\n")
                 else:
                     if cmd == "main()":
