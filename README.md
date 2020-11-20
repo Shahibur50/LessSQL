@@ -5,7 +5,7 @@
 
 # Documentation Under-development...
 
-# <u><b>COMMANDS FOR DATABASE MANIPULATION:</u></b>
+# <u>COMMANDS FOR DATABASE MANIPULATION:</u>
 
 <h2>
 show_db()
