@@ -1,9 +1,5 @@
-"""
-SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)
-
-version 2.11.11
-
-"""
+import mysql.connector
+import sys
 import mysql.connector
 import time
 import getpass
@@ -26,7 +22,7 @@ for i in range(3):
     except EOFError:
         print("Exiting...\n")
         time.sleep(1)
-        exit()
+        sys.exit()
 
     try:
         cnx = mysql.connector.connect(user=usr_name,
@@ -53,7 +49,7 @@ else:
     print("Wrong credentials entered 3 times.")
     print("Exiting...\n")
     time.sleep(2)
-    exit()
+    sys.exit()
 
 
 def main():
@@ -91,7 +87,7 @@ def main():
             except EOFError:
                 print("Exiting...")
                 time.sleep(1)
-                exit()
+                sys.exit()
             except NameError:
                 print("\nERROR! Command not found!\n")
                 continue
