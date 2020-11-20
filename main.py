@@ -164,7 +164,7 @@ def delete_db():
         elif not database_name:
                 print("\nPlease enter values properly!\n")
         else:
-            opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want to delete the table '{database_name}'? (y/n) ")
+            opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want to delete the databse '{database_name}'? (y/n) ")
             if opt == 'y' or opt == 'Y':
                 command = f"DROP DATABASE {database_name}"
                 cursor.execute(command)
@@ -173,7 +173,7 @@ def delete_db():
                     db = False
                 print(f"\nQuery OK, Deleted database '{database_name}'.\n")
             else:
-                print("\nQuery cancelled, for deletion of database.\n")
+                print(f"\nQuery cancelled, for deletion of the database '{database_name}'.\n")
     except mysql.connector.Error as error:
             err = str(error.msg).split("; ")[0]
             print(f"\nERROR! {err}\n")
