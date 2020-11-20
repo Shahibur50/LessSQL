@@ -571,7 +571,7 @@ def delete():
 
 
 def bye():
-    print("Closing...")
+    print("Exiting...")
     time.sleep(1)
     print("Bye...\n")
 
