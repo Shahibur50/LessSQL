@@ -119,7 +119,7 @@ def use_db():
 
 def show_db():
     try:
-        command = f"SHOW DATABASES"
+        command = "SHOW DATABASES"
         cursor.execute(command)
         table = from_db_cursor(cursor)
         table.align = "l"
@@ -179,7 +179,7 @@ def show_tb():
         print("\nNo database is in use!\n")
     else:
         try:
-            command = f"SHOW TABLES"
+            command = "SHOW TABLES"
             cursor.execute(command)
             table = from_db_cursor(cursor)
             table.align = "l"
