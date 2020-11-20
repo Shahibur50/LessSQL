@@ -1,6 +1,5 @@
 import mysql.connector
 import sys
-import mysql.connector
 import time
 import getpass
 from mysql.connector import errorcode
