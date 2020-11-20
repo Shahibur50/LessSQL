@@ -3,7 +3,6 @@ import sys
 import mysql.connector
 import time
 import getpass
-from mysql.connector import connection
 from mysql.connector import errorcode
 from prettytable import PrettyTable
 from prettytable import from_db_cursor
