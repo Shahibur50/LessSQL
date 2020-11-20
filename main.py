@@ -18,9 +18,7 @@ for i in range(3):
         passwd = getpass.getpass()
         host = "localhost"
     except EOFError:
-        print("Exiting...\n")
-        time.sleep(1)
-        sys.exit()
+        continue
 
     try:
         cnx = mysql.connector.connect(user=usr_name,
@@ -83,9 +81,7 @@ def main():
                         exec(cmd)
 
             except EOFError:
-                print("Exiting...")
-                time.sleep(1)
-                sys.exit()
+                continue
             except NameError:
                 print("\nERROR! Command not found!\n")
                 continue
