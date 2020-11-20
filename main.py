@@ -30,8 +30,8 @@ for i in range(3):
 
     try:
         cnx = mysql.connector.connect(user=usr_name,
-                                     password=passwd,
-                                     host=host)
+                                      password=passwd,
+                                      host=host)
         cursor = cnx.cursor()
         print("Connecting to the server...")
         time.sleep(2)
@@ -39,17 +39,16 @@ for i in range(3):
         print(f"\nLOGGED IN AS: {usr_name}@{host}")
         now = datetime.now()
         print(f"TIME: {now.strftime('%H:%M:%S %p')}")
-        print(f"\nServer version: {cnx.get_server_info()}") 
+        print(f"\nServer version: {cnx.get_server_info()}")
         connection_status = True
         break
     except mysql.connector.Error as error:
         if error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             print("Something is wrong with your user name or password!\n")
             continue
-        else:
-            print(f"\n{error}\n")
-            time.sleep(2)
-            break
+        print(f"\n{error}\n")
+        time.sleep(2)
+        break
 else:
     print("Wrong credentials entered 3 times.")
     print("Exiting...\n")
@@ -70,13 +69,13 @@ def main():
                 if cmd == "":
                     print("")
                     continue
-                elif "()" not in cmd:
+                if "()" not in cmd:
                     print("\nNot a valid command!\n")
                 else:
                     if cmd == "main()":
                         print("\nERROR! Command not found!\n")
                     elif cmd == "()":
-                        print("")                   
+                        print("")
                     elif cmd == "instructions()":
                         print("\nERROR! Command not found!\n")
                     elif cmd == "exit()":
@@ -88,7 +87,7 @@ def main():
                         exec('instructions()')
                     else:
                         exec(cmd)
-            
+
             except EOFError:
                 print("Exiting...")
                 time.sleep(1)
@@ -120,8 +119,8 @@ def use_db():
 
             print(f"\nQuery OK, now using database '{database_name}'.\n")
     except mysql.connector.Error as error:
-            err = str(error.msg).split("; ")[0]
-            print(f"\nERROR! {err}\n")
+        err = str(error.msg).split("; ")[0]
+        print(f"\nERROR! {err}\n")
 
 
 def show_db():
@@ -133,8 +132,8 @@ def show_db():
         print(table)
         print("")
     except mysql.connector.Error as error:
-            err = str(error.msg).split("; ")[0]
-            print(f"\nERROR! {err}\n")
+        err = str(error.msg).split("; ")[0]
+        print(f"\nERROR! {err}\n")
 
 
 def create_db():
@@ -143,7 +142,7 @@ def create_db():
         if "/c" in database_name:
             print("Query cancelled, for creation of database.")
         elif not database_name:
-                print("\nPlease enter values properly!\n")
+            print("\nPlease enter values properly!\n")
         else:
             command = f"CREATE DATABASE {database_name}"
             cursor.execute(command)
@@ -151,8 +150,8 @@ def create_db():
 
             print(f"\nQuery OK, Created database '{database_name}'.\n")
     except mysql.connector.Error as error:
-            err = str(error.msg).split("; ")[0]
-            print(f"\nERROR! {err}\n")
+        err = str(error.msg).split("; ")[0]
+        print(f"\nERROR! {err}\n")
 
 
 def delete_db():
@@ -162,7 +161,7 @@ def delete_db():
         if "/c" in database_name:
             print("Query cancelled, for deletion of database.")
         elif not database_name:
-                print("\nPlease enter values properly!\n")
+            print("\nPlease enter values properly!\n")
         else:
             opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want to delete the databse '{database_name}'? (y/n) ")
             if opt in ('y', 'Y'):
@@ -173,10 +172,11 @@ def delete_db():
                     db = False
                 print(f"\nQuery OK, Deleted database '{database_name}'.\n")
             else:
-                print(f"\nQuery cancelled, for deletion of the database '{database_name}'.\n")
+                print(
+                    f"\nQuery cancelled, for deletion of the database '{database_name}'.\n")
     except mysql.connector.Error as error:
-            err = str(error.msg).split("; ")[0]
-            print(f"\nERROR! {err}\n")
+        err = str(error.msg).split("; ")[0]
+        print(f"\nERROR! {err}\n")
 
 
 def show_tb():
@@ -215,7 +215,8 @@ def create_tb():
                     no_of_columns = int(no_of_columns)
                     columns = ""
                     for i in range(1, no_of_columns):
-                        column_value_type = input(f"       -> COLUMN ({i}) NAME AND DATA-TYPE: ")
+                        column_value_type = input(
+                            f"       -> COLUMN ({i}) NAME AND DATA-TYPE: ")
                         if "/c" in column_value_type:
                             print("Query cancelled, for creation of table.")
                         elif not column_value_type:
@@ -223,26 +224,28 @@ def create_tb():
                         else:
                             columns += column_value_type + ', '
 
-                    column_value_type = input(f"       -> COLUMN ({i + 1}) NAME AND DATA-TYPE: ")
+                    column_value_type = input(
+                        f"       -> COLUMN ({i + 1}) NAME AND DATA-TYPE: ")
                     if "/c" in column_value_type:
                         print("Query cancelled, for creation of table.")
                     elif not column_value_type:
                         print("\nPlease enter values properly!\n")
                     else:
                         columns += column_value_type
-                
+
                         primary_key = input("       -> PRIMARY KEY: ")
                         if "/c" in primary_key:
                             print("Query cancelled, for creation of table.")
                         elif not primary_key:
-                            print("\nPlease enter values properly!\n") 
+                            print("\nPlease enter values properly!\n")
                         else:
                             command = f"CREATE TABLE {table_name}({columns}, PRIMARY KEY ({primary_key}))"
-                            
+
                             cursor.execute(command)
                             cnx.commit()
 
-                            print(f"\nQuery OK, Created the '{table_name}' table.\n")
+                            print(
+                                f"\nQuery OK, Created the '{table_name}' table.\n")
         except ValueError:
             print("\nERROR! Please enter values properly!\n")
         except mysql.connector.Error as error:
@@ -321,7 +324,8 @@ def add_column():
                     column_name = column.split()[0]
                     data_type = column.split()[1]
 
-                    print(f"\nQuery OK, added column '{column_name}' with data-type '{data_type}' to the table '{table_name}'.\n")
+                    print(
+                        f"\nQuery OK, added column '{column_name}' with data-type '{data_type}' to the table '{table_name}'.\n")
         except mysql.connector.Error as error:
             err = str(error.msg).split("; ")[0]
             print(f"\nERROR! {err}\n")
@@ -344,7 +348,8 @@ def modify_column():
                 elif not column:
                     print("\nPlease enter values properly!\n")
                 else:
-                    data_type = input("       -> NEW DATA-TYPE FOR THE COLUMN: ")
+                    data_type = input(
+                        "       -> NEW DATA-TYPE FOR THE COLUMN: ")
                     if "/c" in data_type:
                         print("\nQuery cancelled, for modification of table.\n")
                     elif not data_type:
@@ -354,7 +359,8 @@ def modify_column():
                         cursor.execute(command)
                         cnx.commit()
 
-                        print(f"\nQuery OK, modified column '{column}' to new data-type '{data_type}' in table '{table_name}'.\n")
+                        print(
+                            f"\nQuery OK, modified column '{column}' to new data-type '{data_type}' in table '{table_name}'.\n")
         except mysql.connector.Error as error:
             err = str(error.msg).split("; ")[0]
             print(f"\nERROR! {err}\n")
@@ -382,8 +388,9 @@ def delete_column():
                         command = f"ALTER TABLE {table_name} DROP {column}"
                         cursor.execute(command)
                         cnx.commit()
-                    
-                        print(f"\nQuery OK, Deleted column '{column}' from table '{table_name}'.\n")
+
+                        print(
+                            f"\nQuery OK, Deleted column '{column}' from table '{table_name}'.\n")
                     else:
                         print("\nQuery cancelled, for deletion of table.\n")
         except mysql.connector.Error as error:
@@ -438,7 +445,8 @@ def insert():
                         command = f"INSERT INTO {table_name} ({column_name}) VALUES ({values})"
                         cursor.execute(command)
                         cnx.commit()
-                        print(f"\nQuery OK, inserted value(s) '{values}' in column(s) '{column_name}' in table '{table_name}'\n")
+                        print(
+                            f"\nQuery OK, inserted value(s) '{values}' in column(s) '{column_name}' in table '{table_name}'\n")
         except mysql.connector.Error as error:
             err = str(error.msg).split("; ")[0]
             print(f"\nERROR! {err}\n")
@@ -467,7 +475,8 @@ def update():
                     elif not attribute:
                         print("\nPlease enter values properly!\n")
                     else:
-                        updated_value = input("       -> VALUE OF DATA-ITEM TO BE UPDATED: ")
+                        updated_value = input(
+                            "       -> VALUE OF DATA-ITEM TO BE UPDATED: ")
                         if "/c" in updated_value:
                             print("\nQuery cancelled, for updatation of table.\n")
                         elif not updated_value:
@@ -477,7 +486,7 @@ def update():
                             cursor.execute(command)
                             cnx.commit()
                             print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute}) to {updated_value} where "
-                                f"condition '{condition}' was satisfied.\n")
+                                  f"condition '{condition}' was satisfied.\n")
 
         except mysql.connector.Error as error:
             err = str(error.msg).split("; ")[0]
@@ -555,8 +564,9 @@ def delete():
                             command = f"DELETE FROM {table_name} WHERE {column_name}={value}"
                             cursor.execute(command)
                             cnx.commit()
-                            
-                            print(f"\nQuery OK, deleted the row(s)/record(s) containing the value {value}.\n")
+
+                            print(
+                                f"\nQuery OK, deleted the row(s)/record(s) containing the value {value}.\n")
         except mysql.connector.Error as error:
             err = str(error.msg).split("; ")[0]
             print(f"\nERROR! {err}\n")
