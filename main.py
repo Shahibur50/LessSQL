@@ -1,3 +1,8 @@
+'''
+School Database Management System (SDBMS)
+Copyright (C) 2020 Shahibur Rahaman
+'''
+
 import mysql.connector
 import sys
 import time
