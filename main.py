@@ -165,7 +165,7 @@ def delete_db():
                 print("\nPlease enter values properly!\n")
         else:
             opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want to delete the databse '{database_name}'? (y/n) ")
-            if opt == 'y' or opt == 'Y':
+            if opt in ('y', 'Y'):
                 command = f"DROP DATABASE {database_name}"
                 cursor.execute(command)
                 cnx.commit()
@@ -284,7 +284,7 @@ def delete_tb():
                 print("\nPlease enter values properly!\n")
             else:
                 opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to delete the table '{table_name}'? (y/n) ")
-                if opt == 'y' or opt == 'Y':
+                if opt in ('y', 'Y'):
                     command = f"DROP TABLE {table_name}"
                     cursor.execute(command)
                     cnx.commit()
@@ -378,7 +378,7 @@ def delete_column():
                     print("\nPlease enter values properly!\n")
                 else:
                     opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to delete the table '{table_name}'? (y/n) ")
-                    if opt == 'y' or opt == 'Y':
+                    if opt in ('y', 'Y'):
                         command = f"ALTER TABLE {table_name} DROP {column}"
                         cursor.execute(command)
                         cnx.commit()

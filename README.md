@@ -5,11 +5,9 @@
 
 # Documentation Under-development...
 
-# <u>COMMANDS FOR DATABASE MANIPULATION:</u>
+# COMMANDS FOR DATABASE MANIPULATION:
 
-<h2>
-show_db()
-</h2>
+## **show_db()**
 
 <i><h3>
 Function: See all of the existing database.
