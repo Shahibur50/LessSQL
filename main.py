@@ -72,7 +72,6 @@ def main():
                 cmd = input()
                 if cmd == "":
                     print("")
-                    continue
                 elif "()" not in cmd:
                     print("\nNot a valid command!\n")
                 elif cmd == "help()":
