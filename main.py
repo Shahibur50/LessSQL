@@ -149,8 +149,8 @@ def delete_db():
         elif not database_name:
             print("\nPlease enter values properly!\n")
         else:
-            opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want to delete the databse '{database_name}'? "
-                        f"(y/n) ")
+            opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want to delete the databse '{database_name}'?"
+                        f" (y/n) ")
             if opt in ('y', 'Y'):
                 command = f"DROP DATABASE {database_name}"
                 cursor.execute(command)
