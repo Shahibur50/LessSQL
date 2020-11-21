@@ -199,9 +199,9 @@ def create_tb():
                 else:
                     no_of_columns = int(no_of_columns)
                     columns = ""
-                    for i in range(1, no_of_columns):
+                    for column_num in range(1, no_of_columns):
                         column_value_type = input(
-                            f"       -> COLUMN ({i}) NAME AND DATA-TYPE: ")
+                            f"       -> COLUMN ({column_num}) NAME AND DATA-TYPE: ")
                         if "/c" in column_value_type:
                             print("Query cancelled, for creation of table.")
                         elif not column_value_type:
