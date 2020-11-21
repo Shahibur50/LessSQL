@@ -1,7 +1,7 @@
-'''
+"""
 School Database Management System (SDBMS)
 Copyright (C) 2020 Shahibur Rahaman
-'''
+"""
 
 import mysql.connector
 import sys
@@ -15,11 +15,11 @@ from datetime import datetime
 
 PT = PrettyTable()
 connection_status = False
+db = False
 
 for i in range(3):
     try:
         usr_name = input("USER-NAME: ")
-        db = False
         passwd = getpass.getpass()
         host = "localhost"
     except EOFError:
@@ -53,6 +53,11 @@ else:
     sys.exit()
 
 
+CMDS = ["use_db()", "show_db()", "create_db()", "delete_db()", "show_tb()", "create_tb()",
+        "describe_tb()", "delete_tb()", "add_column()", "modify_column()", "delete_column()",
+        "reveal()", "search()", "insert()", "update()", "delete()", "exit()"]
+
+
 def main():
     if not connection_status:
         print("Please check if the server is online.")
@@ -68,27 +73,11 @@ def main():
                     continue
                 if "()" not in cmd:
                     print("\nNot a valid command!\n")
+                elif cmd not in CMDS:
+                    print("\nERROR! Command not found!\n")
                 else:
-                    if cmd == "main()":
-                        print("\nERROR! Command not found!\n")
-                    elif cmd == "()":
-                        print("")
-                    elif cmd == "instructions()":
-                        print("\nERROR! Command not found!\n")
-                    elif cmd == "exit()":
-                        bye()
-                        cursor.close()
-                        cnx.close()
-                        break
-                    elif cmd == "help()":
-                        exec('instructions()')
-                    else:
-                        exec(cmd)
-
+                    exec(cmd)
             except EOFError:
-                continue
-            except NameError:
-                print("\nERROR! Command not found!\n")
                 continue
             except KeyboardInterrupt:
                 print("\nSession forcefully closed by the user!\n")
