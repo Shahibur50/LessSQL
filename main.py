@@ -313,8 +313,8 @@ def add_column():
                     column_name = column.split()[0]
                     data_type = column.split()[1]
 
-                    print(f"\nQuery OK, added column '{column_name}' with data-type '{data_type}' to the table '"
-                          f"{table_name}'.\n")
+                    print(f"\nQuery OK, added column '{column_name}' with data-type '{data_type}'"
+                          f" to the table '{table_name}'.\n")
         except mysql.connector.Error as err:
             err = str(err.msg).split("; ")[0]
             print(f"\nERROR! {err}\n")
@@ -348,8 +348,8 @@ def modify_column():
                         cursor.execute(command)
                         cnx.commit()
 
-                        print(f"\nQuery OK, modified column '{column}' to new data-type '{data_type}' in table "
-                              f"'{table_name}'.\n")
+                        print(f"\nQuery OK, modified column '{column}' to new data-type '{data_type}'"
+                              f" in table '{table_name}'.\n")
         except mysql.connector.Error as err:
             err = str(err.msg).split("; ")[0]
             print(f"\nERROR! {err}\n")
@@ -435,8 +435,8 @@ def insert():
                         command = f"INSERT INTO {table_name} ({column_name}) VALUES ({values})"
                         cursor.execute(command)
                         cnx.commit()
-                        print(f"\nQuery OK, inserted value(s) '{values}' in column(s) '{column_name}' in table '"
-                              f"{table_name}'\n")
+                        print(f"\nQuery OK, inserted value(s) '{values}' in column(s) '{column_name}'"
+                              f" in table '{table_name}'\n")
         except mysql.connector.Error as err:
             err = str(err.msg).split("; ")[0]
             print(f"\nERROR! {err}\n")
@@ -475,8 +475,8 @@ def update():
                             command = f"UPDATE {table_name} SET {attribute}={updated_value} WHERE {condition}"
                             cursor.execute(command)
                             cnx.commit()
-                            print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute}) to "
-                                  f"{updated_value} where condition '{condition}' was satisfied.\n")
+                            print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute})"
+                                  f" to '{updated_value}' where condition '{condition}' was satisfied.\n")
 
         except mysql.connector.Error as err:
             err = str(err.msg).split("; ")[0]
