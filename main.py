@@ -12,17 +12,16 @@ from prettytable import PrettyTable
 from prettytable import from_db_cursor
 from datetime import datetime
 
-
-PT = PrettyTable()
-connection_status = False
-db = False
-cursor = False
-cnx = False
-
 COMMANDS = ["use_db()", "show_db()", "create_db()", "delete_db()", "show_tb()", "create_tb()",
             "describe_tb()", "delete_tb()", "add_column()", "modify_column()", "delete_column()",
             "reveal()", "search()", "insert()", "update()", "delete()", "exit()", "show_w()",
             "show_c()"]
+PT = PrettyTable()
+
+connection_status = False
+db = False
+cursor = False
+cnx = False
 
 for i in range(3):
     try:
