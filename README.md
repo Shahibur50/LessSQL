@@ -7,9 +7,9 @@
 
 # COMMANDS FOR DATABASE MANIPULATION:
 
-## **`show_db()`**
-### *Function:* `See all of the existing database.`
-### *Example:*
+## 1. **`show_db()`**
+- ### *Function:* `See all of the existing database.`
+- ### *Example:*
 
 <pre>
 COMMAND|> show_db()
