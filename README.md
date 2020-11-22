@@ -5,7 +5,7 @@
 
 # Documentation Under-development...
 
-# COMMANDS FOR DATABASE MANIPULATION:
+# **COMMANDS FOR DATABASE MANIPULATION:**
 
 ## 1. **`show_db()`**
 - ### *Function:* `See all of the existing database.`
@@ -45,78 +45,54 @@ Query OK, Created database 'demo_db'.
 
 <br>
 
-<h2>
-use_db()
-</h2>
+## 3. **`use_db()`**
+- ### *Function:* `Use an existing database.`
+- ### *Syntax:*
 
-<i><h3>
-Function: Use an existing database.
-</h3></i>
-
-<i><h3>
-Syntax:
-</h3></i>
-
-<pre>
+```
 COMMAND|> use_db()
        -> DATABASE NAME: {Enter the database name to be used}
-</pre>
+```
 
-<i><h3>
-Example:
-</h3></i>
+- ### *Example:*
 
-<pre>
+```
 COMMAND|> use_db()
        -> DATABASE NAME: demo_db  
 
 Query OK, now using database 'demo_db'.
-</pre>
+```
 
-#
+<br>
 
-<h2>
-delete_db()
-</h2>
+## 4. **`delete_db()`**
+- ### *Function:* `Delete an existing database.`
+- ### *Syntax:*
 
-<i><h3>
-Function: Delete an existing database.
-</h3></i>
-
-<i><h3>
-Syntax:
-</h3></i>
-
-<pre>
+```
 COMMAND|> delete_db()
        -> DATABASE NAME: {Enter the database name to be deleted} 
 
        -> IRREVERSIBLE CHANGE! Do you really want to delete the table 'demo_db'? (y/n) {Enter either 'y' to delete or 'n' to cancel it.}
-</pre>
+```
 
-<i><h3>
-Example:
-</h3></i>
+- ### *Example:*
 
-<pre>
+```
 COMMAND|> delete_db()
        -> DATABASE NAME: demo_db    
 
        -> IRREVERSIBLE CHANGE! Do you really want to delete the databse 'demo_db'? (y/n) y
 Query OK, Deleted database 'demo_db'.
-</pre>
+```
 
+## **Or,**
 
-<b><h3>
-Or,
-</b></h3>
-
-<pre>
+```
 COMMAND|> delete_db()
        -> DATABASE NAME: demo_db
 
        -> IRREVERSIBLE CHANGE! Do you really want to delete the databse 'demo_db'? (y/n) n
 
 Query cancelled, for deletion of the database 'demo_db'.
-</pre>
-
+```
