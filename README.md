@@ -120,7 +120,7 @@ COMMAND|> show_tb()
 <br>
 
 ## 2. **`create_tb()`**
-- ### *Function* `Creates a new table.`
+- ### *Function:* `Creates a new table.`
 - ### *Syntax:*
 
 ```
@@ -147,4 +147,66 @@ COMMAND|> create_tb()
        -> PRIMARY KEY: Roll
 
 Query OK, Created the 'Attendance' table.
+```
+
+<br>
+
+## 3. **`describe_tb()`**
+- ### *Function:* `Shows the structure or schema of an exixting table.`
+- ### *Syntax:*
+
+```
+COMMAND|> describe_tb()
+       -> TABLE NAME: {Enter the table name.} 
+```
+
+- ### *Example:*
+
+```
+COMMAND|> describe_tb()
+       -> TABLE NAME: attendance 
++---------+----------------+------+-----+---------+-------+
+| Field   | Type           | Null | Key | Default | Extra |
++---------+----------------+------+-----+---------+-------+
+| Roll    | b'int'         | NO   | PRI | None    |       |
+| Name    | b'varchar(20)' | YES  |     | None    |       |
+| Class   | b'varchar(3)'  | YES  |     | None    |       |
+| Section | b'char(1)'     | YES  |     | None    |       |
+| Remarks | b'char(1)'     | YES  |     | None    |       |
++---------+----------------+------+-----+---------+-------+
+```
+
+<br>
+
+## 4. **`delete_tb()`**
+- ### *Function:* `Deletes an existing table.`
+- ### *Syntax:*
+
+```
+COMMAND|> delete_tb()
+      -> NAME OF TABLE TO BE DELETED: {Enter the table name}
+
+      -> IRREVERSIBLE CHANGE! Do you really want to delete the table 'demo_tb'? (y/n) {Enter either 'y' to delete or 'n' to cancel it.}
+```
+
+- ### *Example:*
+
+```
+COMMAND|> delete_tb()
+      -> NAME OF TABLE TO BE DELETED: demo_tb  
+
+      -> IRREVERSIBLE CHANGE! Do you really want to delete the table 'demo_tb'? (y/n) y
+
+Query OK, deleted the table (demo_tb)
+```
+
+## **Or,**
+
+```
+COMMAND|> delete_tb()
+      -> NAME OF TABLE TO BE DELETED: demo_tb
+
+      -> IRREVERSIBLE CHANGE! Do you really want to delete the table 'demo_tb'? (y/n) n
+
+Query cancelled, for deletion of table.
 ```
