@@ -96,3 +96,55 @@ COMMAND|> delete_db()
 
 Query cancelled, for deletion of the database 'demo_db'.
 ```
+
+#
+
+<br>
+
+#
+# **COMMANDS FOR TABLE MANIPULATION:**
+
+## 1. **`show_tb()`**
+- ### *Function:* `Shows tables present in an existing database.`
+- ### *Example:*
+
+```
+COMMAND|> show_tb()
++-------------------+
+| Tables_in_demo_db |
++-------------------+
+| attendance        |
++-------------------+
+```
+
+<br>
+
+## 2. **`create_tb()`**
+- ### *Function* `Creates a new table.`
+- ### *Syntax:*
+
+```
+COMMAND|> create_tb()
+       -> NAME OF TABLE TO BE CREATED: {New table name}
+       -> NO. OF COLUMNS: {Enter the no. of columns or fields}
+       -> COLUMN (1) NAME AND DATA-TYPE: {1st column name} {1st column's data-type}
+       -> COLUMN (2) NAME AND DATA-TYPE: {2nd column name} {2nd column's data-type}
+       ...
+       -> PRIMARY KEY: {Enter the Primary Key name (The primary key always has the unique data and it's value cannot be NULL.)}
+```
+
+- ### *Example:*
+
+```
+COMMAND|> create_tb()
+       -> NAME OF TABLE TO BE CREATED: Attendance
+       -> NO. OF COLUMNS: 5
+       -> COLUMN (1) NAME AND DATA-TYPE: Roll INT
+       -> COLUMN (2) NAME AND DATA-TYPE: Name VARCHAR(20)
+       -> COLUMN (3) NAME AND DATA-TYPE: Class VARCHAR(3)
+       -> COLUMN (4) NAME AND DATA-TYPE: Section CHAR(1)
+       -> COLUMN (5) NAME AND DATA-TYPE: Remarks CHAR(1)
+       -> PRIMARY KEY: Roll
+
+Query OK, Created the 'Attendance' table.
+```
