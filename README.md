@@ -24,24 +24,16 @@ COMMAND|> show_db()
 +--------------------+
 </pre>
 
-#
+<br>
 
-<h2>
-create_db()
-</h2>
+## 2. **`create_db()`**
+- ### *Function:* `Creates a new database.`
+- ### *Syntax:*
 
-<i><h3>
-Function: Creates a new database.
-</h3></i>
-
-<i><h3>
-Syntax:
-</h3></i>
-
-<pre>
+```
 COMMAND|> create_db()
-       -> DATABASE NAME: {New database name}
-</pre>
+        -> DATABASE NAME: {New database name}
+```
 
 <i><h3>
 Example:
