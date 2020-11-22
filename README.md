@@ -1,3 +1,5 @@
+<Body bgcolor="blue">
+
 # School_DataBase_Management_System (SDBMS)
 
  A database management system based on MySQL, with a goal to simplify the usage of a RDBMS for data-management in schools.
