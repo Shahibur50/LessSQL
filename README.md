@@ -1,7 +1,7 @@
 # School_DataBase_Management_System (SDBMS)
 
  A database management system based on MySQL, with a goal to simplify the usage of a RDBMS for data-management in schools.
- > This program simplifies the process/way of using databases in MySQL by asking the user about data to be queried or updated and converting those answers given by users into MySQL query language, so that any person could simply use databases without having to learn SQL.
+ > This program simplifies the process/way of using databases in MySQL by asking the user about data to be queried or updated and converting those answers given by users into MySQL query language, so that any person could simply use databases without having to learn a lot about SQL.
 
 # Documentation Under-development...
 
@@ -11,7 +11,7 @@
 - ### *Function:* `See all of the existing database.`
 - ### *Example:*
 
-<pre>
+```
 COMMAND|> show_db()
 +--------------------+
 | Database           |
@@ -22,7 +22,7 @@ COMMAND|> show_db()
 | project            |
 | sys                |
 +--------------------+
-</pre>
+```
 
 <br>
 
@@ -35,18 +35,15 @@ COMMAND|> create_db()
         -> DATABASE NAME: {New database name}
 ```
 
-<i><h3>
-Example:
-</h3></i>
-
-<pre>
+- ### *Example:*
+```
 COMMAND|> create_db()
        -> DATABASE NAME: demo_db
 
 Query OK, Created database 'demo_db'.
-</pre>
+```
 
-#
+<br>
 
 <h2>
 use_db()
