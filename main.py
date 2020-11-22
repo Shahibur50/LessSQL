@@ -552,11 +552,10 @@ def delete():
                             command = f"DELETE FROM {table_name} WHERE {column_name} IS {value}"
                         else:
                             command = f"DELETE FROM {table_name} WHERE {column_name}={value}"
-                            cursor.execute(command)
-                            cnx.commit()
+                        cursor.execute(command)
+                        cnx.commit()
 
-                            print(
-                                f"\nQuery OK, deleted the row(s)/record(s) containing the value {value}.\n")
+                        print(f"\nQuery OK, deleted the row(s)/record(s) containing the value {value}.\n")
         except mysql.connector.Error as err:
             err = str(err.msg).split("; ")[0]
             print(f"\nERROR! {err}\n")
