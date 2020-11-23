@@ -5,21 +5,19 @@
 
 <br>
 
-# ``Want a feature to be added in the next update?``
-## No, worries head over to [New feature request page.](https://github.com/Shahibur50/School_DataBase_Management_System/issues/new?assignees=&labels=&template=feature_request.md&title=)
+## ``Want a feature to be added in the next update?``
+## Don't hesitate! Just head over to the [New feature request page!](https://github.com/Shahibur50/School_DataBase_Management_System/issues/new?assignees=&labels=&template=feature_request.md&title=)
 
 
 <br>
 
-# ``Want to report a bug?``
-## Head over to the [Bug report page.](https://github.com/Shahibur50/School_DataBase_Management_System/issues/new?assignees=&labels=&template=bug_report.md&title=)
-
+## ``Want to report a bug?``
+## No, worries just simply head over to the [Bug report page.](https://github.com/Shahibur50/School_DataBase_Management_System/issues/new?assignees=&labels=&template=bug_report.md&title=)
+#
 <br>
-
 <br>
 
 #
-
 # **```DOCUMENTATION FOR SDBMS```**
 
 ## ``NOTE!``
