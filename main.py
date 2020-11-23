@@ -75,6 +75,9 @@ def main():
                     print("\nNot a valid command!\n")
                 elif cmd == "help()":
                     instructions()
+                elif cmd == "exit()":
+                    bye()
+                    break
                 elif cmd not in COMMANDS:
                     print("\nERROR! Command not found!\n")
                 else:
@@ -372,8 +375,8 @@ def delete_column():
                 elif not column:
                     print("\nPlease enter values properly!\n")
                 else:
-                    opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to delete the table "
-                                f"'{table_name}'? (y/n) ")
+                    opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to delete the column "
+                                f"'{column}'? (y/n) ")
                     if opt in ('y', 'Y'):
                         command = f"ALTER TABLE {table_name} DROP {column}"
                         cursor.execute(command)
@@ -382,7 +385,7 @@ def delete_column():
                         print(
                             f"\nQuery OK, Deleted column '{column}' from table '{table_name}'.\n")
                     else:
-                        print("\nQuery cancelled, for deletion of table.\n")
+                        print("\nQuery cancelled, for deletion of column.\n")
         except mysql.connector.Error as err:
             err = str(err.msg).split("; ")[0]
             print(f"\nERROR! {err}\n")

@@ -122,7 +122,7 @@ COMMAND|> show_tb()
 ## 2. **`create_tb()`**
 - ### *Function:* `Creates a new table.`
 - ### *Syntax:*
-
+**\* Remember to put a space between column name and column's data-type.**
 ```
 COMMAND|> create_tb()
        -> NAME OF TABLE TO BE CREATED: {New table name}
@@ -210,3 +210,91 @@ COMMAND|> delete_tb()
 
 Query cancelled, for deletion of table.
 ```
+
+#
+
+<br>
+
+#
+# **COMMANDS FOR COLUMN MANIPULATION:**
+
+## 1. **`add_column()`**
+- ### *Function:* `Adds a new column to an existing table.`
+- ### *Syntax:*
+
+```
+COMMAND|> add_column()
+       -> TABLE NAME: {Enter the table name}
+       -> NEW COLUMN NAME AND DATA-TYPE: {Column name} {column's data-type} 
+```
+
+- ### *Example:*
+
+```
+COMMAND|> add_column()
+       -> TABLE NAME: attendance 
+       -> NEW COLUMN NAME AND DATA-TYPE: Email VARCHAR(30) 
+
+Query OK, added column 'Email' with data-type 'VARCHAR(30)' to the table 'attendance'.
+```
+
+<br>
+
+## 2. **`modify_column()`**
+- ### *Function:* `Modify an existing column in a table.`
+- ### *Syntax:*
+
+```
+COMMAND|> modify_column()
+       -> TABLE NAME: {Enter the table name}
+       -> EXISTING COLUMN NAME: {Enter the existing column name}
+       -> NEW DATA-TYPE FOR THE COLUMN: {Enter the new data type for the column}
+```
+
+- ### *Example:*
+
+```
+COMMAND|> modify_column()
+       -> TABLE NAME: attendance
+       -> EXISTING COLUMN NAME: Email
+       -> NEW DATA-TYPE FOR THE COLUMN: VARCHAR(50)
+
+Query OK, modified column 'Email' to new data-type 'VARCHAR(50)' in table 'attendance'.
+```
+
+## 3. **`delete_column()`**
+- ### *Function:* `Delete an existing column in a table.`
+- ### *Syntax:*
+
+```
+COMMAND|> delete_column()
+       -> TABLE NAME: {Enter the table name}
+       -> NAME OF COLUMN TO BE DELETED: {Enter the column name}
+
+      -> IRREVERSIBLE CHANGE! Do you really want to delete the column 'Email'? (y/n) {Enter either 'y' to delete or 'n' to cancel it.}
+```
+
+- ### *Example:*
+
+```
+COMMAND|> delete_column()
+       -> TABLE NAME: attendance
+       -> NAME OF COLUMN TO BE DELETED: Email
+
+      -> IRREVERSIBLE CHANGE! Do you really want to delete the column 'Email'? (y/n) y
+
+Query OK, Deleted column 'Email' from table 'attendance'.
+```
+
+## **Or,**
+
+```
+COMMAND|> delete_column()
+       -> TABLE NAME: attendance
+       -> NAME OF COLUMN TO BE DELETED: Email
+
+      -> IRREVERSIBLE CHANGE! Do you really want to delete the column 'Email'? (y/n) n
+
+Query cancelled, for deletion of column.
+```
+
