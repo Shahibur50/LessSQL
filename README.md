@@ -14,17 +14,17 @@
 
 <br>
 
-# **STARTING SCRREN:**
+# **STARTING SCREEN OF SDBMS:**
 
 ```
-USER-NAME: {Enter your user-name here} # usually it is root.
-Password: {Enter the password}
+USER-NAME: {user-name}  # Enter your user-name here, usually its 'root' for default installtion.
+Password: {password}  # Enter your password here, created during installation
 Connecting to the server...
 
 CONNECTION ESTABLISHED!
 
 LOGGED IN AS: {user-name}@{host-name}
-TIME: {time} PM
+TIME: {time}
 
 Server version: {your server's version}
 
