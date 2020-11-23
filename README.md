@@ -17,7 +17,7 @@
 
 <br>
 
-## **```DOCUMENTATION FOR SDBMS```**
+# **```DOCUMENTATION FOR SDBMS```**
 
 ## ``NOTE!``
 
@@ -69,7 +69,7 @@
 
 <br>
 
-# **```MANUAL FOR COMMANDS IN SDBMS:```**
+# **```MANUAL OF COMMANDS IN SDBMS:```**
 
 ## ``I.`` **COMMANDS FOR DATABASE MANIPULATION:**
 
