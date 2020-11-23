@@ -60,6 +60,8 @@ COMMAND|>
 
 <br>
 
+# ```**MANUAL FOR COMMANDS:**```
+
 # **COMMANDS FOR DATABASE MANIPULATION:**
 
 ## 1. **`show_db()`**
