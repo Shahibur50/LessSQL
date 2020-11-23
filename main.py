@@ -1,6 +1,9 @@
 """
 School Database Management System (SDBMS)
+
 Copyright (C) 2020 Shahibur Rahaman
+
+Licensed under GNU GPLv3
 """
 
 import mysql.connector
@@ -632,7 +635,7 @@ def to_user():
     print("""
 +----------------------------------------------------------------+
 | WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)           |
-| Version: 2.11.11                                               |
+| Version: 2.12.11                                               |
 |                                                                |
 | Copyright (C) 2020  Shahibur Rahaman                           |
 |                                                                |
