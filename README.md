@@ -18,7 +18,7 @@
 
 ```
 USER-NAME: {Enter your user-name, usually it's 'root' for default installation of MySQL}
-Password: {Enter the password created during installation MySQL}
+Password: {Enter the password created during installation of MySQL}
 ```
 
 <br>
