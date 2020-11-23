@@ -5,7 +5,9 @@
 
 <br>
 
-# **Documentation for SDBMS:**
+# ```**Documentation for SDBMS:**```
+
+## Please first install and setup a mysql server in your computer to use this software.
 
 <br>
 
