@@ -241,7 +241,7 @@ Query OK, added column 'Email' with data-type 'VARCHAR(30)' to the table 'attend
 <br>
 
 ## 2. **`modify_column()`**
-- ### *Function:* `Modify an existing column in a table.`
+- ### *Function:* `Modifies an existing column in a table.`
 - ### *Syntax:*
 
 ```
@@ -265,7 +265,7 @@ Query OK, modified column 'Email' to new data-type 'VARCHAR(50)' in table 'atten
 <br>
 
 ## 3. **`delete_column()`**
-- ### *Function:* `Delete an existing column in a table.`
+- ### *Function:* `Deletes an existing column in a table.`
 - ### *Syntax:*
 
 ```
@@ -332,8 +332,8 @@ COMMAND|> reveal()
 +------+-----------------+-------+---------+---------+------------+
 ```
 
-## 1. **`search()`**
-- ### *Function:* `Search for row(s)/record(s) present in a table.`
+## 2. **`search()`**
+- ### *Function:* `Searches for row(s)/record(s) present in a table.`
 - ### *Syntax:*
 
 ```
@@ -388,3 +388,86 @@ COMMAND|> search()
 +------+-----------------+-------+---------+---------+------------+
 ```
 
+#
+
+<br>
+
+#
+# **COMMANDS FOR IN-TABLE MANIPULATION:**
+
+## 1. **`insert()`**
+- ### *Function:* `Inserts data in a row/record in a table.`
+- ### *Syntax:*
+
+### **\* Remember to use comma between two values.**
+### **\* Enter values releatively for column names and thier values.**
+
+- ### *Syntax:*
+
+```
+COMMAND|> insert()
+       -> TABLE NAME: {Enter the table name}
+       -> COLUMN NAMES: {Enter the column name(s) to which the data has to be inserted} 
+       -> VALUES: {Enter the values relative to the column names}
+```
+
+- ### *Example:*
+
+```
+COMMAND|> insert()   
+       -> TABLE NAME: attendance
+       -> COLUMN NAMES: Roll, Name, Class, Section, Remarks, Date 
+       -> VALUES: 6, 'Taran Duncun', 'XI', 'D', 'A', '2020-11-23'
+
+Query OK, inserted value(s) (6, 'Taran Duncun', 'XI', 'D', 'A', '2020-11-23') in column(s) 'Roll, Name, Class, Section, Remarks, Date' in table 'attendance'
+```
+
+<br>
+
+## 2. **`update()`**
+- ### *Function:* `Modifies data-item present in a row in a table`
+- ### *Syntax:*
+
+```
+COMMAND|> update()
+       -> TABLE NAME: {Enter the table name}
+       -> CONDITION: {Enter the condition for updating}
+       -> COLUMN/FIELD TO BE UPDATED: {Enter the column name under which the data has to be updated}
+       -> VALUE OF DATA-ITEM TO BE UPDATED: {Enter the value to be updated in column mentioned earlier}
+```
+
+- ### *Example:*
+
+```
+COMMAND|> update()
+       -> TABLE NAME: attendance
+       -> CONDITION: Name = 'Taran Duncun' 
+       -> COLUMN/FIELD TO BE UPDATED: Remarks
+       -> VALUE OF DATA-ITEM TO BE UPDATED: 'P'
+
+Query OK, updated the row(s)/record(s) in column/field (Remarks) to ('P') where condition (Name = 'Taran Duncun') was satisfied.
+```
+
+<br>
+
+## 3. **`delete()`**
+- ### *Function:* `Deletes complete row(s)/record(s) present in a table`
+- ### *Syntax:*
+
+```
+COMMAND|> delete()
+       -> TABLE NAME: {Enter the table name}
+       -> COLUMN/FIELD NAME: {Enter the column name to be checked for deletion}
+       -> DATA-ITEM VALUE: {Enter the data-item value present in the column mentioned above}
+```
+
+- ### *Example:*
+
+```
+COMMAND|> delete()   
+       -> TABLE NAME: attendance
+       -> COLUMN/FIELD NAME: Name
+       -> DATA-ITEM VALUE: 'Linus sebastian'
+
+Query OK, deleted the row(s)/record(s) containing the value 'Linus sebastian'.
+```
