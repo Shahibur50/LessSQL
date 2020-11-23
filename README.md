@@ -10,6 +10,8 @@
 ## ``NOTE!``
 ### Please first install and setup a mysql server in your computer to use this software.
 
+> ### Download MySQL installer from here: https://dev.mysql.com/get/Downloads/MySQLInstaller/mysql-installer-community-8.0.22.0.msi
+
 <br>
 
 # **STARTING SCRREN:**
