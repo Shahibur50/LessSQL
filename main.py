@@ -438,7 +438,7 @@ def insert():
                         command = f"INSERT INTO {table_name} ({column_name}) VALUES ({values})"
                         cursor.execute(command)
                         cnx.commit()
-                        print(f"\nQuery OK, inserted value(s) '{values}' in column(s) '{column_name}'"
+                        print(f"\nQuery OK, inserted value(s) ({values}) in column(s) '{column_name}'"
                               f" in table '{table_name}'\n")
         except mysql.connector.Error as err:
             err = str(err.msg).split("; ")[0]
@@ -479,7 +479,7 @@ def update():
                             cursor.execute(command)
                             cnx.commit()
                             print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute})"
-                                  f" to '{updated_value}' where condition '{condition}' was satisfied.\n")
+                                  f" to ({updated_value}) where condition ({condition}) was satisfied.\n")
 
         except mysql.connector.Error as err:
             err = str(err.msg).split("; ")[0]

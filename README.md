@@ -300,3 +300,91 @@ COMMAND|> delete_column()
 Query cancelled, for deletion of column.
 ```
 
+#
+
+<br>
+
+#
+# **COMMANDS FOR IN-TABLE QUERIES:**
+
+## 1. **`reveal()`**
+- ### *Function:* `Shows all of the rows/records present in a table.`
+- ### *Syntax:*
+
+```
+COMMAND|> reveal()
+       -> TABLE NAME: {Enter the table name}
+```
+
+- ### *Example:*
+
+```
+COMMAND|> reveal()  
+       -> TABLE NAME: attendance 
++------+-----------------+-------+---------+---------+------------+
+| Roll | Name            | Class | Section | Remarks | Date       |
++------+-----------------+-------+---------+---------+------------+
+| 1    | Joe gates       | XI    | D       | P       | 2020-11-23 |
+| 2    | linus sebastian | XI    | D       | A       | 2020-11-23 |
+| 3    | Drake jobs      | XI    | D       | P       | 2020-11-23 |
+| 4    | Alan Turing     | XI    | D       | P       | 2020-11-23 |
+| 5    | John morgan     | XI    | D       | P       | 2020-11-23 |
++------+-----------------+-------+---------+---------+------------+
+```
+
+## 1. **`search()`**
+- ### *Function:* `Search for row(s)/record(s) present in a table.`
+- ### *Syntax:*
+
+```
+COMMAND|> search()
+       -> TABLE NAME: {Enter the table name}
+       -> COLUMN NAME: {Enter the column name}
+       -> VALUE: {Enter the value to be searched in the column mentioned earlier}
+```
+
+- ### *Example 1:*
+
+```
+COMMAND|> search()
+       -> TABLE NAME: attendance 
+       -> COLUMN NAME: Name
+       -> VALUE: 'Joe gates'
++------+-----------+-------+---------+---------+------------+
+| Roll | Name      | Class | Section | Remarks | Date       |
++------+-----------+-------+---------+---------+------------+
+| 1    | Joe gates | XI    | D       | P       | 2020-11-23 |
++------+-----------+-------+---------+---------+------------+
+```
+
+- ### *Example 2:*
+
+```
+COMMAND|> search()    
+       -> TABLE NAME: attendance
+       -> COLUMN NAME: Remarks
+       -> VALUE: 'P'
++------+-------------+-------+---------+---------+------------+
+| Roll | Name        | Class | Section | Remarks | Date       |
++------+-------------+-------+---------+---------+------------+
+| 1    | Joe gates   | XI    | D       | P       | 2020-11-23 |
+| 3    | Drake jobs  | XI    | D       | P       | 2020-11-23 |
+| 4    | Alan Turing | XI    | D       | P       | 2020-11-23 |
+| 5    | John morgan | XI    | D       | P       | 2020-11-23 |
++------+-------------+-------+---------+---------+------------+
+```
+
+- ### *Example 3:*
+
+```
+COMMAND|> search()   
+       -> TABLE NAME: attendance
+       -> COLUMN NAME: Remarks
+       -> VALUE: 'A'
++------+-----------------+-------+---------+---------+------------+
+| Roll | Name            | Class | Section | Remarks | Date       |
++------+-----------------+-------+---------+---------+------------+
+| 2    | linus sebastian | XI    | D       | A       | 2020-11-23 |
++------+-----------------+-------+---------+---------+------------+
+```
+
