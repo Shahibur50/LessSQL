@@ -17,16 +17,16 @@
 # **STARTING SCREEN OF SDBMS:**
 
 ```
-USER-NAME: {user-name}  # Enter your user-name here, usually its 'root' for default installtion.
-Password: {password}  # Enter your password here, created during installation
+USER-NAME: root
+Password: 
 Connecting to the server...
 
 CONNECTION ESTABLISHED!
 
-LOGGED IN AS: {user-name}@{host-name}
-TIME: {time}
+LOGGED IN AS: root@localhost
+TIME: 14:37:30 PM
 
-Server version: {your server's version}
+Server version: 8.0.22
 
 +----------------------------------------------------------------+
 | WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)           |
