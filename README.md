@@ -1,4 +1,4 @@
-# ``School DataBase Management System (SDBMS)``
+# **School DataBase Management System (SDBMS)**
 
 ##  A database management system based on MySQL, with a goal to simplify the usage of a RDBMS for data-management in schools.
  > ### This program simplifies the process/way of using databases in MySQL by asking the user about data to be queried or updated and converting those answers given by users into MySQL query language, so that any person could simply use databases without having to learn a lot about SQL.
@@ -14,17 +14,17 @@
 
 **No, worries just simply head over to the [Bug report page.](https://github.com/Shahibur50/School_DataBase_Management_System/issues/new?assignees=&labels=&template=bug_report.md&title=)**
 
-#
+
 <br>
 <br>
 
 #
-# **```DOCUMENTATION FOR SDBMS```**
+## **```DOCUMENTATION FOR SDBMS```**
 
 ## ``NOTE!``
 ### Please first install and setup a mysql server in your computer to use this software.
 
-> ### Download MySQL installer from here: https://dev.mysql.com/downloads/installer/
+> ### Download MySQL installer from here: [MySQL Windows Installer](https://dev.mysql.com/downloads/installer/)
 
 <br>
 
@@ -76,7 +76,7 @@ COMMAND|>
 
 # **```MANUAL FOR COMMANDS IN SDBMS:```**
 
-# ``I.`` **COMMANDS FOR DATABASE MANIPULATION:**
+## ``I.`` **COMMANDS FOR DATABASE MANIPULATION:**
 
 ## 1. **`show_db()`**
 - ### *Function:* `See all of the existing database.`
@@ -173,7 +173,7 @@ Query cancelled, for deletion of the database 'demo_db'.
 <br>
 
 #
-# ``II.`` **COMMANDS FOR TABLE MANIPULATION:**
+## ``II.`` **COMMANDS FOR TABLE MANIPULATION:**
 
 ## 1. **`show_tb()`**
 - ### *Function:* `Shows tables present in an existing database.`
@@ -287,7 +287,7 @@ Query cancelled, for deletion of table.
 <br>
 
 #
-# ``III.`` **COMMANDS FOR COLUMN MANIPULATION:**
+## ``III.`` **COMMANDS FOR COLUMN MANIPULATION:**
 
 ## 1. **`add_column()`**
 - ### *Function:* `Adds a new column to an existing table.`
@@ -376,7 +376,7 @@ Query cancelled, for deletion of column.
 <br>
 
 #
-# ``IV.`` **COMMANDS FOR IN-TABLE QUERIES:**
+## ``IV.`` **COMMANDS FOR IN-TABLE QUERIES:**
 
 ## 1. **`reveal()`**
 - ### *Function:* `Shows all of the rows/records present in a table.`
@@ -464,7 +464,7 @@ COMMAND|> search()
 <br>
 
 #
-# ``V.`` **COMMANDS FOR IN-TABLE MANIPULATION:**
+## ``V.`` **COMMANDS FOR IN-TABLE MANIPULATION:**
 
 ## 1. **`insert()`**
 - ### *Function:* `Inserts data in a row/record in a table.`
