@@ -60,9 +60,9 @@ COMMAND|>
 
 <br>
 
-# **```MANUAL FOR COMMANDS:```**
+# **```MANUAL FOR COMMANDS IN SDBMS:```**
 
-# **COMMANDS FOR DATABASE MANIPULATION:**
+# ``I.`` **COMMANDS FOR DATABASE MANIPULATION:**
 
 ## 1. **`show_db()`**
 - ### *Function:* `See all of the existing database.`
@@ -159,7 +159,7 @@ Query cancelled, for deletion of the database 'demo_db'.
 <br>
 
 #
-# **COMMANDS FOR TABLE MANIPULATION:**
+# ``II.`` **COMMANDS FOR TABLE MANIPULATION:**
 
 ## 1. **`show_tb()`**
 - ### *Function:* `Shows tables present in an existing database.`
@@ -273,7 +273,7 @@ Query cancelled, for deletion of table.
 <br>
 
 #
-# **COMMANDS FOR COLUMN MANIPULATION:**
+# ``III.`` **COMMANDS FOR COLUMN MANIPULATION:**
 
 ## 1. **`add_column()`**
 - ### *Function:* `Adds a new column to an existing table.`
@@ -362,7 +362,7 @@ Query cancelled, for deletion of column.
 <br>
 
 #
-# **COMMANDS FOR IN-TABLE QUERIES:**
+# ``IV.`` **COMMANDS FOR IN-TABLE QUERIES:**
 
 ## 1. **`reveal()`**
 - ### *Function:* `Shows all of the rows/records present in a table.`
@@ -450,7 +450,7 @@ COMMAND|> search()
 <br>
 
 #
-# **COMMANDS FOR IN-TABLE MANIPULATION:**
+# ``V.`` **COMMANDS FOR IN-TABLE MANIPULATION:**
 
 ## 1. **`insert()`**
 - ### *Function:* `Inserts data in a row/record in a table.`
