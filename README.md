@@ -262,6 +262,8 @@ COMMAND|> modify_column()
 Query OK, modified column 'Email' to new data-type 'VARCHAR(50)' in table 'attendance'.
 ```
 
+<br>
+
 ## 3. **`delete_column()`**
 - ### *Function:* `Delete an existing column in a table.`
 - ### *Syntax:*
