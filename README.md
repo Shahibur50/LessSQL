@@ -14,12 +14,14 @@
 
 <br>
 
-## STARTING SCREEN OF SDBMS BEFORE CONNECTING TO THE SERVER:
+## **STARTING SCREEN OF SDBMS BEFORE CONNECTING TO THE SERVER:**
 
 ```
 USER-NAME: {Enter your user-name, usually it's 'root' for default installation of MySQL}
 Password: {Enter the password created during installation MySQL}
 ```
+
+<br>
 
 ## **FINAL SCREEN OF SDBMS AFTER CONNECTING TO THE SERVER SUCCESSFULLY:**
 
