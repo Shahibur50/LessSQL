@@ -15,8 +15,6 @@
 
 **No, worries just simply head over to the [Bug report page.](https://github.com/Shahibur50/School_DataBase_Management_System/issues/new?assignees=&labels=&template=bug_report.md&title=)**
 
-
-<br>
 <br>
 
 ## **```DOCUMENTATION FOR SDBMS```**
