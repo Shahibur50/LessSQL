@@ -5,7 +5,7 @@
 
 <br>
 
-# ``********Documentation for SDBMS:********``
+# ``********* Documentation for SDBMS *********``
 
 #### ``NOTE! Please first install and setup a mysql server in your computer to use this software.``
 
