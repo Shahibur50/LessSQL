@@ -9,6 +9,43 @@
 
 <br>
 
+# **STARTING SCRREN:**
+
+```
+USER-NAME: {Enter your user-name here} # usually it is root.
+Password: {Enter the password}
+Connecting to the server...
+
+CONNECTION ESTABLISHED!
+
+LOGGED IN AS: {user-name}@{host-name}
+TIME: {time} PM
+
+Server version: {your server's version}
+
++----------------------------------------------------------------+
+| WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)           |
+| Version: 2.11.11                                               |
+|                                                                |
+| Copyright (C) 2020  Shahibur Rahaman                           |
+|                                                                |
+| This program comes with ABSOLUTELY NO WARRANTY;                |
+| for details type show_w()                                      |
+| This is free software, and you are welcome to redistribute it  |
+| under certain conditions; type show_c() for details.           |
+|                                                                |
+| Commands end with ()                                           |
+|                                                                |
+| To cancel any input statement type /c                          |
+|                                                                |
+| For help type help(); To exit the program type exit()          |
++----------------------------------------------------------------+
+
+COMMAND|>
+```
+
+<br>
+
 # **COMMANDS FOR DATABASE MANIPULATION:**
 
 ## 1. **`show_db()`**
