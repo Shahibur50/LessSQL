@@ -1,9 +1,24 @@
 # ``School DataBase Management System (SDBMS)``
 
- A database management system based on MySQL, with a goal to simplify the usage of a RDBMS for data-management in schools.
- > This program simplifies the process/way of using databases in MySQL by asking the user about data to be queried or updated and converting those answers given by users into MySQL query language, so that any person could simply use databases without having to learn a lot about SQL.
+##  A database management system based on MySQL, with a goal to simplify the usage of a RDBMS for data-management in schools.
+ > ### This program simplifies the process/way of using databases in MySQL by asking the user about data to be queried or updated and converting those answers given by users into MySQL query language, so that any person could simply use databases without having to learn a lot about SQL.
 
 <br>
+
+# ``Want a feature to be added in the next update?``
+## No, worries head over to [New feature request page.](https://github.com/Shahibur50/School_DataBase_Management_System/issues/new?assignees=&labels=&template=feature_request.md&title=)
+
+
+<br>
+
+# ``Want to report a bug?``
+## Head over to the [Bug report page.](https://github.com/Shahibur50/School_DataBase_Management_System/issues/new?assignees=&labels=&template=bug_report.md&title=)
+
+<br>
+
+<br>
+
+#
 
 # **```DOCUMENTATION FOR SDBMS```**
 
