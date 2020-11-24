@@ -28,18 +28,18 @@
 
 ## **INSTALLATION INSTRUCTIONS**
 
-1. ### Download the latest release of SDBMS from here:
+1. #### Download the latest release of SDBMS from here:
 - **[Latest release of SDBMS for windows OS](https://github.com/Shahibur50/School_DataBase_Management_System/releases/tag/2.12.11)**
 
-2. ### After downloading the fil, extract the file using [win rar.](https://www.win-rar.com/download-winrar.html?&L=0)
+2. #### After downloading the file, extract the file using [win rar.](https://www.win-rar.com/download-winrar.html?&L=0)
 
-3. ### After extraction of file, open the extracted file.
+3. #### After extraction of file, open the extracted file.
 
-4. ### After opening the file look for an application named as SDBMS.exe.
+4. #### After opening the file look for an application named as SDBMS.exe.
 
-5. ### After findning the application double-click on it.
+5. #### After findning the application double-click on it.
 
-- ## The Program should be started by now : )
+- ### The Program should be started by now : )
 
 <br>
 
