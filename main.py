@@ -310,7 +310,7 @@ def modify_column():
                         command = f"ALTER TABLE {table_name} MODIFY {column_name} {data_type}"
                         cursor.execute(command)
                         cnx.commit()
-                        print(f"\nQuery OK, modified column ({column}) to new data-type ({data_type})"
+                        print(f"\nQuery OK, modified column ({column_name}) to new data-type ({data_type})"
                               f" in table ({table_name}).\n")
         except mysql.connector.Error as err:
             err = str(err.msg).split("; ")[0]
