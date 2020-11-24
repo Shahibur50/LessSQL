@@ -1,6 +1,6 @@
 """
 School Database Management System (SDBMS)
-Version: 2.14.11
+Version: 2.15.11
 Copyright (C) 2020 Shahibur Rahaman
 
 Licensed under GNU GPLv3 or later
@@ -470,8 +470,8 @@ show_db()   > To show all of the databases.
 create_db() > To create a new database.
 delete_db() > To delete an existing database.
 
-_______________________________________________________________________________
-_______________________________________________________________________________
+___________________________________________________________________________________
+___________________________________________________________________________________
 
 COMMANDS FOR TABLE MANIPULATION:
 
@@ -480,8 +480,8 @@ create_tb()   > To create a new table.
 describe_tb() > To see the schema(structure) of a table.
 delete_tb()   > To delete a table completely.
 
-_______________________________________________________________________________
-_______________________________________________________________________________
+___________________________________________________________________________________
+___________________________________________________________________________________
 
 COMMANDS FOR COLUMN MANIPULATION:
 
@@ -489,16 +489,16 @@ add_column()    > To add a new column to an existing table.
 modify_column() > To change data-type of a column in a table.
 delete_column() > To delete an exiting column inside a table.
 
-_______________________________________________________________________________
-_______________________________________________________________________________
+___________________________________________________________________________________
+___________________________________________________________________________________
 
 COMMANDS FOR IN-TABLE QUERIES:
 
 reveal() > To show all of the data stored in a specific table.
 search() > To search for a particular row in a table.
 
-_______________________________________________________________________________
-_______________________________________________________________________________
+___________________________________________________________________________________
+___________________________________________________________________________________
 
 COMMANDS FOR  IN-TABLE MANIPULATION:
 
@@ -506,12 +506,16 @@ insert() > To insert data in a table.
 update() > To modify or change value of a data-item present in a column/field.
 delete() > To delete row(s)/record(s).
 
-_______________________________________________________________________________
-_______________________________________________________________________________
+___________________________________________________________________________________
+___________________________________________________________________________________
 
 COMMAND TO EXIT THE PROGRAM:
 
 exit() > To quit the program.
+
+-----------------------------------------------------------------------------------
+For more help vist: https://github.com/Shahibur50/School_DataBase_Management_System
+-----------------------------------------------------------------------------------
 """)
 
 
@@ -519,7 +523,7 @@ def to_user():
     print("""
 +----------------------------------------------------------------+
 | WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)           |
-| Version: 2.14.11                                               |
+| Version: 2.15.11                                               |
 |                                                                |
 | Copyright (C) 2020  Shahibur Rahaman                           |
 |                                                                |
@@ -527,6 +531,9 @@ def to_user():
 | for details type show_w()                                      |
 | This is free software, and you are welcome to redistribute it  |
 | under certain conditions; type show_c() for details.           |
+|                                                                |
+| For more info visit:                                           |
+| https://github.com/Shahibur50/School_DataBase_Management_System|
 |                                                                |
 | Commands end with ()                                           |
 |                                                                |
