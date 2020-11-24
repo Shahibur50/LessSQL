@@ -1,6 +1,6 @@
 """
 School Database Management System (SDBMS)
-Version: 2.13.11
+Version: 2.14.11
 Copyright (C) 2020 Shahibur Rahaman
 
 Licensed under GNU GPLv3 or later
@@ -519,7 +519,7 @@ def to_user():
     print("""
 +----------------------------------------------------------------+
 | WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)           |
-| Version: 2.13.11                                               |
+| Version: 2.14.11                                               |
 |                                                                |
 | Copyright (C) 2020  Shahibur Rahaman                           |
 |                                                                |
