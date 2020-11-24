@@ -95,7 +95,7 @@ def connector():
             if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
                 print("Something is wrong with your user name or password!\n")
                 continue
-            print(f"\n{error}\n")
+            print(f"\n{err}\n")
             time.sleep(2)
             break
     else:
@@ -286,8 +286,8 @@ def add_column():
                     cursor.execute(command)
                     cnx.commit()
 
-                    column_name = column.split()[0]
-                    data_type = column.split()[1]
+                    column_name = column_data.split()[0]
+                    data_type = column_data.split()[1]
 
                     print(f"\nQuery OK, added column '{column_name}' with data-type '{data_type}'"
                           f" to the table '{table_name}'.\n")
@@ -327,9 +327,9 @@ def delete_column():
                 column_name = input("       -> NAME OF COLUMN TO BE DELETED: ")
                 if check(column_name):
                     opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to delete the column "
-                                f"({column})? (y/n) ")
+                                f"({column_name})? (y/n) ")
                     if opt in ('y', 'Y'):
-                        command = f"ALTER TABLE {table_name} DROP {column}"
+                        command = f"ALTER TABLE {table_name} DROP {column_name}"
                         cursor.execute(command)
                         cnx.commit()
                         print(f"\nQuery OK, Deleted column ({column_name}) from table ({table_name}).\n")
