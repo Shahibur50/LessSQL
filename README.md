@@ -29,7 +29,7 @@
 ## **INSTALLATION INSTRUCTIONS**
 
 1. ### Download the latest release of SDBMS from here:
-> [Latest release of SDBMS for windows OS](https://github.com/Shahibur50/School_DataBase_Management_System/releases/tag/2.12.11)
+- **[Latest release of SDBMS for windows OS](https://github.com/Shahibur50/School_DataBase_Management_System/releases/tag/2.12.11)**
 
 2. ### After downloading the fil, extract the file using [win rar.](https://www.win-rar.com/download-winrar.html?&L=0)
 
