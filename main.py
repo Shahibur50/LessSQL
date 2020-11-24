@@ -332,7 +332,7 @@ def delete_column():
                         command = f"ALTER TABLE {table_name} DROP {column}"
                         cursor.execute(command)
                         cnx.commit()
-                        print(f"\nQuery OK, Deleted column ({column}) from table ({table_name}).\n")
+                        print(f"\nQuery OK, Deleted column ({column_name}) from table ({table_name}).\n")
                     else:
                         print("\nQuery cancelled, for deletion of column.\n")
         except mysql.connector.Error as err:
