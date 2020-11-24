@@ -433,23 +433,19 @@
 
 - ### *Syntax:*
 
-```
-COMMAND|> insert()
-       -> TABLE NAME: {Enter the table name}
-       -> COLUMN NAMES: {Enter the column name(s) to which the data has to be inserted} 
-       -> VALUES: {Enter the values relative to the column names}
-```
+       COMMAND|> insert()
+              -> TABLE NAME: {Enter the table name}
+              -> COLUMN NAMES: {Enter the column name(s) to which the data has to be inserted} 
+              -> VALUES: {Enter the values relative to the column names}
 
 - ### *Example:*
 
-```
-COMMAND|> insert()   
-       -> TABLE NAME: attendance
-       -> COLUMN NAMES: Roll, Name, Class, Section, Remarks, Date 
-       -> VALUES: 6, 'Taran Duncun', 'XI', 'D', 'A', '2020-11-23'
+       COMMAND|> insert()   
+              -> TABLE NAME: attendance
+              -> COLUMN NAMES: Roll, Name, Class, Section, Remarks, Date 
+              -> VALUES: 6, 'Taran Duncun', 'XI', 'D', 'A', '2020-11-23'
 
-Query OK, inserted value(s) (6, 'Taran Duncun', 'XI', 'D', 'A', '2020-11-23') in column(s) 'Roll, Name, Class, Section, Remarks, Date' in table 'attendance'
-```
+       Query OK, inserted value(s) (6, 'Taran Duncun', 'XI', 'D', 'A', '2020-11-23') in column(s) 'Roll, Name, Class, Section, Remarks, Date' in table 'attendance'
 
 <br>
 
@@ -457,26 +453,21 @@ Query OK, inserted value(s) (6, 'Taran Duncun', 'XI', 'D', 'A', '2020-11-23') in
 - ### *Function:* `Modifies data-item present in a row in a table`
 - ### *Syntax:*
 
-```
-COMMAND|> update()
-       -> TABLE NAME: {Enter the table name}
-       -> CONDITION: {Enter the condition for updating}
-       -> COLUMN/FIELD TO BE UPDATED: {Enter the column name under which the data has to be updated}
-       -> VALUE OF DATA-ITEM TO BE UPDATED: {Enter the value to be updated in column mentioned earlier}
-```
+       COMMAND|> update()
+              -> TABLE NAME: {Enter the table name}
+              -> CONDITION: {Enter the condition for updating}
+              -> COLUMN/FIELD TO BE UPDATED: {Enter the column name under which the data has to be updated}
+              -> VALUE OF DATA-ITEM TO BE UPDATED: {Enter the value to be updated in column mentioned earlier}
 
 - ### *Example:*
 
-```
-COMMAND|> update()
-       -> TABLE NAME: attendance
-       -> CONDITION: Name = 'Taran Duncun' 
-       -> COLUMN/FIELD TO BE UPDATED: Remarks
-       -> VALUE OF DATA-ITEM TO BE UPDATED: 'P'
+       COMMAND|> update()
+              -> TABLE NAME: attendance
+              -> CONDITION: Name = 'Taran Duncun' 
+              -> COLUMN/FIELD TO BE UPDATED: Remarks
+              -> VALUE OF DATA-ITEM TO BE UPDATED: 'P'
 
-Query OK, updated the row(s)/record(s) in column/field (Remarks) to ('P') where condition (Name = 'Taran Duncun') was satisfied.
-```
-
+       Query OK, updated the row(s)/record(s) in column/field (Remarks) to ('P') where condition (Name = 'Taran Duncun') was satisfied.
 <br>
 
 ## 3. **`delete()`**
