@@ -1,15 +1,14 @@
 # **School DataBase Management System (SDBMS)**
 
-## A database management system based on MySQL, with a goal to simplify the usage of a RDBMS for data-management in schools
+### A database management system based on MySQL, with a goal to simplify the usage of a RDBMS for data-management in schools
 
- > ### This program simplifies the process/way of using databases in MySQL by asking the user about data to be queried or updated and converting those answers given by users into MySQL query language, so that any person could simply use databases without having to learn a lot about SQL
+ > #### This program simplifies the process/way of using databases in MySQL by asking the user about data to be queried or updated and converting those answers given by users into MySQL query language, so that any person could simply use databases without having to learn a lot about SQL
 
 <br>
 
 ## Want a feature to be added in the next update?
 **Don't hesitate! Just head over to the [New feature request page!](https://github.com/Shahibur50/School_DataBase_Management_System/issues/new?assignees=&labels=&template=feature_request.md&title=)**
 
-<br>
 
 ## Want to report a bug?
 
@@ -27,14 +26,31 @@
 
 <br>
 
-## **STARTING SCREEN OF SDBMS BEFORE CONNECTING TO THE SERVER:**
+## **INSTALLATION INSTRUCTIONS**
+
+1. ### Download the latest release of SDBMS from here:
+> [Latest release of SDBMS for windows OS](https://github.com/Shahibur50/School_DataBase_Management_System/releases/tag/2.12.11)
+
+2. ### After downloading the fil, extract the file using [win rar.](https://www.win-rar.com/download-winrar.html?&L=0)
+
+3. ### After extraction of file, open the extracted file.
+
+4. ### After opening the file look for an application named as SDBMS.exe.
+
+5. ### After findning the application double-click on it.
+
+- ## The Program should be started by now : )
+
+<br>
+
+## **STARTING SCREEN OF SDBMS BEFORE CONNECTING TO THE SERVER**
 
        USER-NAME: {Enter your user-name, usually it's 'root' for default installation of MySQL}
        Password: {Enter the password created during installation of MySQL}
 
 <br>
 
-## **FINAL SCREEN OF SDBMS AFTER CONNECTING TO THE SERVER SUCCESSFULLY:**
+## **FINAL SCREEN OF SDBMS AFTER CONNECTING TO THE SERVER SUCCESSFULLY**
 
        USER-NAME: root
        Password: 
