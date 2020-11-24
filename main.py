@@ -1,6 +1,6 @@
 """
 School Database Management System (SDBMS)
-
+Version: 2.13.11
 Copyright (C) 2020 Shahibur Rahaman
 
 Licensed under GNU GPLv3
@@ -26,43 +26,9 @@ db = False
 cursor = False
 cnx = False
 
-for i in range(3):
-    try:
-        usr_name = input("USER-NAME: ")
-        passwd = getpass.getpass()
-        host = "localhost"
-    except EOFError:
-        continue
-
-    try:
-        cnx = mysql.connector.connect(user=usr_name,
-                                      password=passwd,
-                                      host=host)
-        cursor = cnx.cursor()
-        print("Connecting to the server...")
-        time.sleep(2)
-        print("\nCONNECTION ESTABLISHED!")
-        print(f"\nLOGGED IN AS: {usr_name}@{host}")
-        now = datetime.now()
-        print(f"TIME: {now.strftime('%H:%M:%S %p')}")
-        print(f"\nServer version: {cnx.get_server_info()}")
-        connection_status = True
-        break
-    except mysql.connector.Error as error:
-        if error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print("Something is wrong with your user name or password!\n")
-            continue
-        print(f"\n{error}\n")
-        time.sleep(2)
-        break
-else:
-    print("Wrong credentials entered 3 times.")
-    print("Exiting...\n")
-    time.sleep(2)
-    sys.exit()
-
 
 def main():
+    connector()
     if not connection_status:
         print("Please check if the server is online.")
         bye()
@@ -93,6 +59,46 @@ def main():
 
         cursor.close()
         cnx.close()
+
+
+def connector():
+    global connection_status, db, cursor, cnx
+
+    for _ in range(3):
+        try:
+            usr_name = input("USER-NAME: ")
+            passwd = getpass.getpass()
+            host = "localhost"
+        except EOFError:
+            print("")
+            continue
+
+        try:
+            cnx = mysql.connector.connect(user=usr_name,
+                                          password=passwd,
+                                          host=host)
+            cursor = cnx.cursor()
+            print("Connecting to the server...")
+            time.sleep(2)
+            print("\nCONNECTION ESTABLISHED!")
+            print(f"\nLOGGED IN AS: {usr_name}@{host}")
+            now = datetime.now()
+            print(f"TIME: {now.strftime('%H:%M:%S %p')}")
+            print(f"\nServer version: {cnx.get_server_info()}")
+            connection_status = True
+            break
+        except mysql.connector.Error as error:
+            if error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+                print("Something is wrong with your user name or password!\n")
+                continue
+            print(f"\n{error}\n")
+            time.sleep(2)
+            break
+    else:
+        print("Wrong credentials entered 3 times.")
+        print("Exiting...\n")
+        time.sleep(2)
+        sys.exit()
 
 
 def use_db():
@@ -635,7 +641,7 @@ def to_user():
     print("""
 +----------------------------------------------------------------+
 | WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)           |
-| Version: 2.12.11                                               |
+| Version: 2.13.11                                               |
 |                                                                |
 | Copyright (C) 2020  Shahibur Rahaman                           |
 |                                                                |
