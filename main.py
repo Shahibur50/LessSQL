@@ -530,26 +530,26 @@ For more help visit: https://github.com/Shahibur50/School_DataBase_Management_Sy
 
 def to_user():
     print("""
-+----------------------------------------------------------------+
-| WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)           |
-| Version: 2.15.11                                               |
-|                                                                |
-| Copyright (C) 2020  Shahibur Rahaman                           |
-|                                                                |
-| This program comes with ABSOLUTELY NO WARRANTY;                |
-| for details type show_w()                                      |
-| This is free software, and you are welcome to redistribute it  |
-| under certain conditions; type show_c() for details.           |
-|                                                                |
-| For more info visit:                                           |
-| https://github.com/Shahibur50/School_DataBase_Management_System|
-|                                                                |
-| Commands end with ()                                           |
-|                                                                |
-| To cancel any input statement type /c                          |
-|                                                                |
-| For help type help(); To exit the program type exit()          |
-+----------------------------------------------------------------+
++-----------------------------------------------------------------+
+| WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)            |  
+| Version: 2.15.11                                                |
+|                                                                 |
+| Copyright (C) 2020  Shahibur Rahaman                            |
+|                                                                 |
+| This program comes with ABSOLUTELY NO WARRANTY;                 |
+| for details type show_w()                                       |
+| This is free software, and you are welcome to redistribute it   |
+| under certain conditions; type show_c() for details.            |
+|                                                                 |
+| For more info visit:                                            |
+| https://github.com/Shahibur50/School_DataBase_Management_System |
+|                                                                 |
+| Commands end with ()                                            |
+|                                                                 |
+| To cancel any input statement type /c                           |
+|                                                                 |
+| For help type help(); To exit the program type exit()           |
++-----------------------------------------------------------------+
 """)
 
 
