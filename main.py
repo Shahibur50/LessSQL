@@ -113,16 +113,16 @@ def check(variable_to_check):
     :param variable_to_check:
     :return: next_step
     """
-    is_next_step = True  # Boolean variable to check and make the program process further ahead.
+    take_next_step = True  # Boolean variable to check and make the program process further ahead.
 
     if "/c" in variable_to_check:
         print("\nQuery cancelled!\n")
-        is_next_step = False
+        take_next_step = False
     elif not variable_to_check:
-        is_next_step = False
+        take_next_step = False
         print("\nPlease enter values properly!\n")
 
-    return is_next_step
+    return take_next_step
 
 
 def use_db():
