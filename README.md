@@ -29,7 +29,7 @@
 ## **INSTALLATION INSTRUCTIONS**
 
 1. #### Download the latest release of SDBMS from here:
-- **[Latest release of SDBMS for windows OS](https://github.com/Shahibur50/School_DataBase_Management_System/releases/tag/2.14.11)**
+- **[Latest release of SDBMS for windows OS](https://github.com/Shahibur50/School_DataBase_Management_System/releases/tag/2.15.11)**
 
 2. #### After downloading the file, extract the file using [win rar.](https://www.win-rar.com/download-winrar.html?&L=0)
 
@@ -59,27 +59,30 @@
        CONNECTION ESTABLISHED!
 
        LOGGED IN AS: root@localhost
-       TIME: 14:37:30 PM
+       TIME: 11:21:36 AM
 
        Server version: 8.0.22
 
-       +----------------------------------------------------------------+
-       | WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)           |
-       | Version: 2.12.11                                               |
-       |                                                                |
-       | Copyright (C) 2020  Shahibur Rahaman                           |
-       |                                                                |
-       | This program comes with ABSOLUTELY NO WARRANTY;                |
-       | for details type show_w()                                      |
-       | This is free software, and you are welcome to redistribute it  |
-       | under certain conditions; type show_c() for details.           |
-       |                                                                |
-       | Commands end with ()                                           |
-       |                                                                |
-       | To cancel any input statement type /c                          |
-       |                                                                |
-       | For help type help(); To exit the program type exit()          |
-       +----------------------------------------------------------------+
+       +-----------------------------------------------------------------+
+       | WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)            |
+       | Version: 2.15.11                                                |
+       |                                                                 |
+       | Copyright (C) 2020  Shahibur Rahaman                            |
+       |                                                                 |
+       | This program comes with ABSOLUTELY NO WARRANTY;                 |
+       | for details type show_w()                                       |
+       | This is free software, and you are welcome to redistribute it   |
+       | under certain conditions; type show_c() for details.            |
+       |                                                                 |
+       | For more info visit:                                            |
+       | https://github.com/Shahibur50/School_DataBase_Management_System |
+       |                                                                 |
+       | Commands end with ()                                            |
+       |                                                                 |
+       | To cancel any input statement type /c                           |
+       |                                                                 |
+       | For help type help(); To exit the program type exit()           |
+       +-----------------------------------------------------------------+
 
        COMMAND|>
 
