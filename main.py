@@ -117,8 +117,6 @@ def execute(command):
         run(command)
     elif is_valid(command) and command in DB_COMMANDS and not db:
         print("\nERROR! No database is in use!\n")
-    else:
-        print("UNEXPECTED ERROR!")
 
 
 def run(command):
