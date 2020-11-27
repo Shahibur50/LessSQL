@@ -18,7 +18,8 @@ from datetime import datetime
 NO_DB_COMMANDS = ["use_db;", "show_db;", "create_db;", "delete_db;", "exit;", "show_w;", "show_c;", "help;"]
 
 DB_COMMANDS = ["show_tb;", "create_tb;", "describe_tb;", "delete_tb;", "add_column;", "modify_column;",
-               "delete_column;", "reveal;", "search;", "insert;", "update;", "delete;", "average;"]
+               "delete_column;", "reveal;", "search;", "insert;", "update;", "delete;", "average;",
+               "group_insert;"]
 
 HELP_COMMANDS = ["help;", "/h", "?"]
 
@@ -97,6 +98,14 @@ def connector():
         sys.exit()
 
 
+def cmd_execute(command):
+    if is_valid(command):
+        if command in DB_COMMANDS and not db:
+            print("\nERROR! No database is in use!\n")
+        else:
+            run(command)
+
+
 def is_valid(command):
     valid = False
     if len(command) == 0:
@@ -108,14 +117,6 @@ def is_valid(command):
     else:
         valid = True
     return valid
-
-
-def cmd_execute(command):
-    if is_valid(command):
-        if command in DB_COMMANDS and not db:
-            print("\nERROR! No database is in use!\n")
-        else:
-            run(command)
 
 
 def run(command):
@@ -135,11 +136,11 @@ def run(command):
         describe_tb()
     elif command == "delete_tb;":
         delete_tb()
-    elif command == "add_column;":
+    elif command == "add_cl;":
         add_column()
-    elif command == "modify_column;":
+    elif command == "modify_cl;":
         modify_column()
-    elif command == "delete_column;":
+    elif command == "delete_cl;":
         delete_column()
     elif command == "reveal;":
         reveal()
@@ -151,7 +152,9 @@ def run(command):
         delete()
     elif command == "average;":
         average()
-    elif command in ("exit;", "Exit;", "EXIT"):
+    elif command == "group_insert;":
+        group_insert()
+    elif command == "exit;":
         close()
     elif command == "show_w;":
         show_w()
@@ -264,8 +267,7 @@ def create_tb():
                 column_num = 0
 
                 for column_num in range(1, no_of_columns):
-                    column_value_type = input(
-                        f"       -> COLUMN ({column_num}) NAME AND DATA-TYPE: ")
+                    column_value_type = input(f"       -> COLUMN ({column_num}) NAME AND DATA-TYPE: ")
                     if check(column_value_type):
                         columns += column_value_type + ', '
                 column_value_type = input(f"       -> COLUMN ({column_num + 1}) NAME AND DATA-TYPE: ")
@@ -402,8 +404,10 @@ def insert():
                     command = f"INSERT INTO {table_name} ({column_name}) VALUES ({values})"
                     cursor.execute(command)
                     cnx.commit()
+                    count = cursor.rowcount
                     print(f"\nQuery OK, inserted value(s) ({values}) in column(s) ({column_name})"
                           f" in table ({table_name})\n")
+                    print(f"Affected row(s): {count}\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -417,14 +421,18 @@ def update():
             if check(condition):
                 attribute = input("       -> COLUMN/FIELD TO BE UPDATED: ")
                 if check(attribute):
-                    updated_value = input(
-                        "       -> VALUE OF DATA-ITEM TO BE UPDATED: ")
+                    updated_value = input("       -> VALUE OF DATA-ITEM TO BE UPDATED: ")
                     if check(updated_value):
                         command = f"UPDATE {table_name} SET {attribute}={updated_value} WHERE {condition}"
                         cursor.execute(command)
                         cnx.commit()
-                        print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute})"
-                              f" to ({updated_value}) where condition ({condition}) was satisfied.\n")
+                        count = cursor.rowcount
+                        if count == 0:
+                            print("The given condition was not satisfied!\n")
+                        else:
+                            print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute})"
+                                  f" to ({updated_value}) where condition ({condition}) was satisfied.\n")
+                        print("Affected row(s):", count)
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -460,17 +468,12 @@ def delete():
     try:
         table_name = input("       -> TABLE NAME: ")
         if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                value = input("       -> DATA-ITEM VALUE: ")
-                if check(value):
-                    if "NULL" in value:
-                        command = f"DELETE FROM {table_name} WHERE {column_name} IS {value}"
-                    else:
-                        command = f"DELETE FROM {table_name} WHERE {column_name}={value}"
-                    cursor.execute(command)
-                    cnx.commit()
-                    print(f"\nQuery OK, deleted the row(s)/record(s) containing the value {value}.\n")
+            condition = input("       -> CONDITION: ")
+            if check(condition):
+                command = f"DELETE FROM {table_name} WHERE {condition}"
+                cursor.execute(command)
+                cnx.commit()
+                print(f"\nQuery OK, deleted the row(s)/record(s) where condition ({condition}) was satisfied.\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -495,6 +498,36 @@ def average():
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
+
+
+def group_insert():
+    row_num = 0
+    try:
+        table_name = input("       -> TABLE NAME: ")
+        if check(table_name):
+            no_of_rows = input("       -> NO. OF ROWS: ")
+            column_name = input("       -> COLUMN NAMES: ")
+            if check(column_name):
+                if check(no_of_rows):
+                    no_of_rows = int(no_of_rows)
+                    rows_values = []
+                    for rows in range(no_of_rows):
+                        row_data = input("                     -> ")
+                        rows_values.append(row_data)
+                        if check(row_data):
+                            continue
+                    for values in rows_values:
+                        command = f"INSERT INTO {table_name} ({column_name}) VALUES ({values})"
+                        cursor.execute(command)
+                        cnx.commit()
+                        row_num += 1
+                    print(f"\nQuery OK, inserted the given value(s) in column(s) ({column_name})"
+                          f" in table ({table_name})\n")
+    except mysql.connector.Error as err:
+        err = str(err.msg).split("; ")[0]
+        print(f"\nERROR! {err}\n")
+    finally:
+        print(f"Affected row(s): {row_num}\n")
 
 
 def close():
