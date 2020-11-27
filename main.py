@@ -388,6 +388,7 @@ def reveal():
             table = from_db_cursor(cursor)
             table.align = "l"
             print(table)
+            print()
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -506,12 +507,12 @@ def group_insert():
         table_name = input("       -> TABLE NAME: ")
         if check(table_name):
             no_of_rows = input("       -> NO. OF ROWS: ")
-            column_name = input("       -> COLUMN NAMES: ")
-            if check(column_name):
-                if check(no_of_rows):
+            if check(no_of_rows):
+                column_name = input("       -> COLUMN NAMES: ")
+                if check(column_name):
                     no_of_rows = int(no_of_rows)
                     rows_values = []
-                    for rows in range(no_of_rows):
+                    for _ in range(no_of_rows):
                         row_data = input("                     -> ")
                         rows_values.append(row_data)
                         if check(row_data):
