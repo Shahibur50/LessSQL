@@ -151,9 +151,7 @@ def run(command):
         delete()
     elif command == "average;":
         average()
-    elif command == "status;":
-        status()
-    elif command == "exit" or command == "exit;":
+    elif command in ("exit;", "Exit;", "EXIT"):
         close()
     elif command == "show_w;":
         show_w()
