@@ -15,10 +15,10 @@ from prettytable import PrettyTable
 from prettytable import from_db_cursor
 from datetime import datetime
 
-NO_DB_COMMANDS = ["use_db;", "show_db;", "create_db;", "delete_db;", "exit;", "show_w;", "show_c;"]
+NO_DB_COMMANDS = ["use_db;", "show_db;", "create_db;", "delete_db;", "exit;", "show_w;", "show_c;", "help;"]
 
 DB_COMMANDS = ["show_tb;", "create_tb;", "describe_tb;", "delete_tb;", "add_column;", "modify_column;",
-               "delete_column;", "reveal;", "search;", "insert;", "update;", "delete;"]
+               "delete_column;", "reveal;", "search;", "insert;", "update;", "delete;", "average;"]
 
 HELP_COMMANDS = ["help;", "/h", "?"]
 
@@ -39,8 +39,8 @@ def main():
         while True:
             print("COMMAND|> ", end="")
             try:
-                cmd = input()
-                execute(cmd)
+                cmd = input().lower()
+                cmd_execute(cmd)
             except EOFError:
                 continue
             except KeyboardInterrupt:
@@ -100,23 +100,22 @@ def connector():
 def is_valid(command):
     valid = False
     if len(command) == 0:
-        print("ERROR! Please enter values properly!")
+        print("")
     elif ";" not in command:
-        print("ERROR! Not a valid command!")
+        print("\nERROR! Not a valid command!\n")
     elif command not in NO_DB_COMMANDS and command not in DB_COMMANDS:
-        print("Command not found!")
+        print("\nCommand not found!\n")
     else:
         valid = True
     return valid
 
 
-def execute(command):
-    if is_valid(command) and command in NO_DB_COMMANDS and not db:
-        run(command)
-    elif is_valid(command) and command in DB_COMMANDS and db:
-        run(command)
-    elif is_valid(command) and command in DB_COMMANDS and not db:
-        print("\nERROR! No database is in use!\n")
+def cmd_execute(command):
+    if is_valid(command):
+        if command in DB_COMMANDS and not db:
+            print("\nERROR! No database is in use!\n")
+        else:
+            run(command)
 
 
 def run(command):
@@ -150,6 +149,10 @@ def run(command):
         update()
     elif command == "delete;":
         delete()
+    elif command == "average;":
+        average()
+    elif command == "status;":
+        status()
     elif command == "exit" or command == "exit;":
         close()
     elif command == "show_w;":
@@ -166,7 +169,7 @@ def check(variable_to_check):
     cancelled the input statement or has
     given no input at all.
     :param variable_to_check:
-    :return: next_step
+    :return: take_next_step
     """
     take_next_step = True  # Boolean variable to check and make the program process further ahead.
 
@@ -470,6 +473,27 @@ def delete():
                     cursor.execute(command)
                     cnx.commit()
                     print(f"\nQuery OK, deleted the row(s)/record(s) containing the value {value}.\n")
+    except mysql.connector.Error as err:
+        err = str(err.msg).split("; ")[0]
+        print(f"\nERROR! {err}\n")
+
+
+def average():
+    try:
+        table_name = input("       -> TABLE NAME: ")
+        if check(table_name):
+            column_name = input("       -> COLUMN/FIELD NAME: ")
+            if check(column_name):
+                command = f'SELECT AVG({column_name}) "Average of {column_name}" from {table_name}'
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("Data not present in the table!")
+                else:
+                    cursor.execute(command)
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
