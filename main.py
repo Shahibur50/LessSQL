@@ -15,7 +15,8 @@ from prettytable import PrettyTable
 from prettytable import from_db_cursor
 from datetime import datetime
 
-NO_DB_COMMANDS = ["use_db;", "show_db;", "create_db;", "delete_db;", "exit;", "show_w;", "show_c;", "help;"]
+NO_DB_COMMANDS = ["use_db;", "show_db;", "create_db;",
+                  "delete_db;", "exit;", "show_w;", "show_c;", "help;"]
 
 DB_COMMANDS = ["show_tb;", "create_tb;", "describe_tb;", "delete_tb;", "add_column;", "modify_column;",
                "delete_column;", "reveal;", "search;", "insert;", "update;", "delete;", "average;",
@@ -238,7 +239,8 @@ def delete_db():
                     db = False
                 print(f"\nQuery OK, Deleted database ({database_name}).\n")
             else:
-                print(f"\nQuery cancelled, for deletion of the database ({database_name}).\n")
+                print(
+                    f"\nQuery cancelled, for deletion of the database ({database_name}).\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -267,10 +269,12 @@ def create_tb():
                 column_num = 0
 
                 for column_num in range(1, no_of_columns):
-                    column_value_type = input(f"       -> COLUMN ({column_num}) NAME AND DATA-TYPE: ")
+                    column_value_type = input(
+                        f"       -> COLUMN ({column_num}) NAME AND DATA-TYPE: ")
                     if check(column_value_type):
                         columns += column_value_type + ', '
-                column_value_type = input(f"       -> COLUMN ({column_num + 1}) NAME AND DATA-TYPE: ")
+                column_value_type = input(
+                    f"       -> COLUMN ({column_num + 1}) NAME AND DATA-TYPE: ")
 
                 if check(column_value_type):
                     columns += column_value_type
@@ -372,7 +376,8 @@ def delete_column():
                     command = f"ALTER TABLE {table_name} DROP {column_name}"
                     cursor.execute(command)
                     cnx.commit()
-                    print(f"\nQuery OK, Deleted column ({column_name}) from table ({table_name}).\n")
+                    print(
+                        f"\nQuery OK, Deleted column ({column_name}) from table ({table_name}).\n")
                 else:
                     print("\nQuery cancelled, for deletion of column.\n")
     except mysql.connector.Error as err:
@@ -422,7 +427,8 @@ def update():
             if check(condition):
                 attribute = input("       -> COLUMN/FIELD TO BE UPDATED: ")
                 if check(attribute):
-                    updated_value = input("       -> VALUE OF DATA-ITEM TO BE UPDATED: ")
+                    updated_value = input(
+                        "       -> VALUE OF DATA-ITEM TO BE UPDATED: ")
                     if check(updated_value):
                         command = f"UPDATE {table_name} SET {attribute}={updated_value} WHERE {condition}"
                         cursor.execute(command)
@@ -474,7 +480,8 @@ def delete():
                 command = f"DELETE FROM {table_name} WHERE {condition}"
                 cursor.execute(command)
                 cnx.commit()
-                print(f"\nQuery OK, deleted the row(s)/record(s) where condition ({condition}) was satisfied.\n")
+                print(
+                    f"\nQuery OK, deleted the row(s)/record(s) where condition ({condition}) was satisfied.\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
