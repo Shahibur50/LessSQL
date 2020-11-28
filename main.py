@@ -1,6 +1,6 @@
 """
 School Database Management System (SDBMS)
-Version: 2.15.11
+Version: 2.16.11
 Copyright (C) 2020 Shahibur Rahaman
 
 Licensed under GNU GPLv3
@@ -146,6 +146,8 @@ def run(command):
         reveal()
     elif command == "insert;":
         insert()
+    elif command == "search;":
+        search()
     elif command == "update;":
         update()
     elif command == "delete;":
@@ -385,10 +387,12 @@ def reveal():
         table_name = input("       -> TABLE NAME: ")
         if check(table_name):
             cursor.execute(f"SELECT * FROM {table_name}")
+            rows = cursor.fetchall()
+            cursor.execute(f"SELECT * FROM {table_name}")
             table = from_db_cursor(cursor)
             table.align = "l"
             print(table)
-            print()
+            print(f"Row(s) count: {len(rows)}\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -405,10 +409,10 @@ def insert():
                     command = f"INSERT INTO {table_name} ({column_name}) VALUES ({values})"
                     cursor.execute(command)
                     cnx.commit()
-                    count = cursor.rowcount
+                    row_count = cursor.rowcount
                     print(f"\nQuery OK, inserted value(s) ({values}) in column(s) ({column_name})"
                           f" in table ({table_name})\n")
-                    print(f"Affected row(s): {count}\n")
+                    print(f"Affected row(s): {row_count}\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -427,13 +431,13 @@ def update():
                         command = f"UPDATE {table_name} SET {attribute}={updated_value} WHERE {condition}"
                         cursor.execute(command)
                         cnx.commit()
-                        count = cursor.rowcount
-                        if count == 0:
-                            print("The given condition was not satisfied!\n")
+                        row_count = cursor.rowcount
+                        if row_count == 0:
+                            print("\nThe given condition was not satisfied!")
                         else:
                             print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute})"
                                   f" to ({updated_value}) where condition ({condition}) was satisfied.\n")
-                        print("Affected row(s):", count)
+                        print(f"Affected row(s): {row_count}")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -443,14 +447,13 @@ def search():
     try:
         table_name = input("       -> TABLE NAME: ")
         if check(table_name):
-            column_name = input("       -> COLUMN NAME: ")
-            if check(column_name):
-                value = input("       -> VALUE: ")
-                if check(value):
-                    if value == "NULL":
-                        command = f"SELECT * FROM {table_name} WHERE {column_name} IS {value}"
-                    else:
-                        command = f"SELECT * FROM {table_name} WHERE {column_name}={value}"
+            column_names = input("       -> COLUMN NAMES: ")
+            if check(column_names):
+                condition = input("       -> CONDITION: ")
+                if check(condition):
+                    if column_names in ("ALL", 'all', "All"):
+                        column_names = "*"
+                    command = f"SELECT {column_names} FROM {table_name} WHERE {condition}"
                     cursor.execute(command)
                     data = cursor.fetchall()
                     if len(data) == 0:
@@ -474,7 +477,9 @@ def delete():
                 command = f"DELETE FROM {table_name} WHERE {condition}"
                 cursor.execute(command)
                 cnx.commit()
-                print(f"\nQuery OK, deleted the row(s)/record(s) where condition ({condition}) was satisfied.\n")
+                row_count = cursor.rowcount
+                print(f"\nQuery OK, deleted the row(s)/record(s) where condition ({condition}) was satisfied.")
+                print("Affected row(s):", row_count, "\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -529,6 +534,10 @@ def group_insert():
         print(f"\nERROR! {err}\n")
     finally:
         print(f"Affected row(s): {row_num}\n")
+
+
+def count():
+    pass
 
 
 def close():
@@ -602,7 +611,7 @@ def to_user():
     print("""
 +-----------------------------------------------------------------+
 | WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)            |  
-| Version: 2.15.11                                                |
+| Version: 2.16.11                                                |
 |                                                                 |
 | Copyright (C) 2020  Shahibur Rahaman                            |
 |                                                                 |
