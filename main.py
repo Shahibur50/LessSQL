@@ -19,7 +19,7 @@ NO_DB_COMMANDS = ["use_db;", "show_db;", "create_db;", "delete_db;", "exit;", "s
 
 DB_COMMANDS = ["show_tb;", "create_tb;", "describe_tb;", "delete_tb;", "add_column;", "modify_column;",
                "delete_column;", "reveal;", "search;", "insert;", "update;", "delete;", "average;",
-               "group_insert;"]
+               "group_insert;", "count;"]
 
 HELP_COMMANDS = ["help;", "/h", "?"]
 
@@ -156,6 +156,8 @@ def run(command):
         average()
     elif command == "group_insert;":
         group_insert()
+    elif command == "count;":
+        count()
     elif command == "exit;":
         close()
     elif command == "show_w;":
@@ -537,6 +539,32 @@ def group_insert():
 
 
 def count():
+    try:
+        table_name = input("       -> TABLE NAME: ")
+        if check(table_name):
+            column_name = input("       -> COLUMN/FIELD NAME: ")
+            if check(column_name):
+                title = input("       -> TITLE: ")
+                command = f'SELECT COUNT({column_name}) "{title}" from {table_name}'
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("Data not present in the table!")
+                else:
+                    cursor.execute(command)
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
+    except mysql.connector.Error as err:
+        err = str(err.msg).split("; ")[0]
+        print(f"\nERROR! {err}\n")
+
+
+def conditional_count():
+    pass
+
+
+def distinct_count():
     pass
 
 
