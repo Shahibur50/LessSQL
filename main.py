@@ -25,16 +25,50 @@ HELP_COMMANDS = ["help;", "/h", "?"]
 
 PT = PrettyTable()
 
-is_connection = False
 db = None
-cursor = None
-cnx = None
-cmd = None
+
+for _ in range(3):
+    try:
+        usr_name = input("USER-NAME: ")
+        passwd = getpass.getpass()
+        host = "localhost"
+    except EOFError:
+        print("")
+        continue
+
+    try:
+        cnx = mysql.connector.connect(user=usr_name,
+                                      password=passwd,
+                                      host=host)
+        cursor = cnx.cursor()
+        print("Connecting to the server...")
+
+        time.sleep(2)
+
+        print("\nCONNECTION ESTABLISHED!")
+        print(f"\nLOGGED IN AS: {usr_name}@{host}")
+
+        now = datetime.now()
+
+        print(f"TIME: {now.strftime('%H:%M:%S %p')}")
+        print(f"\nServer version: {cnx.get_server_info()}")
+        is_connection = True
+        break
+    except mysql.connector.Error as error:
+        if error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            print("Something is wrong with your user name or password!\n")
+            continue
+        print(f"\n{error}\n")
+        time.sleep(2)
+        break
+else:
+    print("Wrong credentials entered 3 times.")
+    print("Exiting...\n")
+    time.sleep(2)
+    sys.exit()
 
 
 def main():
-    global cmd
-    connector()
     if is_connection:
         to_user()  # Showing the user info related to the program
         while True:
@@ -52,50 +86,6 @@ def main():
     else:
         print("Please check if the server is online.")
         close()
-
-
-def connector():
-    global is_connection, db, cursor, cnx
-
-    for _ in range(3):
-        try:
-            usr_name = input("USER-NAME: ")
-            passwd = getpass.getpass()
-            host = "localhost"
-        except EOFError:
-            print("")
-            continue
-
-        try:
-            cnx = mysql.connector.connect(user=usr_name,
-                                          password=passwd,
-                                          host=host)
-            cursor = cnx.cursor()
-            print("Connecting to the server...")
-
-            time.sleep(2)
-
-            print("\nCONNECTION ESTABLISHED!")
-            print(f"\nLOGGED IN AS: {usr_name}@{host}")
-
-            now = datetime.now()
-
-            print(f"TIME: {now.strftime('%H:%M:%S %p')}")
-            print(f"\nServer version: {cnx.get_server_info()}")
-            is_connection = True
-            break
-        except mysql.connector.Error as err:
-            if err.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                print("Something is wrong with your user name or password!\n")
-                continue
-            print(f"\n{err}\n")
-            time.sleep(2)
-            break
-    else:
-        print("Wrong credentials entered 3 times.")
-        print("Exiting...\n")
-        time.sleep(2)
-        sys.exit()
 
 
 def cmd_execute(command):
