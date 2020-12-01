@@ -87,6 +87,9 @@ ipython_config.py
 # VS Code
 .vscode
 
+# Visual Studio
+.vs
+
 # pyenv
 .python-version
 
