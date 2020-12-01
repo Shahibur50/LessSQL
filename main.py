@@ -15,8 +15,8 @@ from prettytable import PrettyTable
 from prettytable import from_db_cursor
 from datetime import datetime
 
-NO_DB_COMMANDS = ["use database;", "show databases;", "create database;", "delete database;", "exit;", "show w;",
-                  "show c;", "help;", "create user;", "reveal user;", "delete user;"]
+NO_DB_COMMANDS = ["use database;", "show databases;", "create database;", "delete database;", "exit;", "show_w;",
+                  "show_c;", "help;", "create user;", "reveal user;", "delete user;"]
 
 DB_COMMANDS = ["show tables;", "create table;", "describe table;", "delete table;", "add column;", "modify column;",
                "delete column;", "reveal;", "search;", "insert;", "update;", "delete;", "average;",
