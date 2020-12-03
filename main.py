@@ -1,6 +1,6 @@
 """
 School Database Management System (SDBMS)
-Version: 3.1.12
+Version: 3.2.12
 Copyright (C) 2020 Shahibur Rahaman
 
 Licensed under GNU GPLv3
@@ -40,21 +40,16 @@ for _ in range(3):
     except EOFError:
         print("")
         continue
-
     try:
         cnx = mysql.connector.connect(user=usr_name,
                                       password=passwd,
                                       host=host)
         cursor = cnx.cursor()
         print("Connecting to the server...")
-
         time.sleep(2)
-
         print("\nCONNECTION ESTABLISHED!")
         print(f"\nLOGGED IN AS: {usr_name}@{host}")
-
         now = datetime.now()
-
         print(f"TIME: {now.strftime('%H:%M:%S %p')}")
         print(f"\nServer version: {cnx.get_server_info()}")
         is_connection = True
@@ -501,6 +496,8 @@ def search():
                         column_names = "*"
                     command = f"SELECT {column_names} FROM {table_name} WHERE {condition}"
                     cursor.execute(command)
+                    row_count = cursor.fetchall()
+                    cursor.execute(command)
                     data = cursor.fetchall()
                     if len(data) == 0:
                         print("Data not present in the table!")
@@ -508,7 +505,8 @@ def search():
                         cursor.execute(command)
                         table = from_db_cursor(cursor)
                         table.align = "l"
-                        print(table, "\n")
+                        print(table)
+                    print(f"Row(s) count: {len(row_count)}\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -1160,7 +1158,7 @@ def to_user():
     print("""
 +-----------------------------------------------------------------+
 | WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)            |  
-| Version: 3.1.12                                                 |
+| Version: 3.2.12                                                 |
 |                                                                 |
 | Copyright (C) 2020  Shahibur Rahaman                            |
 |                                                                 |
