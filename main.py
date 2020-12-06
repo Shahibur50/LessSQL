@@ -1,11 +1,12 @@
 """
 School Database Management System (SDBMS)
-Version: 3.2.12
+Version: 3.3.12
 Copyright (C) 2020 Shahibur Rahaman
 
 Licensed under GNU GPLv3
 """
 
+from os import system
 import mysql.connector
 import sys
 import time
@@ -32,6 +33,8 @@ PT = PrettyTable()
 
 db = None
 
+system('cls')
+
 for _ in range(3):
     try:
         usr_name = input("USER-NAME: ")
@@ -47,7 +50,7 @@ for _ in range(3):
         cursor = cnx.cursor()
         print("Connecting to the server...")
         time.sleep(2)
-        print("\nCONNECTION ESTABLISHED!")
+        system('cls')
         print(f"\nLOGGED IN AS: {usr_name}@{host}")
         now = datetime.now()
         print(f"TIME: {now.strftime('%H:%M:%S %p')}")
@@ -72,7 +75,7 @@ def main():
     if is_connection:
         to_user()  # Showing the user info related to the program
         while True:
-            print("COMMAND|> ", end="")
+            print("LESSSQL|> ", end="")
             try:
                 cmd = input().lower()
                 cmd_execute(cmd)
@@ -187,7 +190,7 @@ def run(command):
     elif command == "create user;":
         create_user()
     elif command == "reveal user;":
-        reveal_user()
+        reveal_users()
     elif command == "delete user;":
         delete_user()
     elif command == "exit;":
@@ -500,13 +503,13 @@ def search():
                     cursor.execute(command)
                     data = cursor.fetchall()
                     if len(data) == 0:
-                        print("Data not present in the table!")
+                        print("\nData not present in the table!\n")
                     else:
                         cursor.execute(command)
                         table = from_db_cursor(cursor)
                         table.align = "l"
                         print(table)
-                    print(f"Row(s) count: {len(row_count)}\n")
+                        print(f"Row(s) count: {len(row_count)}\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -527,6 +530,36 @@ def delete():
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
+
+
+def group_insert():
+    row_num = 0
+    try:
+        table_name = input("       -> TABLE NAME: ")
+        if check(table_name):
+            no_of_rows = input("       -> NO. OF ROWS: ")
+            if check(no_of_rows):
+                column_name = input("       -> COLUMN NAMES: ")
+                if check(column_name):
+                    no_of_rows = int(no_of_rows)
+                    rows_values = []
+                    for _ in range(no_of_rows):
+                        row_data = input("                     -> ")
+                        rows_values.append(row_data)
+                        if check(row_data):
+                            continue
+                    for values in rows_values:
+                        command = f"INSERT INTO {table_name} ({column_name}) VALUES ({values})"
+                        cursor.execute(command)
+                        cnx.commit()
+                        row_num += 1
+                    print(f"\nQuery OK, inserted the given value(s) in column(s) ({column_name})"
+                          f" in table ({table_name})\n")
+    except mysql.connector.Error as err:
+        err = str(err.msg).split("; ")[0]
+        print(f"\nERROR! {err}\n")
+    finally:
+        print(f"Affected row(s): {row_num}\n")
 
 
 def average():
@@ -626,36 +659,6 @@ def distinct_conditional_average():
         print(f"\nERROR! {err}\n")
 
 
-def group_insert():
-    row_num = 0
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            no_of_rows = input("       -> NO. OF ROWS: ")
-            if check(no_of_rows):
-                column_name = input("       -> COLUMN NAMES: ")
-                if check(column_name):
-                    no_of_rows = int(no_of_rows)
-                    rows_values = []
-                    for _ in range(no_of_rows):
-                        row_data = input("                     -> ")
-                        rows_values.append(row_data)
-                        if check(row_data):
-                            continue
-                    for values in rows_values:
-                        command = f"INSERT INTO {table_name} ({column_name}) VALUES ({values})"
-                        cursor.execute(command)
-                        cnx.commit()
-                        row_num += 1
-                    print(f"\nQuery OK, inserted the given value(s) in column(s) ({column_name})"
-                          f" in table ({table_name})\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
-    finally:
-        print(f"Affected row(s): {row_num}\n")
-
-
 def count():
     try:
         table_name = input("       -> TABLE NAME: ")
@@ -665,29 +668,6 @@ def count():
                 title = input("       -> TITLE: ")
                 if check(title):
                     command = f'SELECT COUNT({column_name}) "{title}" FROM {table_name}'
-                    cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
-
-
-def distinct_count():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                title = input("       -> TITLE: ")
-                if check(title):
-                    command = f'SELECT COUNT(DISTINCT {column_name}) "{title}" FROM {table_name}'
                     cursor.execute(command)
                     data = cursor.fetchall()
                     if len(data) == 0:
@@ -722,6 +702,29 @@ def conditional_count():
                             table = from_db_cursor(cursor)
                             table.align = "l"
                             print(table, "\n")
+    except mysql.connector.Error as err:
+        err = str(err.msg).split("; ")[0]
+        print(f"\nERROR! {err}\n")
+
+
+def distinct_count():
+    try:
+        table_name = input("       -> TABLE NAME: ")
+        if check(table_name):
+            column_name = input("       -> COLUMN/FIELD NAME: ")
+            if check(column_name):
+                title = input("       -> TITLE: ")
+                if check(title):
+                    command = f'SELECT COUNT(DISTINCT {column_name}) "{title}" FROM {table_name}'
+                    cursor.execute(command)
+                    data = cursor.fetchall()
+                    if len(data) == 0:
+                        print("Data not present in the table!")
+                    else:
+                        cursor.execute(command)
+                        table = from_db_cursor(cursor)
+                        table.align = "l"
+                        print(table, "\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -1056,7 +1059,7 @@ def create_user():
         print(f"\nERROR! {err}\n")
 
 
-def reveal_user():
+def reveal_users():
     try:
         command = "SELECT * FROM INFORMATION_SCHEMA.USER_ATTRIBUTES"
         cursor.execute(command)
@@ -1095,62 +1098,110 @@ def close():
 
 def program_help():
     print("""
-                                INSTRUCTIONS
-                                ------------
-
-COMMANDS FOR DATABASE MANIPULATION:
-
-use_db()    > To use a database.
-show_db()   > To show all of the databases.
-create_db() > To create a new database.
-delete_db() > To delete an existing database.
-
-____________________________________________________________________________________
-____________________________________________________________________________________
-
-COMMANDS FOR TABLE MANIPULATION:
-
-show_tb()     > To show tables present in a database.
-create_tb()   > To create a new table.
-describe_tb() > To see the schema(structure) of a table.
-delete_tb()   > To delete a table completely.
-
-____________________________________________________________________________________
-____________________________________________________________________________________
-
-COMMANDS FOR COLUMN MANIPULATION:
-
-add_column()    > To add a new column to an existing table.
-modify_column() > To change data-type of a column in a table.
-delete_column() > To delete an exiting column inside a table.
-
-____________________________________________________________________________________
-____________________________________________________________________________________
-
-COMMANDS FOR IN-TABLE QUERIES:
-
-reveal() > To show all of the data stored in a specific table.
-search() > To search for a particular row in a table.
-
-____________________________________________________________________________________
-____________________________________________________________________________________
-
-COMMANDS FOR  IN-TABLE MANIPULATION:
-
-insert() > To insert data in a table.
-update() > To modify or change value of a data-item present in a column/field.
-delete() > To delete row(s)/record(s).
-
-____________________________________________________________________________________
-____________________________________________________________________________________
-
-COMMAND TO EXIT THE PROGRAM:
-
-exit() > To quit the program.
-
-------------------------------------------------------------------------------------
-For more help visit: https://github.com/Shahibur50/School_DataBase_Management_System
-------------------------------------------------------------------------------------
+________________________________________________________________________________________________________________________
+|                                                    INSTRUCTIONS                                                      |
+|                                                    ------------                                                      |
+|                                                                                                                      |
+| COMMANDS FOR DATABASE MANIPULATION:                                                                                  |
+|                                                                                                                      |
+| use db;    > To use a database.                                                                                      |
+| show db;   > To show all of the databases.                                                                           |
+| create db; > To create a new database.                                                                               |
+| delete db; > To delete an existing database.                                                                         |
+|                                                                                                                      |
+|______________________________________________________________________________________________________________________|
+|______________________________________________________________________________________________________________________|
+|                                                                                                                      |
+| COMMANDS FOR TABLE MANIPULATION:                                                                                     |
+|                                                                                                                      |
+| show tb;     > To show tables present in a database.                                                                 |
+| create tb;   > To create a new table.                                                                                |
+| describe tb; > To see the schema(structure) of a table.                                                              |
+| delete tb;   > To delete a table completely.                                                                         |
+|                                                                                                                      |
+|______________________________________________________________________________________________________________________|
+|______________________________________________________________________________________________________________________|
+|                                                                                                                      |
+| COMMANDS FOR COLUMN MANIPULATION:                                                                                    |
+|                                                                                                                      |
+| add column;    > To add a new column to an existing table.                                                           |
+| modify column; > To change data-type of a column in a table.                                                         |
+| delete column; > To delete an exiting column inside a table.                                                         |
+|                                                                                                                      |
+|______________________________________________________________________________________________________________________|
+|______________________________________________________________________________________________________________________|
+|                                                                                                                      |
+| COMMANDS FOR IN-TABLE QUERIES:                                                                                       |
+|                                                                                                                      |
+| reveal; > To show all of the data stored in a specific table.                                                        |
+| search; > To search for a particular row in a table.                                                                 |
+|                                                                                                                      |
+|______________________________________________________________________________________________________________________|
+|______________________________________________________________________________________________________________________|
+|                                                                                                                      |
+| COMMANDS FOR  IN-TABLE MANIPULATION:                                                                                 |
+|                                                                                                                      |
+| insert; > To insert data in a table.                                                                                 |
+| update; > To modify or change value of a data-item present in a column/field.                                        |
+| delete; > To delete row(s)/record(s).                                                                                |
+|                                                                                                                      |
+|______________________________________________________________________________________________________________________|
+|______________________________________________________________________________________________________________________|
+|                                                                                                                      |
+| COMMANDS FOR SPECIAL OPERATIONS:                                                                                     |
+|                                                                                                                      |
+| I. Group Data Insertion:                                                                                             |
+|     1. group insert; > To insert data in a grouped manner in a table.                                                |
+|                                                                                                                      |
+| II. Average Of Data-Items In A Column:                                                                               |
+|     1. average;                      > To get the average of data-items.                                             |
+|     2. conditional average;          > To get the averageof data-items based on condition.                           |
+|     3. distinct average;             > To get the average of distict data-items.                                     |
+|     4. distinct conditional average; > To get the average of distict data-items based on condition.                  |
+|                                                                                                                      |
+| III. Count Of Data-Items In A Column:                                                                                |
+|    1. count;                      > To count the number of NOT NULL data-items.                                      |
+|    2. conditional count;          > To count the number of NOT NULL data-items based on a condition.                 |
+|    3. distinct count;             > To count the number of distinct NOT NULL data-items.                             |
+|    4. distinct conditional count; > To count the number of distinct NOT NULL data-items based on a condition.        |
+|                                                                                                                      |
+| IV. Maximum Value:                                                                                                   |
+|     1. max;                      > To get the value of biggest data-item.                                            |
+|     2. conditional max;          > To get the value of biggest data-item based on a condition.                       |
+|     3. distinct max;             > To get the value of biggest distinct data-item.                                   |
+|     4. distinct conditional max; > To get the value of biggest distinct data-item based on a condition.              |
+|                                                                                                                      |
+| V. Minimum Value:                                                                                                    |
+|     1. min;                      > To get the value of smallest data-item.                                           |
+|     2. conditional min;          > To get the value of smallest data-item based on a condition.                      |
+|     3. distinct min;             > To get the value of smallest distinct data-item.                                  |
+|     4. distinct conditional min; > To get the value of smallest distinct data-item based on a condition.             |
+|                                                                                                                      |
+| VI. Summation Of Data-Items In A Column:                                                                             |
+|     1. sum;                      > To get the sum of all data-items.                                                 |
+|     2. conditional sum;          > To get the sum of all data-items based on a condition.                            |
+|     3. distinct sum;             > To get the sum of all distinct data-items.                                        |
+|     4. distinct conditional sum; > To get the sum of all distinct data-items based on a condition.                   |
+|                                                                                                                      |
+|______________________________________________________________________________________________________________________|
+|______________________________________________________________________________________________________________________|
+|                                                                                                                      |
+| COMMANDS FOR USER MANAGEMENT:                                                                                        |
+|                                                                                                                      |
+| create user;  > To create a new user and granting all permissions to that user.                                      |
+| reveal users; > To show data-about all of the users.                                                                 |
+| delete user;  > To delete an user.                                                                                   |
+|                                                                                                                      |
+|______________________________________________________________________________________________________________________|
+|______________________________________________________________________________________________________________________|
+|                                                                                                                      |
+| COMMAND TO EXIT THE PROGRAM:                                                                                         |
+|                                                                                                                      |
+| exit; > To quit the program.                                                                                         |
+|                                                                                                                      |
+|______________________________________________________________________________________________________________________|
+| For more help visit: https://github.com/Shahibur50/School_DataBase_Management_System                                 |
+|______________________________________________________________________________________________________________________|
 """)
 
 
@@ -1167,14 +1218,14 @@ def to_user():
 | This is free software, and you are welcome to redistribute it   |
 | under certain conditions; type `show_c;' for details.           |
 |                                                                 |
-| For more info visit:                                            |
+| For more info and updates visit:                                |
 | https://github.com/Shahibur50/School_DataBase_Management_System |
 |                                                                 |
 | Commands end with ;                                             |
 |                                                                 |
 | To cancel any input statement type \c                           |
 |                                                                 |
-| For help type help(); To exit the program type exit()           |
+| Type help; for help. To exit the program type exit;             |
 +-----------------------------------------------------------------+
 """)
 
