@@ -1,6 +1,6 @@
 # **School DataBase Management System (SDBMS)**
 
-# Documentation not ready/usable.
+# **Documentation not ready/usable!**
 
 ### A database management system based on MySQL, with a goal to simplify the usage of a RDBMS for data-management in schools
 
