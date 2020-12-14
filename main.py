@@ -1,5 +1,5 @@
 """
-LESSQL
+LESSSQL
 Version: 3.3.12
 Copyright (C) 2020 Shahibur Rahaman
 
@@ -27,13 +27,13 @@ DB_COMMANDS = ["show tables;", "create table;", "describe table;", "delete table
                "distinct min;", "distinct conditional min;", "sum;", "conditional sum;", "distinct sum;",
                "distinct conditional sum;"]
 
-HELP_COMMANDS = ["help;", "/h", "?"]
+HELP_COMMANDS = ["help;", "\h", "?"]
 
 PT = PrettyTable()
 
 db = None
 
-system('cls')
+system('cls')  # Clearing the screen
 
 for _ in range(3):
     try:
@@ -50,7 +50,7 @@ for _ in range(3):
         cursor = cnx.cursor()
         print("Connecting to the server...")
         time.sleep(2)
-        system('cls')
+        system('cls')  # Clearing the screen after successful connection
         print(f"\nLOGGED IN AS: {usr_name}@{host}")
         now = datetime.now()
         print(f"TIME: {now.strftime('%H:%M:%S %p')}")
@@ -1092,8 +1092,8 @@ def delete_user():
 
 def close():
     print("Exiting...")
-    time.sleep(1)
-    print("Bye...\n")
+    time.sleep(2)
+    print("Bye.\n")
 
 
 def program_help():
