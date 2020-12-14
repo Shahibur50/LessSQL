@@ -1,5 +1,5 @@
 """
-School Database Management System (SDBMS)
+LESSQL
 Version: 3.3.12
 Copyright (C) 2020 Shahibur Rahaman
 
@@ -54,7 +54,7 @@ for _ in range(3):
         print(f"\nLOGGED IN AS: {usr_name}@{host}")
         now = datetime.now()
         print(f"TIME: {now.strftime('%H:%M:%S %p')}")
-        print(f"\nServer version: {cnx.get_server_info()}")
+        print(f"\nMySQL server version: {cnx.get_server_info()}")
         is_connection = True
         break
     except mysql.connector.Error as error:
@@ -260,7 +260,7 @@ def create_db():
             command = f"CREATE DATABASE {database_name}"
             cursor.execute(command)
             cnx.commit()
-            print(f"\nQuery OK, Created database '{database_name}'.\n")
+            print(f"\nQuery OK, Created database ({database_name}).\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -1155,9 +1155,9 @@ ________________________________________________________________________________
 |                                                                                                                      |
 | II. Average Of Data-Items In A Column:                                                                               |
 |     1. average;                      > To get the average of data-items.                                             |
-|     2. conditional average;          > To get the averageof data-items based on condition.                           |
-|     3. distinct average;             > To get the average of distict data-items.                                     |
-|     4. distinct conditional average; > To get the average of distict data-items based on condition.                  |
+|     2. conditional average;          > To get the average data-items based on condition.                             |
+|     3. distinct average;             > To get the average of distinct data-items.                                    |
+|     4. distinct conditional average; > To get the average of distinct data-items based on condition.                 |
 |                                                                                                                      |
 | III. Count Of Data-Items In A Column:                                                                                |
 |    1. count;                      > To count the number of NOT NULL data-items.                                      |
@@ -1208,8 +1208,8 @@ ________________________________________________________________________________
 def to_user():
     print("""
 +-----------------------------------------------------------------+
-| WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)            |  
-| Version: 3.2.12                                                 |
+| WELCOME TO LESSQL DATABASE MANAGEMENT SYSTEM                    |  
+| Version: 3.3.12                                                 |
 |                                                                 |
 | Copyright (C) 2020  Shahibur Rahaman                            |
 |                                                                 |
