@@ -312,20 +312,26 @@ def create_tb():
                 columns = ""
                 column_num = 0
 
+                is_query_cancel = False
                 for column_num in range(1, no_of_columns):
                     column_value_type = input(f"       -> COLUMN ({column_num}) NAME AND DATA-TYPE: ")
                     if check(column_value_type):
                         columns += column_value_type + ', '
-                column_value_type = input(f"       -> COLUMN ({column_num + 1}) NAME AND DATA-TYPE: ")
-
-                if check(column_value_type):
-                    columns += column_value_type
-                    primary_key = input("       -> PRIMARY KEY: ")
-                    if check(primary_key):
-                        command = f"CREATE TABLE {table_name}({columns}, PRIMARY KEY ({primary_key}))"
-                        cursor.execute(command)
-                        cnx.commit()
-                        print(f"\nQuery OK, Created table ({table_name}).\n")
+                    else:
+                        is_query_cancel = True
+                        break
+                if is_query_cancel:
+                    pass
+                else:
+                    column_value_type = input(f"       -> COLUMN ({column_num + 1}) NAME AND DATA-TYPE: ")
+                    if check(column_value_type):
+                        columns += column_value_type
+                        primary_key = input("       -> PRIMARY KEY: ")
+                        if check(primary_key):
+                            command = f"CREATE TABLE {table_name}({columns}, PRIMARY KEY ({primary_key}))"
+                            cursor.execute(command)
+                            cnx.commit()
+                            print(f"\nQuery OK, Created table ({table_name}).\n")
     except ValueError:
         print("\nERROR! Please enter values properly!\n")
     except mysql.connector.Error as err:
