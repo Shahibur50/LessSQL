@@ -129,7 +129,7 @@ def run(command):
         show_tb()
     elif command == "create table;":
         create_tb()
-    elif command == "describe table;" or command == "desc table;":
+    elif command in ("describe table;", "desc table;"):
         describe_tb()
     elif command == "delete table;":
         delete_tb()
