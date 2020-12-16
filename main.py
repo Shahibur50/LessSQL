@@ -1,6 +1,6 @@
 """
 LESSSQL
-Version: 3.5.12
+Version: 3.6.12
 Copyright (C) 2020 Shahibur Rahaman
 
 Licensed under GNU GPLv3
@@ -19,8 +19,8 @@ from datetime import datetime
 NO_DB_COMMANDS = ["use database;", "show databases;", "create database;", "delete database;", "exit;", "show_w;",
                   "show_c;", "help;", "create user;", "reveal user;", "delete user;"]
 
-DB_COMMANDS = ["show tables;", "create table;", "describe table;", "delete table;", "add column;", "modify column;",
-               "delete column;", "reveal;", "search;", "insert;", "update;", "delete;", "average;",
+DB_COMMANDS = ["show tables;", "create table;", "describe table;", "delete table;", "show columns;", "add column;",
+               "modify column;", "delete column;", "reveal;", "search;", "insert;", "update;", "delete;", "average;",
                "conditional average;", "distinct average;", "distinct conditional average;",
                "group insert;", "count;", "distinct count;", "conditional count;", "distinct conditional count;",
                "max;", "conditional max;", "distinct max;", "distinct conditional max;", "min;", "conditional min;",
@@ -133,6 +133,8 @@ def run(command):
         describe_tb()
     elif command == "delete table;":
         delete_tb()
+    elif command == "show columns;":
+        show_column()
     elif command == "add column;":
         add_column()
     elif command == "modify column;":
@@ -371,6 +373,23 @@ def delete_tb():
                 print(f"\nQuery OK, deleted the table [{table_name}]\n")
             else:
                 print("\nQuery cancelled, for deletion of table.\n")
+    except mysql.connector.Error as err:
+        err = str(err.msg).split("; ")[0]
+        print(f"\nERROR! {err}\n")
+
+
+def show_column():
+    try:
+        table_name = input("       -> TABLE NAME: ")
+        if check(table_name):
+            command = f"SHOW COLUMNS FROM {table_name}"
+            cursor.execute(command)
+            column_count = cursor.fetchall()
+            cursor.execute(command)
+            table = from_db_cursor(cursor)
+            table.align = "l"
+            print(table)
+            print(f"Column(s) count: {len(column_count)}\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -1232,7 +1251,7 @@ def to_user():
     print("""
 +-----------------------------------------------------------------+
 | WELCOME TO LESSSQL DATABASE MANAGEMENT SYSTEM                   |
-| Version: 3.5.12                                                 |
+| Version: 3.6.12                                                 |
 |                                                                 |
 | Copyright (C) 2020  Shahibur Rahaman                            |
 |                                                                 |
