@@ -25,7 +25,7 @@ DB_COMMANDS = ["show tables;", "create table;", "describe table;", "delete table
                "group insert;", "count;", "distinct count;", "conditional count;", "distinct conditional count;",
                "max;", "conditional max;", "distinct max;", "distinct conditional max;", "min;", "conditional min;",
                "distinct min;", "distinct conditional min;", "sum;", "conditional sum;", "distinct sum;",
-               "distinct conditional sum;"]
+               "distinct conditional sum;", "change engine;"]
 
 HELP_COMMANDS = ["help;", "\h;", "?;"]
 
@@ -197,6 +197,8 @@ def run(command):
         reveal_users()
     elif command == "delete user;":
         delete_user()
+    elif command == "change engine;":
+        change_engine()
     elif command == "exit;":
         close()
         sys.exit()
@@ -462,7 +464,7 @@ def insert():
                     cnx.commit()
                     row_count = cursor.rowcount
                     print(f"\nQuery OK, inserted value(s) [{values}] in column(s) [{column_name}]"
-                          f" in table ({table_name})\n")
+                          f" in table [{table_name}].\n")
                     print(f"Affected row(s): {row_count}\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
@@ -1091,6 +1093,21 @@ def delete_user():
                 print(f"\nQuery OK, removed the user [{user_name}].\n")
             else:
                 print(f"\nQuery cancelled, for removal of user [{user_name}].\n")
+    except mysql.connector.Error as err:
+        err = str(err.msg).split("; ")[0]
+        print(f"\nERROR! {err}\n")
+
+
+def change_engine():
+    try:
+        table_name = input("       -> TABLE NAME: ")
+        if check(table_name):
+            engine_name = input("       -> ENGINE NAME: ")
+            if check(engine_name):
+                command = f"ALTER TABLE {table_name} ENGINE = {engine_name}"
+                cursor.execute(command)
+                cnx.commit()
+                print(f"\nQuery OK, now using [{engine_name}] storage engine for table [{table_name}].\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
