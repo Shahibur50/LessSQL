@@ -1214,7 +1214,7 @@ def program_help():
 def to_user():
     print("""
 +-----------------------------------------------------------------+
-| WELCOME TO LESSSQL DATABASE MANAGEMENT SYSTEM                    |
+| WELCOME TO LESSSQL DATABASE MANAGEMENT SYSTEM                   |
 | Version: 3.5.12                                                 |
 |                                                                 |
 | Copyright (C) 2020  Shahibur Rahaman                            |
