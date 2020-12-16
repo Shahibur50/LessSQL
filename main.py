@@ -1,6 +1,6 @@
 """
 LESSSQL
-Version: 3.3.12
+Version: 3.5.12
 Copyright (C) 2020 Shahibur Rahaman
 
 Licensed under GNU GPLv3
@@ -27,7 +27,7 @@ DB_COMMANDS = ["show tables;", "create table;", "describe table;", "delete table
                "distinct min;", "distinct conditional min;", "sum;", "conditional sum;", "distinct sum;",
                "distinct conditional sum;"]
 
-HELP_COMMANDS = ["help;", "\h", "?"]
+HELP_COMMANDS = ["help;", "\h;", "?;"]
 
 PT = PrettyTable()
 
@@ -43,6 +43,10 @@ for _ in range(3):
     except EOFError:
         print("")
         continue
+    except KeyboardInterrupt:
+        print("\nExiting...")
+        time.sleep(1)
+        sys.exit()
     try:
         cnx = mysql.connector.connect(user=usr_name,
                                       password=passwd,
@@ -125,7 +129,7 @@ def run(command):
         show_tb()
     elif command == "create table;":
         create_tb()
-    elif command == "describe table;":
+    elif command == "describe table;" or command == "desc table;":
         describe_tb()
     elif command == "delete table;":
         delete_tb()
@@ -209,10 +213,8 @@ def check(variable_to_check):
     Function to check whether the user
     cancelled the input statement or has
     given no input at all.
-    :param variable_to_check:
-    :return: take_next_step
     """
-    take_next_step = True  # Boolean variable to check and make the program process further ahead.
+    take_next_step = True  # Boolean variable to check and process further ahead.
 
     if "\c" in variable_to_check:
         print("\nQuery cancelled!\n")
@@ -232,7 +234,7 @@ def use_db():
             command = f"USE {database_name}"
             cursor.execute(command)
             db = database_name
-            print(f"\nQuery OK, now using database '{database_name}'.\n")
+            print(f"\nQuery OK, now using database [{database_name}].\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -260,7 +262,7 @@ def create_db():
             command = f"CREATE DATABASE {database_name}"
             cursor.execute(command)
             cnx.commit()
-            print(f"\nQuery OK, Created database ({database_name}).\n")
+            print(f"\nQuery OK, Created database [{database_name}].\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -279,7 +281,7 @@ def delete_db():
                 cnx.commit()
                 if db == database_name:
                     db = None
-                print(f"\nQuery OK, Deleted database ({database_name}).\n")
+                print(f"\nQuery OK, Deleted database '{database_name}'.\n")
             else:
                 print(f"\nQuery cancelled, for deletion of the database ({database_name}).\n")
     except mysql.connector.Error as err:
@@ -312,15 +314,15 @@ def create_tb():
                 columns = ""
                 column_num = 0
 
-                is_query_cancel = False
+                is_query_cancelled = False
                 for column_num in range(1, no_of_columns):
                     column_value_type = input(f"       -> COLUMN ({column_num}) NAME AND DATA-TYPE: ")
                     if check(column_value_type):
                         columns += column_value_type + ', '
                     else:
-                        is_query_cancel = True
+                        is_query_cancelled = True
                         break
-                if is_query_cancel:
+                if is_query_cancelled:
                     pass
                 else:
                     column_value_type = input(f"       -> COLUMN ({column_num + 1}) NAME AND DATA-TYPE: ")
@@ -331,7 +333,7 @@ def create_tb():
                             command = f"CREATE TABLE {table_name}({columns}, PRIMARY KEY ({primary_key}))"
                             cursor.execute(command)
                             cnx.commit()
-                            print(f"\nQuery OK, Created table ({table_name}).\n")
+                            print(f"\nQuery OK, Created table [{table_name}].\n")
     except ValueError:
         print("\nERROR! Please enter values properly!\n")
     except mysql.connector.Error as err:
@@ -359,12 +361,12 @@ def delete_tb():
         table_name = input("      -> NAME OF TABLE TO BE DELETED: ")
         if check(table_name):
             opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to delete the"
-                        f" table '{table_name}'? (y/n) ")
+                        f" table '{table_name}'? (y/[n]) ")
             if opt in ('y', 'Y'):
                 command = f"DROP TABLE {table_name}"
                 cursor.execute(command)
                 cnx.commit()
-                print(f"\nQuery OK, deleted the table ({table_name})\n")
+                print(f"\nQuery OK, deleted the table [{table_name}]\n")
             else:
                 print("\nQuery cancelled, for deletion of table.\n")
     except mysql.connector.Error as err:
@@ -376,8 +378,7 @@ def add_column():
     try:
         table_name = input("       -> TABLE NAME: ")
         if check(table_name):
-            column_data = input(
-                "       -> NEW COLUMN NAME AND DATA-TYPE: ")
+            column_data = input("       -> NEW COLUMN NAME AND DATA-TYPE: ")
             if check(column_data):
                 command = f"ALTER TABLE {table_name} ADD {column_data}"
                 cursor.execute(command)
@@ -386,7 +387,7 @@ def add_column():
                 column_name = column_data.split()[0]
                 data_type = column_data.split()[1]
 
-                print(f"\nQuery OK, added column '{column_name}' with data-type '{data_type}'"
+                print(f"\nQuery OK, added column [{column_name}] with data-type [{data_type}]"
                       f" to the table '{table_name}'.\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
@@ -405,7 +406,7 @@ def modify_column():
                     command = f"ALTER TABLE {table_name} MODIFY {column_name} {data_type}"
                     cursor.execute(command)
                     cnx.commit()
-                    print(f"\nQuery OK, modified column ({column_name}) to new data-type ({data_type})"
+                    print(f"\nQuery OK, modified column [{column_name}] to new data-type ({data_type})"
                           f" in table ({table_name}).\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
@@ -424,7 +425,7 @@ def delete_column():
                     command = f"ALTER TABLE {table_name} DROP {column_name}"
                     cursor.execute(command)
                     cnx.commit()
-                    print(f"\nQuery OK, Deleted column ({column_name}) from table ({table_name}).\n")
+                    print(f"\nQuery OK, Deleted column [{column_name}] from table [{table_name}].\n")
                 else:
                     print("\nQuery cancelled, for deletion of column.\n")
     except mysql.connector.Error as err:
@@ -460,7 +461,7 @@ def insert():
                     cursor.execute(command)
                     cnx.commit()
                     row_count = cursor.rowcount
-                    print(f"\nQuery OK, inserted value(s) ({values}) in column(s) ({column_name})"
+                    print(f"\nQuery OK, inserted value(s) [{values}] in column(s) [{column_name}]"
                           f" in table ({table_name})\n")
                     print(f"Affected row(s): {row_count}\n")
     except mysql.connector.Error as err:
@@ -485,8 +486,8 @@ def update():
                         if row_count == 0:
                             print("\nThe given condition was not satisfied!")
                         else:
-                            print(f"\nQuery OK, updated the row(s)/record(s) in column/field ({attribute})"
-                                  f" to ({updated_value}) where condition ({condition}) was satisfied.\n")
+                            print(f"\nQuery OK, updated the row(s)/record(s) in column/field [{attribute}]"
+                                  f" to [{updated_value}] where condition [{condition}] was satisfied.\n")
                         print(f"Affected row(s): {row_count}")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
@@ -531,7 +532,7 @@ def delete():
                 cursor.execute(command)
                 cnx.commit()
                 row_count = cursor.rowcount
-                print(f"\nQuery OK, deleted the row(s)/record(s) where condition ({condition}) was satisfied.")
+                print(f"\nQuery OK, deleted the row(s)/record(s) where condition [{condition}] was satisfied.")
                 print("Affected row(s):", row_count, "\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
@@ -559,8 +560,8 @@ def group_insert():
                         cursor.execute(command)
                         cnx.commit()
                         row_num += 1
-                    print(f"\nQuery OK, inserted the given value(s) in column(s) ({column_name})"
-                          f" in table ({table_name})\n")
+                    print(f"\nQuery OK, inserted the given value(s) in column(s) [{column_name}]"
+                          f" in table [{table_name}]\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -1059,7 +1060,7 @@ def create_user():
                 grant_command = f"GRANT ALL ON * . * TO '{new_usr_name}'@'{host_name}'"
                 cursor.execute(grant_command)
                 cnx.commit()
-                print(f"\nQuery OK, created and granted all privileges to the user ({new_usr_name}).\n")
+                print(f"\nQuery OK, created and granted all privileges to the user [{new_usr_name}].\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -1082,15 +1083,14 @@ def delete_user():
         user_name = input("       -> USER-NAME: ")
         if check(user_name):
             host_name = input("       -> HOST: ")
-            opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want to remove the user "
-                        f"'{user_name}'? (y/n) ")
+            opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want to remove the user [{user_name}]? (y/n) ")
             if opt in ('y', 'Y'):
                 command = f"DROP USER '{user_name}'@'{host_name}'"
                 cursor.execute(command)
                 cnx.commit()
-                print(f"\nQuery OK, removed the user ({user_name}).\n")
+                print(f"\nQuery OK, removed the user [{user_name}].\n")
             else:
-                print(f"\nQuery cancelled, for deletion of the database ({user_name}).\n")
+                print(f"\nQuery cancelled, for removal of user [{user_name}].\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -1104,7 +1104,7 @@ def close():
 
 def program_help():
     print("""
-________________________________________________________________________________________________________________________
++----------------------------------------------------------------------------------------------------------------------+
 |                                                    INSTRUCTIONS                                                      |
 |                                                    ------------                                                      |
 |                                                                                                                      |
@@ -1166,10 +1166,10 @@ ________________________________________________________________________________
 |     4. distinct conditional average; > To get the average of distinct data-items based on condition.                 |
 |                                                                                                                      |
 | III. Count Of Data-Items In A Column:                                                                                |
-|    1. count;                      > To count the number of NOT NULL data-items.                                      |
-|    2. conditional count;          > To count the number of NOT NULL data-items based on a condition.                 |
-|    3. distinct count;             > To count the number of distinct NOT NULL data-items.                             |
-|    4. distinct conditional count; > To count the number of distinct NOT NULL data-items based on a condition.        |
+|     1. count;                      > To count the number of NOT NULL data-items.                                     |
+|     2. conditional count;          > To count the number of NOT NULL data-items based on a condition.                |
+|     3. distinct count;             > To count the number of distinct NOT NULL data-items.                            |
+|     4. distinct conditional count; > To count the number of distinct NOT NULL data-items based on a condition.       |
 |                                                                                                                      |
 | IV. Maximum Value:                                                                                                   |
 |     1. max;                      > To get the value of biggest data-item.                                            |
@@ -1206,16 +1206,16 @@ ________________________________________________________________________________
 | exit; > To quit the program.                                                                                         |
 |                                                                                                                      |
 |______________________________________________________________________________________________________________________|
-| For more help visit: https://github.com/Shahibur50/School_DataBase_Management_System                                 |
-|______________________________________________________________________________________________________________________|
+| For more help visit: https://github.com/Shahibur50/LESSSQL                                                           |
++----------------------------------------------------------------------------------------------------------------------+
 """)
 
 
 def to_user():
     print("""
 +-----------------------------------------------------------------+
-| WELCOME TO LESSQL DATABASE MANAGEMENT SYSTEM                    |  
-| Version: 3.3.12                                                 |
+| WELCOME TO LESSSQL DATABASE MANAGEMENT SYSTEM                    |
+| Version: 3.5.12                                                 |
 |                                                                 |
 | Copyright (C) 2020  Shahibur Rahaman                            |
 |                                                                 |
@@ -1225,7 +1225,7 @@ def to_user():
 | under certain conditions; type `show_c;' for details.           |
 |                                                                 |
 | For more info and updates visit:                                |
-| https://github.com/Shahibur50/School_DataBase_Management_System |
+| https://github.com/Shahibur50/LESSSQL                           |
 |                                                                 |
 | Commands end with ;                                             |
 |                                                                 |
