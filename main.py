@@ -1,6 +1,6 @@
 """
 LESSSQL
-Version: 3.7.12
+Version: 3.8.12
 Copyright (C) 2020 Shahibur Rahaman
 
 Licensed under GNU GPLv3
@@ -80,7 +80,7 @@ def main():
     if is_connection:
         to_user()  # Showing the user info related to the program
         while True:
-            print("LESSSQL|> ", end="")
+            print("lesssql|> ", end="")
             try:
                 cmd = input().lower()
                 cmd_execute(cmd)
