@@ -1,6 +1,6 @@
 """
 LESSSQL
-Version: 3.6.12
+Version: 3.7.12
 Copyright (C) 2020 Shahibur Rahaman
 
 Licensed under GNU GPLv3
@@ -17,7 +17,8 @@ from prettytable import from_db_cursor
 from datetime import datetime
 
 NO_DB_COMMANDS = ["use database;", "show databases;", "create database;", "delete database;", "exit;", "show_w;",
-                  "show_c;", "help;", "create user;", "reveal user;", "delete user;"]
+                  "show_c;", "help;", "\h;", "?;", "create user;", "reveal user;", "delete user;",
+                  "show default engine;"]
 
 DB_COMMANDS = ["show tables;", "create table;", "describe table;", "delete table;", "show columns;", "add column;",
                "modify column;", "delete column;", "reveal;", "search;", "insert;", "update;", "delete;", "average;",
@@ -25,12 +26,12 @@ DB_COMMANDS = ["show tables;", "create table;", "describe table;", "delete table
                "group insert;", "count;", "distinct count;", "conditional count;", "distinct conditional count;",
                "max;", "conditional max;", "distinct max;", "distinct conditional max;", "min;", "conditional min;",
                "distinct min;", "distinct conditional min;", "sum;", "conditional sum;", "distinct sum;",
-               "distinct conditional sum;", "change engine;"]
+               "distinct conditional sum;", "show table engine;", "change engine;"]
 
 HELP_COMMANDS = ["help;", "\h;", "?;"]
 
 PT = PrettyTable()
-
+is_connection = False
 db = None
 
 system('cls')  # Clearing the screen
@@ -92,6 +93,8 @@ def main():
         cnx.close()
     else:
         print("Please check if the server is online.")
+        print("\nLESSSQL will exit automatically in 5 secs.\n")
+        time.sleep(3)
         close()
 
 
@@ -199,8 +202,14 @@ def run(command):
         reveal_users()
     elif command == "delete user;":
         delete_user()
-    elif command == "change engine;":
-        change_engine()
+    elif command == "show default engine;":
+        show_default_engine()
+    elif command == "change default engine;":
+        change_default_engine()
+    elif command == "show table engine;":
+        show_table_engine()
+    elif command == "change table engine;":
+        change_table_engine()
     elif command == "exit;":
         close()
         sys.exit()
@@ -1117,11 +1126,51 @@ def delete_user():
         print(f"\nERROR! {err}\n")
 
 
-def change_engine():
+def show_default_engine():
+    try:
+        command = "SHOW ENGINES"
+        cursor.execute(command)
+        table = from_db_cursor(cursor)
+        table.align = "l"
+        print(table, "\n")
+    except mysql.connector.Error as err:
+        err = str(err.msg).split("; ")[0]
+        print(f"\nERROR! {err}\n")
+
+
+def change_default_engine():
+    try:
+        engine_name = input("       -> NEW ENGINE NAME: ")
+        if check(engine_name):
+            command = f"SET default_storage_engine={engine_name}"
+            cursor.execute(command)
+            cnx.commit()
+            print(f"\nQuery OK, now using [{engine_name}] storage engine as default.\n")
+    except mysql.connector.Error as err:
+        err = str(err.msg).split("; ")[0]
+        print(f"\nERROR! {err}\n")
+
+
+def show_table_engine():
     try:
         table_name = input("       -> TABLE NAME: ")
         if check(table_name):
-            engine_name = input("       -> ENGINE NAME: ")
+            command = f"SELECT TABLE_NAME, ENGINE FROM INFORMATION_SCHEMA.TABLES WHERE" \
+                      f" table_name = '{table_name}'"
+            cursor.execute(command)
+            table = from_db_cursor(cursor)
+            table.align = "l"
+            print(table, "\n")
+    except mysql.connector.Error as err:
+        err = str(err.msg).split("; ")[0]
+        print(f"\nERROR! {err}\n")
+
+
+def change_table_engine():
+    try:
+        table_name = input("       -> TABLE NAME: ")
+        if check(table_name):
+            engine_name = input("       -> NEW ENGINE NAME: ")
             if check(engine_name):
                 command = f"ALTER TABLE {table_name} ENGINE = {engine_name}"
                 cursor.execute(command)
@@ -1236,6 +1285,15 @@ def program_help():
 |                                                                                                                      |
 |______________________________________________________________________________________________________________________|
 |______________________________________________________________________________________________________________________|
+| COMMANDS FOR ENGINE MANAGEMENT:                                                                                      |
+|                                                                                                                      | 
+| show default engine;   > To show the default engine.                                                                 |
+| change default engine; > To change the default engine.                                                               |
+| show table engine;     > To show the default engine for a table.                                                     |
+| change table engine;   > To change the default engine for a table.                                                   |
+|                                                                                                                      |
+|______________________________________________________________________________________________________________________|
+|______________________________________________________________________________________________________________________|
 |                                                                                                                      |
 | COMMAND TO EXIT THE PROGRAM:                                                                                         |
 |                                                                                                                      |
@@ -1250,8 +1308,8 @@ def program_help():
 def to_user():
     print("""
 +-----------------------------------------------------------------+
-| WELCOME TO LESSSQL DATABASE MANAGEMENT SYSTEM                   |
-| Version: 3.6.12                                                 |
+| WELCOME TO LessSQL DATABASE MANAGEMENT SYSTEM                   |
+| Version: 3.8.12                                                 |
 |                                                                 |
 | Copyright (C) 2020  Shahibur Rahaman                            |
 |                                                                 |
@@ -1261,7 +1319,7 @@ def to_user():
 | under certain conditions; type `show_c;' for details.           |
 |                                                                 |
 | For more info and updates visit:                                |
-| https://github.com/Shahibur50/LESSSQL                           |
+| https://github.com/Shahibur50/LessSQL                           |
 |                                                                 |
 | Commands end with ;                                             |
 |                                                                 |
