@@ -61,7 +61,6 @@ try:
             now = datetime.now()
             print(f"TIME: {now.strftime('%H:%M:%S %p')}")
             print(f"\nMySQL server version: {cnx.get_server_info()}")
-            print(f"Your connection id is: {mysql.connector.MySQLConnection.connection_id}")
             is_connection = True
             is_server_installed = True
             break
