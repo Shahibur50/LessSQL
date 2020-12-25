@@ -1313,7 +1313,7 @@ def to_user():
     print("""
 +------------------------------------------------------------------+
 | Welcome to LessSQL command line client                           |
-| Version: 4.0.12                                                  |
+| Version: 4.1.12                                                  |
 |                                                                  |
 | Copyright (c) 2020 Shahibur Rahaman                              |
 |                                                                  |
