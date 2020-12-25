@@ -1,9 +1,9 @@
 """
-LESSSQL
-Version: 3.9.12
-Copyright (C) 2020 Shahibur Rahaman
+LessSQL
+Version: 4.0.12
 
-Licensed under GNU GPLv3
+Copyright (c) 2020 Shahibur Rahaman
+Licensed under MIT
 """
 
 from os import system
@@ -16,9 +16,9 @@ from prettytable import PrettyTable
 from prettytable import from_db_cursor
 from datetime import datetime
 
-NO_DB_COMMANDS = ["use database;", "show databases;", "create database;", "delete database;", "exit;", "show_w;",
-                  "show_c;", "help;", "\h;", "?;", "create user;", "reveal user;", "delete user;",
-                  "show default engine;", "change default engine;"]
+NO_DB_COMMANDS = ["use database;", "show databases;", "create database;", "delete database;", "exit;",
+                  "help;", "\h;", "?;", "create user;", "reveal user;", "delete user;",
+                  "show default engine;", "change default engine;", "license;"]
 
 DB_COMMANDS = ["show tables;", "create table;", "describe table;", "delete table;", "show columns;", "add column;",
                "modify column;", "delete column;", "reveal;", "search;", "insert;", "update;", "delete;", "average;",
@@ -81,7 +81,7 @@ try:
         time.sleep(2)
         sys.exit()
 except (ConnectionRefusedError, ModuleNotFoundError, OSError,  ImportError):
-    print("please check your MySQL server installation.")
+    print("\nERROR! Please check your MySQL server installation.")
 
 
 def main():
@@ -220,12 +220,10 @@ def run(command):
     elif command == "exit;":
         close()
         sys.exit()
-    elif command == "show_w;":
-        show_w()
-    elif command == "show_c;":
-        show_c()
     elif command in HELP_COMMANDS:
         program_help()
+    elif command == "license;":
+        lesssql_license()
 
 
 def check(variable_to_check):
@@ -1307,7 +1305,7 @@ def program_help():
 | exit; > To quit the program.                                                                                         |
 |                                                                                                                      |
 |______________________________________________________________________________________________________________________|
-| For more help visit: https://github.com/Shahibur50/LESSSQL                                                           |
+| For more help visit: https://github.com/Shahibur50/LessSQL                                                           |
 +----------------------------------------------------------------------------------------------------------------------+
 """)
 
@@ -1316,14 +1314,9 @@ def to_user():
     print("""
 +-----------------------------------------------------------------+
 | WELCOME TO LessSQL DATABASE MANAGEMENT SYSTEM                   |
-| Version: 3.8.12                                                 |
+| Version: 4.0.12                                                 |
 |                                                                 |
-| Copyright (C) 2020  Shahibur Rahaman                            |
-|                                                                 |
-| This program comes with ABSOLUTELY NO WARRANTY;                 |
-| for details type `show_w;'                                      |
-| This is free software, and you are welcome to redistribute it   |
-| under certain conditions; type `show_c;' for details.           |
+| Copyright (c) 2020 Shahibur Rahaman                             |
 |                                                                 |
 | For more info and updates visit:                                |
 | https://github.com/Shahibur50/LessSQL                           |
@@ -1337,29 +1330,29 @@ def to_user():
 """)
 
 
-def show_w():
+def lesssql_license():
     print("""
-THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY
-APPLICABLE LAW.  EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT
-HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY
-OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO,
-THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
-PURPOSE.  THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM
-IS WITH YOU.  SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF
-ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+MIT License
 
-For license info visit: https://www.gnu.org/licenses/
-""")
+Copyright (c) 2020 Shahibur Rahaman
 
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-def show_c():
-    print("""
-This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-For license info visit: https://www.gnu.org/licenses/
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 """)
 
 
