@@ -1,6 +1,6 @@
 """
 LessSQL
-Version: 4.0.12
+Version: 4.1.12
 
 Copyright (c) 2020 Shahibur Rahaman
 Licensed under MIT
@@ -8,12 +8,11 @@ Licensed under MIT
 
 from os import system
 import mysql.connector
+from mysql.connector import errorcode
 import sys
 import time
 import getpass
-from mysql.connector import errorcode
-from prettytable import PrettyTable
-from prettytable import from_db_cursor
+from prettytable import PrettyTable, from_db_cursor
 from datetime import datetime
 
 NO_DB_COMMANDS = ["use database;", "show databases;", "create database;", "delete database;", "exit;",
@@ -62,6 +61,7 @@ try:
             now = datetime.now()
             print(f"TIME: {now.strftime('%H:%M:%S %p')}")
             print(f"\nMySQL server version: {cnx.get_server_info()}")
+            print(f"Your connection id is: {mysql.connector.MySQLConnection.connection_id}")
             is_connection = True
             is_server_installed = True
             break
@@ -1312,21 +1312,21 @@ def program_help():
 
 def to_user():
     print("""
-+-----------------------------------------------------------------+
-| WELCOME TO LessSQL DATABASE MANAGEMENT SYSTEM                   |
-| Version: 4.0.12                                                 |
-|                                                                 |
-| Copyright (c) 2020 Shahibur Rahaman                             |
-|                                                                 |
-| For more info and updates visit:                                |
-| https://github.com/Shahibur50/LessSQL                           |
-|                                                                 |
-| Commands end with ;                                             |
-|                                                                 |
-| To cancel any input statement type \c                           |
-|                                                                 |
-| Type help; for help. To exit the program type exit;             |
-+-----------------------------------------------------------------+
++------------------------------------------------------------------+
+| Welcome to LessSQL command line client                           |
+| Version: 4.0.12                                                  |
+|                                                                  |
+| Copyright (c) 2020 Shahibur Rahaman                              |
+|                                                                  |
+| For more info and updates visit:                                 |
+| https://github.com/Shahibur50/LessSQL                            |
+|                                                                  |
+| Commands end with ;                                              |
+|                                                                  |
+| To cancel any input statement type '\c'                          |
+|                                                                  |
+| Type 'help;' or '\h;' for help. To exit the program type 'exit;' |
++------------------------------------------------------------------+
 """)
 
 
