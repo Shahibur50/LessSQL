@@ -1,6 +1,6 @@
 """
 LESSSQL
-Version: 3.8.12
+Version: 3.9.12
 Copyright (C) 2020 Shahibur Rahaman
 
 Licensed under GNU GPLv3
@@ -18,7 +18,7 @@ from datetime import datetime
 
 NO_DB_COMMANDS = ["use database;", "show databases;", "create database;", "delete database;", "exit;", "show_w;",
                   "show_c;", "help;", "\h;", "?;", "create user;", "reveal user;", "delete user;",
-                  "show default engine;"]
+                  "show default engine;", "change default engine;"]
 
 DB_COMMANDS = ["show tables;", "create table;", "describe table;", "delete table;", "show columns;", "add column;",
                "modify column;", "delete column;", "reveal;", "search;", "insert;", "update;", "delete;", "average;",
@@ -26,54 +26,62 @@ DB_COMMANDS = ["show tables;", "create table;", "describe table;", "delete table
                "group insert;", "count;", "distinct count;", "conditional count;", "distinct conditional count;",
                "max;", "conditional max;", "distinct max;", "distinct conditional max;", "min;", "conditional min;",
                "distinct min;", "distinct conditional min;", "sum;", "conditional sum;", "distinct sum;",
-               "distinct conditional sum;", "show table engine;", "change engine;"]
+               "distinct conditional sum;", "show table engine;", "change table engine;"]
 
 HELP_COMMANDS = ["help;", "\h;", "?;"]
 
 PT = PrettyTable()
 is_connection = False
 db = None
+is_server_installed = False
 
 system('cls')  # Clearing the screen
 
-for _ in range(3):
-    try:
-        usr_name = input("USER-NAME: ")
-        passwd = getpass.getpass()
-        host = "localhost"
-    except EOFError:
-        print("")
-        continue
-    except KeyboardInterrupt:
-        print("\nExiting...")
-        time.sleep(1)
-        sys.exit()
-    try:
-        cnx = mysql.connector.connect(user=usr_name,
-                                      password=passwd,
-                                      host=host)
-        cursor = cnx.cursor()
-        print("Connecting to the server...")
-        time.sleep(2)
-        system('cls')  # Clearing the screen after successful connection
-        print(f"\nLOGGED IN AS: {usr_name}@{host}")
-        now = datetime.now()
-        print(f"TIME: {now.strftime('%H:%M:%S %p')}")
-        print(f"\nMySQL server version: {cnx.get_server_info()}")
-        is_connection = True
-        break
-    except mysql.connector.Error as error:
-        if error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print("Something is wrong with your user name or password!\n")
+try:
+    for _ in range(3):
+        try:
+            usr_name = input("USER-NAME: ")
+            passwd = getpass.getpass()
+            host = "localhost"
+        except EOFError:
+            print("")
             continue
-        print(f"\n{error}\n")
+        except KeyboardInterrupt:
+            print("\nExiting...")
+            time.sleep(1)
+            sys.exit()
+        try:
+            cnx = mysql.connector.connect(user=usr_name,
+                                          password=passwd,
+                                          host=host)
+            cursor = cnx.cursor()
+            print("Connecting to the server...")
+            time.sleep(2)
+            system('cls')  # Clearing the screen after successful connection
+            print(f"\nLOGGED IN AS: {usr_name}@{host}")
+            now = datetime.now()
+            print(f"TIME: {now.strftime('%H:%M:%S %p')}")
+            print(f"\nMySQL server version: {cnx.get_server_info()}")
+            is_connection = True
+            is_server_installed = True
+            break
+        except mysql.connector.Error as error:
+            is_server_installed = True
+            if error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+                print("Something is wrong with your user name or password!\n")
+                continue
+            print(f"\n{error}\n")
+            if is_server_installed:
+                print("Please check if the server is online.")
+            time.sleep(2)
+            break
+    else:
+        print("Wrong credentials entered 3 times.")
+        print("Exiting...\n")
         time.sleep(2)
-        break
-else:
-    print("Wrong credentials entered 3 times.")
-    print("Exiting...\n")
-    time.sleep(2)
-    sys.exit()
+        sys.exit()
+except (ConnectionRefusedError, ModuleNotFoundError, OSError,  ImportError):
+    print("please check your MySQL server installation.")
 
 
 def main():
@@ -92,9 +100,8 @@ def main():
         cursor.close()
         cnx.close()
     else:
-        print("Please check if the server is online.")
-        print("\nLESSSQL will exit automatically in 5 secs.\n")
-        time.sleep(3)
+        print("\nLessSQL will exit automatically in 5 secs.\n")
+        time.sleep(5)
         close()
 
 
