@@ -1,6 +1,6 @@
 """
 LessSQL
-Version: 4.1.12
+Version: 4.2.12
 
 Copyright (c) 2020 Shahibur Rahaman
 Licensed under MIT
@@ -36,51 +36,49 @@ is_server_installed = False
 
 system('cls')  # Clearing the screen
 
-try:
-    for _ in range(3):
-        try:
-            usr_name = input("USER-NAME: ")
-            passwd = getpass.getpass()
-            host = "localhost"
-        except EOFError:
-            print("")
-            continue
-        except KeyboardInterrupt:
-            print("\nExiting...")
-            time.sleep(1)
-            sys.exit()
-        try:
-            cnx = mysql.connector.connect(user=usr_name,
-                                          password=passwd,
-                                          host=host)
-            cursor = cnx.cursor()
-            print("Connecting to the server...")
-            time.sleep(2)
-            system('cls')  # Clearing the screen after successful connection
-            print(f"\nLOGGED IN AS: {usr_name}@{host}")
-            now = datetime.now()
-            print(f"TIME: {now.strftime('%H:%M:%S %p')}")
-            print(f"\nMySQL server version: {cnx.get_server_info()}")
-            is_connection = True
-            is_server_installed = True
-            break
-        except mysql.connector.Error as error:
-            is_server_installed = True
-            if error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-                print("Something is wrong with your user name or password!\n")
-                continue
-            print(f"\n{error}\n")
-            if is_server_installed:
-                print("Please check if the server is online.")
-            time.sleep(2)
-            break
-    else:
-        print("Wrong credentials entered 3 times.")
-        print("Exiting...\n")
-        time.sleep(2)
+
+for _ in range(3):
+    try:
+        usr_name = input("USER-NAME: ")
+        passwd = getpass.getpass()
+        host = "localhost"
+    except EOFError:
+        print("")
+        continue
+    except KeyboardInterrupt:
+        print("\nExiting...")
+        time.sleep(1)
         sys.exit()
-except (ConnectionRefusedError, ModuleNotFoundError, OSError,  ImportError):
-    print("\nERROR! Please check your MySQL server installation.")
+    try:
+        cnx = mysql.connector.connect(user=usr_name,
+                                      password=passwd,
+                                      host=host)
+        cursor = cnx.cursor()
+        print("Connecting to the server...")
+        time.sleep(2)
+        system('cls')  # Clearing the screen after successful connection
+        print(f"\nLOGGED IN AS: {usr_name}@{host}")
+        now = datetime.now()
+        print(f"TIME: {now.strftime('%H:%M:%S %p')}")
+        print(f"\nMySQL server version: {cnx.get_server_info()}")
+        is_connection = True
+        is_server_installed = True
+        break
+    except mysql.connector.Error as error:
+        is_server_installed = True
+        if error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
+            print("Something is wrong with your user name or password!\n")
+            continue
+        print(f"\n{error}\n")
+        if is_server_installed:
+            print("Please check if the server is online.")
+        time.sleep(2)
+        break
+else:
+    print("Wrong credentials entered 3 times.")
+    print("Exiting...\n")
+    time.sleep(2)
+    sys.exit()
 
 
 def main():
@@ -91,6 +89,7 @@ def main():
             try:
                 cmd = input().lower()
                 cmd_execute(cmd)
+                break
             except EOFError:
                 continue
             except KeyboardInterrupt:
@@ -1311,21 +1310,22 @@ def program_help():
 
 def to_user():
     print("""
-+------------------------------------------------------------------+
-| Welcome to LessSQL command line client                           |
-| Version: 4.1.12                                                  |
-|                                                                  |
-| Copyright (c) 2020 Shahibur Rahaman                              |
-|                                                                  |
-| For more info and updates visit:                                 |
-| https://github.com/Shahibur50/LessSQL                            |
-|                                                                  |
-| Commands end with ;                                              |
-|                                                                  |
-| To cancel any input statement type '\c'                          |
-|                                                                  |
-| Type 'help;' or '\h;' for help. To exit the program type 'exit;' |
-+------------------------------------------------------------------+
++------------------------------------------------------------+
+| Welcome to LessSQL command line client                     |
+| Version: 4.2.12                                            |
+|                                                            |
+| Copyright (c) 2020 Shahibur Rahaman                        |
+|                                                            |
+| For more info and updates visit:                           |
+| https://github.com/Shahibur50/LessSQL                      |
+|                                                            |
+| Commands end with ;                                        |
+|                                                            |
+| To cancel any input statement type '\c'                    |
+|                                                            |
+| Type "license;" to see the license.                        |
+| Type 'help;' or '\h;' for help. To exit type 'exit;'       |
++------------------------------------------------------------+
 """)
 
 
