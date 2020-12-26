@@ -1,6 +1,8 @@
-# **School DataBase Management System (SDBMS)**
+![LessSQL Logo](LessSQL.ico) 
+  
+# **```LessSQL Database Management Client```**
 
-# **Documentation not ready/usable!**
+# **`Documentation Under development!`**
 
 ### A database management system based on MySQL, with a goal to simplify the usage of a RDBMS for data-management in schools
 

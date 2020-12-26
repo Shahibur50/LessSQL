@@ -1311,7 +1311,7 @@ def program_help():
 def to_user():
     print("""
 +------------------------------------------------------------+
-| Welcome to LessSQL command line client                     |
+| Welcome to LessSQL Database Management Client              |
 | Version: 4.2.12                                            |
 |                                                            |
 | Copyright (c) 2020 Shahibur Rahaman                        |
