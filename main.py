@@ -89,7 +89,6 @@ def main():
             try:
                 cmd = input().lower()
                 cmd_execute(cmd)
-                break
             except EOFError:
                 continue
             except KeyboardInterrupt:
