@@ -19,9 +19,9 @@ NO_DB_COMMANDS = ["use database;", "show databases;", "create database;", "delet
                   "help;", "\h;", "?;", "create user;", "reveal user;", "delete user;",
                   "show default engine;", "change default engine;", "license;"]
 
-DB_COMMANDS = ["show tables;", "create table;", "describe table;", "delete table;", "show columns;", "add column;",
-               "modify column;", "delete column;", "reveal;", "search;", "insert;", "update;", "delete;", "average;",
-               "conditional average;", "distinct average;", "distinct conditional average;",
+DB_COMMANDS = ["show tables;", "create table;", "desc table;", "describe table;", "delete table;", "show columns;",
+               "add column;", "modify column;", "delete column;", "reveal;", "search;", "insert;", "update;", "delete;",
+               "average;", "conditional average;", "distinct average;", "distinct conditional average;",
                "group insert;", "count;", "distinct count;", "conditional count;", "distinct conditional count;",
                "max;", "conditional max;", "distinct max;", "distinct conditional max;", "min;", "conditional min;",
                "distinct min;", "distinct conditional min;", "sum;", "conditional sum;", "distinct sum;",
