@@ -299,7 +299,8 @@ def delete_db():
                     db = None
                 print(f"\nQuery OK, Deleted database '{database_name}'.\n")
             else:
-                print(f"\nQuery cancelled, for deletion of the database ({database_name}).\n")
+                print(
+                    f"\nQuery cancelled, for deletion of the database ({database_name}).\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -332,7 +333,8 @@ def create_tb():
 
                 is_query_cancelled = False
                 for column_num in range(1, no_of_columns):
-                    column_value_type = input(f"       -> COLUMN ({column_num}) NAME AND DATA-TYPE: ")
+                    column_value_type = input(
+                        f"       -> COLUMN ({column_num}) NAME AND DATA-TYPE: ")
                     if check(column_value_type):
                         columns += column_value_type + ', '
                     else:
@@ -341,7 +343,8 @@ def create_tb():
                 if is_query_cancelled:
                     pass
                 else:
-                    column_value_type = input(f"       -> COLUMN ({column_num + 1}) NAME AND DATA-TYPE: ")
+                    column_value_type = input(
+                        f"       -> COLUMN ({column_num + 1}) NAME AND DATA-TYPE: ")
                     if check(column_value_type):
                         columns += column_value_type
                         primary_key = input("       -> PRIMARY KEY: ")
@@ -349,7 +352,8 @@ def create_tb():
                             command = f"CREATE TABLE {table_name}({columns}, PRIMARY KEY ({primary_key}))"
                             cursor.execute(command)
                             cnx.commit()
-                            print(f"\nQuery OK, Created table [{table_name}].\n")
+                            print(
+                                f"\nQuery OK, Created table [{table_name}].\n")
     except ValueError:
         print("\nERROR! Please enter values properly!\n")
     except mysql.connector.Error as err:
@@ -458,7 +462,8 @@ def delete_column():
                     command = f"ALTER TABLE {table_name} DROP {column_name}"
                     cursor.execute(command)
                     cnx.commit()
-                    print(f"\nQuery OK, Deleted column [{column_name}] from table [{table_name}].\n")
+                    print(
+                        f"\nQuery OK, Deleted column [{column_name}] from table [{table_name}].\n")
                 else:
                     print("\nQuery cancelled, for deletion of column.\n")
     except mysql.connector.Error as err:
@@ -510,7 +515,8 @@ def update():
             if check(condition):
                 attribute = input("       -> COLUMN/FIELD TO BE UPDATED: ")
                 if check(attribute):
-                    updated_value = input("       -> VALUE OF DATA-ITEM TO BE UPDATED: ")
+                    updated_value = input(
+                        "       -> VALUE OF DATA-ITEM TO BE UPDATED: ")
                     if check(updated_value):
                         command = f"UPDATE {table_name} SET {attribute}={updated_value} WHERE {condition}"
                         cursor.execute(command)
@@ -565,7 +571,8 @@ def delete():
                 cursor.execute(command)
                 cnx.commit()
                 row_count = cursor.rowcount
-                print(f"\nQuery OK, deleted the row(s)/record(s) where condition [{condition}] was satisfied.")
+                print(
+                    f"\nQuery OK, deleted the row(s)/record(s) where condition [{condition}] was satisfied.")
                 print("Affected row(s):", row_count, "\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
@@ -1093,7 +1100,8 @@ def create_user():
                 grant_command = f"GRANT ALL ON * . * TO '{new_usr_name}'@'{host_name}'"
                 cursor.execute(grant_command)
                 cnx.commit()
-                print(f"\nQuery OK, created and granted all privileges to the user [{new_usr_name}].\n")
+                print(
+                    f"\nQuery OK, created and granted all privileges to the user [{new_usr_name}].\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -1116,14 +1124,16 @@ def delete_user():
         user_name = input("       -> USER-NAME: ")
         if check(user_name):
             host_name = input("       -> HOST: ")
-            opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want to remove the user [{user_name}]? (y/n) ")
+            opt = input(
+                f"\n       -> IRREVERSIBLE CHANGE! Do you really want to remove the user [{user_name}]? (y/n) ")
             if opt in ('y', 'Y'):
                 command = f"DROP USER '{user_name}'@'{host_name}'"
                 cursor.execute(command)
                 cnx.commit()
                 print(f"\nQuery OK, removed the user [{user_name}].\n")
             else:
-                print(f"\nQuery cancelled, for removal of user [{user_name}].\n")
+                print(
+                    f"\nQuery cancelled, for removal of user [{user_name}].\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -1148,7 +1158,8 @@ def change_default_engine():
             command = f"SET default_storage_engine={engine_name}"
             cursor.execute(command)
             cnx.commit()
-            print(f"\nQuery OK, now using [{engine_name}] storage engine as default.\n")
+            print(
+                f"\nQuery OK, now using [{engine_name}] storage engine as default.\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
@@ -1178,7 +1189,8 @@ def change_table_engine():
                 command = f"ALTER TABLE {table_name} ENGINE = {engine_name}"
                 cursor.execute(command)
                 cnx.commit()
-                print(f"\nQuery OK, now using [{engine_name}] storage engine for table [{table_name}].\n")
+                print(
+                    f"\nQuery OK, now using [{engine_name}] storage engine for table [{table_name}].\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
