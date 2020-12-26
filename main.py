@@ -1290,7 +1290,7 @@ def program_help():
 |______________________________________________________________________________________________________________________|
 |______________________________________________________________________________________________________________________|
 | COMMANDS FOR ENGINE MANAGEMENT:                                                                                      |
-|                                                                                                                      | 
+|                                                                                                                      |
 | show default engine;   > To show the default engine.                                                                 |
 | change default engine; > To change the default engine.                                                               |
 | show table engine;     > To show the default engine for a table.                                                     |
