@@ -90,8 +90,6 @@ ipython_config.py
 # Visual Studio
 .vs
 
-# Inno Setup
-.iss
 
 # pyenv
 .python-version
