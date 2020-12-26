@@ -56,39 +56,30 @@
 
 ## **FINAL SCREEN OF SDBMS AFTER CONNECTING TO THE SERVER SUCCESSFULLY**
 
-       USER-NAME: root
-       Password: 
-       Connecting to the server...
+    LOGGED IN AS: root@localhost
+    TIME: 18:45:54 PM
+    
+    MySQL server version: 8.0.22
+    
+    +------------------------------------------------------------+
+    | Welcome to LessSQL Database Management Client              |
+    | Version: 4.2.12                                            |
+    |                                                            |
+    | Copyright (c) 2020 Shahibur Rahaman                        |
+    |                                                            |
+    | For more info and updates visit:                           |
+    | https://github.com/Shahibur50/LessSQL                      |
+    |                                                            |
+    | Commands end with ;                                        |
+    |                                                            |
+    | To cancel any input statement type '\c'                    |
+    |                                                            |
+    | Type "license;" to see the license.                        |
+    | Type 'help;' or '\h;' for help. To exit type 'exit;'       |
+    +------------------------------------------------------------+
+    
+    lesssql|>
 
-       CONNECTION ESTABLISHED!
-
-       LOGGED IN AS: root@localhost
-       TIME: 11:21:36 AM
-
-       Server version: 8.0.22
-
-       +-----------------------------------------------------------------+
-       | WELCOME TO SCHOOL DATABASE MANAGEMENT SYSTEM (SDBMS)            |
-       | Version: 2.15.11                                                |
-       |                                                                 |
-       | Copyright (C) 2020  Shahibur Rahaman                            |
-       |                                                                 |
-       | This program comes with ABSOLUTELY NO WARRANTY;                 |
-       | for details type show_w()                                       |
-       | This is free software, and you are welcome to redistribute it   |
-       | under certain conditions; type show_c() for details.            |
-       |                                                                 |
-       | For more info visit:                                            |
-       | https://github.com/Shahibur50/School_DataBase_Management_System |
-       |                                                                 |
-       | Commands end with ()                                            |
-       |                                                                 |
-       | To cancel any input statement type /c                           |
-       |                                                                 |
-       | For help type help(); To exit the program type exit()           |
-       +-----------------------------------------------------------------+
-
-       COMMAND|>
 
 <br>
 
