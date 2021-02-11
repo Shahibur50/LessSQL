@@ -1,8 +1,8 @@
 """
 LessSQL
-Version: 4.2.12
+Version: 4.2.13
 
-Copyright (c) 2020 Shahibur Rahaman
+Copyright (c) 2021 Shahibur Rahaman
 Licensed under MIT
 """
 
@@ -16,7 +16,7 @@ from prettytable import PrettyTable, from_db_cursor
 from datetime import datetime
 
 NO_DB_COMMANDS = ["use database;", "show databases;", "create database;", "delete database;", "exit;",
-                  "help;", "\h;", "?;", "create user;", "reveal user;", "delete user;",
+                  "help;", r"\h;", "?;", "create user;", "reveal user;", "delete user;",
                   "show default engine;", "change default engine;", "license;"]
 
 DB_COMMANDS = ["show tables;", "create table;", "desc table;", "describe table;", "delete table;", "show columns;",
@@ -27,7 +27,7 @@ DB_COMMANDS = ["show tables;", "create table;", "desc table;", "describe table;"
                "distinct min;", "distinct conditional min;", "sum;", "conditional sum;", "distinct sum;",
                "distinct conditional sum;", "show table engine;", "change table engine;"]
 
-HELP_COMMANDS = ["help;", "\h;", "?;"]
+HELP_COMMANDS = ["help;", r"\h;", "?;"]
 
 PT = PrettyTable()
 is_connection = False
@@ -35,7 +35,6 @@ db = None
 is_server_installed = False
 
 system('cls')  # Clearing the screen
-
 
 for _ in range(3):
     try:
@@ -231,7 +230,7 @@ def check(variable_to_check):
     """
     take_next_step = True  # Boolean variable to check and process further ahead.
 
-    if "\c" in variable_to_check:
+    if r"\c" in variable_to_check:
         print("\nQuery cancelled!\n")
         take_next_step = False
     elif len(variable_to_check) == 0:
@@ -1308,12 +1307,12 @@ def program_help():
 
 
 def to_user():
-    print("""
+    print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 4.2.12                                            |
+| Version: 4.2.13                                            |
 |                                                            |
-| Copyright (c) 2020 Shahibur Rahaman                        |
+| Copyright (c) 2021 Shahibur Rahaman                        |
 |                                                            |
 | For more info and updates visit:                           |
 | https://github.com/Shahibur50/LessSQL                      |
