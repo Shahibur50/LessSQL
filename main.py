@@ -1,8 +1,8 @@
 """
 LessSQL
-Version: 4.2.12
+Version: 4.2.13
 
-Copyright (c) 2020 Shahibur Rahaman
+Copyright (c) 2021 Shahibur Rahaman
 Licensed under MIT
 """
 
@@ -1310,9 +1310,9 @@ def to_user():
     print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 4.2.12                                            |
+| Version: 4.2.13                                            |
 |                                                            |
-| Copyright (c) 2020 Shahibur Rahaman                        |
+| Copyright (c) 2021 Shahibur Rahaman                        |
 |                                                            |
 | For more info and updates visit:                           |
 | https://github.com/Shahibur50/LessSQL                      |
