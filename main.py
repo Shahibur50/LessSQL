@@ -6,14 +6,14 @@ Copyright (c) 2021 Shahibur Rahaman
 Licensed under MIT
 """
 
-from os import system
-import mysql.connector
-from mysql.connector import errorcode
 import sys
 import time
 import getpass
-from prettytable import PrettyTable, from_db_cursor
+import mysql.connector
+from os import system
 from datetime import datetime
+from mysql.connector import errorcode
+from prettytable import PrettyTable, from_db_cursor
 
 NO_DB_COMMANDS = ["use database;", "show databases;", "create database;", "delete database;", "exit;",
                   "help;", r"\h;", "?;", "create user;", "reveal user;", "delete user;",
