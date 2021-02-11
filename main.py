@@ -34,7 +34,7 @@ is_connection = False
 db = None
 is_server_installed = False
 
-system('cls')  # Clearing the screen
+system('clear')  # Clearing the screen
 
 for _ in range(3):
     try:
@@ -55,7 +55,7 @@ for _ in range(3):
         cursor = cnx.cursor()
         print("Connecting to the server...")
         time.sleep(2)
-        system('cls')  # Clearing the screen after successful connection
+        system('clear')  # Clearing the screen after successful connection
         print(f"\nLOGGED IN AS: {usr_name}@{host}")
         now = datetime.now()
         print(f"TIME: {now.strftime('%H:%M:%S %p')}")
