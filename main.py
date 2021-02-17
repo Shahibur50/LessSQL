@@ -1328,7 +1328,7 @@ def to_user():
 
 
 def lesssql_license():
-    main_license = open("LICENSE.txt", "r").read()
+    main_license = open("LICENSE", "r").read()
     print(main_license)
 
 
