@@ -1,22 +1,22 @@
 """
 LessSQL
-Version: 4.2.12
+Version: 4.3.13
 
-Copyright (c) 2020 Shahibur Rahaman
-Licensed under MIT
+Copyright (c) 2021 Shahibur Rahaman
+Licensed under GNU GPLv3
 """
 
-from os import system
-import mysql.connector
-from mysql.connector import errorcode
 import sys
 import time
 import getpass
-from prettytable import PrettyTable, from_db_cursor
+import mysql.connector
+from os import system
 from datetime import datetime
+from mysql.connector import errorcode
+from prettytable import PrettyTable, from_db_cursor
 
 NO_DB_COMMANDS = ["use database;", "show databases;", "create database;", "delete database;", "exit;",
-                  "help;", "\h;", "?;", "create user;", "reveal user;", "delete user;",
+                  "help;", r"\h;", "?;", "create user;", "reveal user;", "delete user;",
                   "show default engine;", "change default engine;", "license;"]
 
 DB_COMMANDS = ["show tables;", "create table;", "desc table;", "describe table;", "delete table;", "show columns;",
@@ -27,15 +27,14 @@ DB_COMMANDS = ["show tables;", "create table;", "desc table;", "describe table;"
                "distinct min;", "distinct conditional min;", "sum;", "conditional sum;", "distinct sum;",
                "distinct conditional sum;", "show table engine;", "change table engine;"]
 
-HELP_COMMANDS = ["help;", "\h;", "?;"]
+HELP_COMMANDS = ["help;", r"\h;", "?;"]
 
 PT = PrettyTable()
 is_connection = False
 db = None
 is_server_installed = False
 
-system('cls')  # Clearing the screen
-
+system('clear')  # Clearing the screen
 
 for _ in range(3):
     try:
@@ -56,7 +55,7 @@ for _ in range(3):
         cursor = cnx.cursor()
         print("Connecting to the server...")
         time.sleep(2)
-        system('cls')  # Clearing the screen after successful connection
+        system('clear')  # Clearing the screen after successful connection
         print(f"\nLOGGED IN AS: {usr_name}@{host}")
         now = datetime.now()
         print(f"TIME: {now.strftime('%H:%M:%S %p')}")
@@ -231,7 +230,7 @@ def check(variable_to_check):
     """
     take_next_step = True  # Boolean variable to check and process further ahead.
 
-    if "\c" in variable_to_check:
+    if r"\c" in variable_to_check:
         print("\nQuery cancelled!\n")
         take_next_step = False
     elif len(variable_to_check) == 0:
@@ -1308,12 +1307,12 @@ def program_help():
 
 
 def to_user():
-    print("""
+    print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 4.2.12                                            |
+| Version: 4.3.13                                            |
 |                                                            |
-| Copyright (c) 2020 Shahibur Rahaman                        |
+| Copyright (c) 2021 Shahibur Rahaman                        |
 |                                                            |
 | For more info and updates visit:                           |
 | https://github.com/Shahibur50/LessSQL                      |
@@ -1329,29 +1328,8 @@ def to_user():
 
 
 def lesssql_license():
-    print("""
-MIT License
-
-Copyright (c) 2020 Shahibur Rahaman
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-""")
+    main_license = open("LICENSE", "r").read()
+    print(main_license)
 
 
 if __name__ == "__main__":
