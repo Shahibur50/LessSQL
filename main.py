@@ -16,6 +16,8 @@ from datetime import datetime
 from mysql.connector import errorcode
 from prettytable import PrettyTable, from_db_cursor
 
+cl_term = 'nt'
+
 if os.name == 'nt':
     cl_term = 'cls'
 elif os.name == 'posix':
