@@ -1,11 +1,12 @@
 """
 LessSQL
-Version: 4.3.13
+Version: 4.4.13
 
 Copyright (c) 2021 Shahibur Rahaman
 Licensed under GNU GPLv3
 """
 
+import os
 import sys
 import time
 import getpass
@@ -14,6 +15,11 @@ from os import system
 from datetime import datetime
 from mysql.connector import errorcode
 from prettytable import PrettyTable, from_db_cursor
+
+if os.name == 'nt':
+    cl_term = 'cls'
+elif os.name == 'posix':
+    cl_term = 'clear'
 
 NO_DB_COMMANDS = ["use database;", "show databases;", "create database;", "delete database;", "exit;",
                   "help;", r"\h;", "?;", "create user;", "reveal user;", "delete user;",
@@ -34,7 +40,7 @@ is_connection = False
 db = None
 is_server_installed = False
 
-system('clear')  # Clearing the screen
+system(cl_term)  # Clearing the screen
 
 for _ in range(3):
     try:
@@ -55,7 +61,7 @@ for _ in range(3):
         cursor = cnx.cursor()
         print("Connecting to the server...")
         time.sleep(2)
-        system('clear')  # Clearing the screen after successful connection
+        system(cl_term)  # Clearing the screen after successful connection
         print(f"\nLOGGED IN AS: {usr_name}@{host}")
         now = datetime.now()
         print(f"TIME: {now.strftime('%H:%M:%S %p')}")
@@ -1310,7 +1316,7 @@ def to_user():
     print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 4.3.13                                            |
+| Version: 4.4.13                                            |
 |                                                            |
 | Copyright (c) 2021 Shahibur Rahaman                        |
 |                                                            |
