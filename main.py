@@ -1,6 +1,6 @@
 """
 LessSQL
-Version: 4.4.13
+Version: 4.4.14
 
 Copyright (c) 2021 Shahibur Rahaman
 Licensed under GNU GPLv3
@@ -1318,7 +1318,7 @@ def to_user():
     print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 4.4.13                                            |
+| Version: 4.4.14                                            |
 |                                                            |
 | Copyright (c) 2021 Shahibur Rahaman                        |
 |                                                            |
