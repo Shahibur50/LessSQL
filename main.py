@@ -16,11 +16,9 @@ from datetime import datetime
 from mysql.connector import errorcode
 from prettytable import PrettyTable, from_db_cursor
 
-cl_term = 'nt'
+cl_term = 'cls'
 
-if os.name == 'nt':
-    cl_term = 'cls'
-elif os.name == 'posix':
+if os.name == 'posix':
     cl_term = 'clear'
 
 NO_DB_COMMANDS = ["use database;", "show databases;", "create database;", "delete database;", "exit;",
