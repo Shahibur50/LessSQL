@@ -1,6 +1,6 @@
 """
 LessSQL
-Version: 4.4.14
+Version: 4.4.15
 
 Copyright (c) 2021 Shahibur Rahaman
 Licensed under GNU GPLv3
@@ -21,17 +21,60 @@ cl_term = 'cls'
 if os.name == 'posix':
     cl_term = 'clear'
 
-NO_DB_COMMANDS = ["use database;", "show databases;", "create database;", "delete database;", "exit;",
-                  "help;", r"\h;", "?;", "create user;", "reveal user;", "delete user;",
-                  "show default engine;", "change default engine;", "license;"]
+NO_DB_COMMANDS = [
+    "use database;",
+    "show databases;",
+    "create database;",
+    "delete database;",
+    "exit;",
+    "help;",
+    r"\h;",
+    "?;",
+    "create user;",
+    "reveal user;",
+    "delete user;",
+    "show default engine;",
+    "change default engine;",
+    "license;"]
 
-DB_COMMANDS = ["show tables;", "create table;", "desc table;", "describe table;", "delete table;", "show columns;",
-               "add column;", "modify column;", "delete column;", "reveal;", "search;", "insert;", "update;", "delete;",
-               "average;", "conditional average;", "distinct average;", "distinct conditional average;",
-               "group insert;", "count;", "distinct count;", "conditional count;", "distinct conditional count;",
-               "max;", "conditional max;", "distinct max;", "distinct conditional max;", "min;", "conditional min;",
-               "distinct min;", "distinct conditional min;", "sum;", "conditional sum;", "distinct sum;",
-               "distinct conditional sum;", "show table engine;", "change table engine;"]
+DB_COMMANDS = [
+    "show tables;",
+    "create table;",
+    "desc table;",
+    "describe table;",
+    "delete table;",
+    "show columns;",
+    "add column;",
+    "modify column;",
+    "delete column;",
+    "reveal;",
+    "search;",
+    "insert;",
+    "update;",
+    "delete;",
+    "average;",
+    "conditional average;",
+    "distinct average;",
+    "distinct conditional average;",
+    "group insert;",
+    "count;",
+    "distinct count;",
+    "conditional count;",
+    "distinct conditional count;",
+    "max;",
+    "conditional max;",
+    "distinct max;",
+    "distinct conditional max;",
+    "min;",
+    "conditional min;",
+    "distinct min;",
+    "distinct conditional min;",
+    "sum;",
+    "conditional sum;",
+    "distinct sum;",
+    "distinct conditional sum;",
+    "show table engine;",
+    "change table engine;"]
 
 HELP_COMMANDS = ["help;", r"\h;", "?;"]
 
@@ -90,7 +133,7 @@ def main():
     if is_connection:
         to_user()  # Showing the user info related to the program
         while True:
-            print("lesssql|> ", end="")
+            print("LessSQL|> ", end="")
             try:
                 cmd = input().lower()
                 cmd_execute(cmd)
@@ -99,6 +142,9 @@ def main():
             except KeyboardInterrupt:
                 print("\nSession forcefully closed by the user!\n")
                 break
+            except mysql.connector.Error as err:
+                err = str(err.msg).split("; ")[0]
+                print(f"\nERROR! {err}\n")
         cursor.close()
         cnx.close()
     else:
@@ -228,18 +274,18 @@ def run(command):
         lesssql_license()
 
 
-def check(variable_to_check):
+def check(usr_input):
     """
     Function to check whether the user
     cancelled the input statement or has
     given no input at all.
     """
-    take_next_step = True  # Boolean variable to check and process further ahead.
+    take_next_step = True  # Boolean variable to check and process further ahead
 
-    if r"\c" in variable_to_check:
+    if r"\c" in usr_input:
         print("\nQuery cancelled!\n")
         take_next_step = False
-    elif len(variable_to_check) == 0:
+    elif len(usr_input) == 0:
         take_next_step = False
         print("\nPlease enter values properly!\n")
 
@@ -248,242 +294,200 @@ def check(variable_to_check):
 
 def use_db():
     global db
-    try:
-        database_name = input("       -> DATABASE NAME: ")
-        if check(database_name):
-            command = f"USE {database_name}"
-            cursor.execute(command)
-            db = database_name
-            print(f"\nQuery OK, now using database [{database_name}].\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+
+    database_name = input("       -> DATABASE NAME: ")
+    if check(database_name):
+        command = f"USE {database_name}"
+        cursor.execute(command)
+        db = database_name
+        print(f"\nQuery OK, now using database [{database_name}].\n")
 
 
 def show_db():
-    try:
-        command = "SHOW DATABASES"
-        cursor.execute(command)
-        row_count = cursor.fetchall()
-        cursor.execute(command)
-        table = from_db_cursor(cursor)
-        table.align = "l"
-        print(table)
-        print(f"Database(s) count: {len(row_count)}\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+    command = "SHOW DATABASES"
+    cursor.execute(command)
+    row_count = cursor.fetchall()
+    cursor.execute(command)
+    table = from_db_cursor(cursor)
+    table.align = "l"
+    print(table)
+    print(f"Database(s) count: {len(row_count)}\n")
 
 
 def create_db():
-    try:
-        database_name = input("       -> DATABASE NAME: ")
-        if check(database_name):
-            command = f"CREATE DATABASE {database_name}"
-            cursor.execute(command)
-            cnx.commit()
-            print(f"\nQuery OK, Created database [{database_name}].\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+    database_name = input("       -> DATABASE NAME: ")
+    if check(database_name):
+        command = f"CREATE DATABASE {database_name}"
+        cursor.execute(command)
+        cnx.commit()
+        print(f"\nQuery OK, Created database [{database_name}].\n")
 
 
 def delete_db():
     global db
-    try:
-        database_name = input("       -> DATABASE NAME: ")
-        if check(database_name):
-            opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want to delete the database "
-                        f"'{database_name}'? (y/n) ")
-            if opt in ('y', 'Y'):
-                command = f"DROP DATABASE {database_name}"
-                cursor.execute(command)
-                cnx.commit()
-                if db == database_name:
-                    db = None
-                print(f"\nQuery OK, Deleted database '{database_name}'.\n")
-            else:
-                print(f"\nQuery cancelled, for deletion of the database ({database_name}).\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+
+    database_name = input("       -> DATABASE NAME: ")
+    if check(database_name):
+        opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want to "
+                    f"delete the database [{database_name}]? (y/n) ")
+        if opt in ('y', 'Y'):
+            command = f"DROP DATABASE {database_name}"
+            cursor.execute(command)
+            cnx.commit()
+            if db == database_name:
+                db = None
+            print(f"\nQuery OK, Deleted database '{database_name}'.\n")
+        else:
+            print(f"\nQuery cancelled, for deletion of the database "
+                  f"({database_name}).\n")
 
 
 def show_tb():
-    try:
-        command = "SHOW TABLES"
-        cursor.execute(command)
-        row_count = cursor.fetchall()
+    command = "SHOW TABLES"
+    cursor.execute(command)
+    row_count = cursor.fetchall()
+    cursor.execute(command)
+    table = from_db_cursor(cursor)
+    table.align = "l"
+    print(table)
+    print(f"Table(s) count: {len(row_count)}\n")
+
+
+def create_tb():
+    table_name = input("       -> NAME OF TABLE TO BE CREATED: ")
+    if check(table_name):
+        no_of_columns = input("       -> NO. OF COLUMNS: ")
+        if check(no_of_columns):
+            try:
+                no_of_columns = int(no_of_columns)
+            except ValueError:
+                print("\nERROR! Please enter values properly!\n")
+
+            columns = ""
+            column_num = 0
+
+            is_query_cancelled = False
+            for column_num in range(1, no_of_columns):
+                column_value_type = input(f"       -> COLUMN ({column_num}) "
+                                          f"NAME AND DATA-TYPE: ")
+                if check(column_value_type):
+                    columns += column_value_type + ', '
+                else:
+                    is_query_cancelled = True
+                    break
+            if is_query_cancelled:
+                pass
+            else:
+                column_value_type = input(f"       -> COLUMN ({column_num + 1})"
+                                          f" NAME AND DATA-TYPE: ")
+                if check(column_value_type):
+                    columns += column_value_type
+                    primary_key = input("       -> PRIMARY KEY: ")
+                    if check(primary_key):
+                        command = f"CREATE TABLE {table_name}({columns}, " \
+                                  f"PRIMARY KEY ({primary_key}))"
+                        cursor.execute(command)
+                        cnx.commit()
+                        print(
+                            f"\nQuery OK, Created table [{table_name}].\n")
+
+
+def describe_tb():
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        command = f"DESCRIBE {table_name}"
         cursor.execute(command)
         table = from_db_cursor(cursor)
         table.align = "l"
         print(table)
-        print(f"Table(s) count: {len(row_count)}\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
-
-
-def create_tb():
-    try:
-        table_name = input("       -> NAME OF TABLE TO BE CREATED: ")
-        if check(table_name):
-            no_of_columns = input("       -> NO. OF COLUMNS: ")
-            if check(no_of_columns):
-                no_of_columns = int(no_of_columns)
-                columns = ""
-                column_num = 0
-
-                is_query_cancelled = False
-                for column_num in range(1, no_of_columns):
-                    column_value_type = input(f"       -> COLUMN ({column_num}) NAME AND DATA-TYPE: ")
-                    if check(column_value_type):
-                        columns += column_value_type + ', '
-                    else:
-                        is_query_cancelled = True
-                        break
-                if is_query_cancelled:
-                    pass
-                else:
-                    column_value_type = input(f"       -> COLUMN ({column_num + 1}) NAME AND DATA-TYPE: ")
-                    if check(column_value_type):
-                        columns += column_value_type
-                        primary_key = input("       -> PRIMARY KEY: ")
-                        if check(primary_key):
-                            command = f"CREATE TABLE {table_name}({columns}, PRIMARY KEY ({primary_key}))"
-                            cursor.execute(command)
-                            cnx.commit()
-                            print(f"\nQuery OK, Created table [{table_name}].\n")
-    except ValueError:
-        print("\nERROR! Please enter values properly!\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
-
-
-def describe_tb():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            command = f"DESCRIBE {table_name}"
-            cursor.execute(command)
-            table = from_db_cursor(cursor)
-            table.align = "l"
-            print(table)
-            print("")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+        print("")
 
 
 def delete_tb():
-    try:
-        table_name = input("      -> NAME OF TABLE TO BE DELETED: ")
-        if check(table_name):
-            opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to delete the"
-                        f" table '{table_name}'? (y/[n]) ")
-            if opt in ('y', 'Y'):
-                command = f"DROP TABLE {table_name}"
-                cursor.execute(command)
-                cnx.commit()
-                print(f"\nQuery OK, deleted the table [{table_name}]\n")
-            else:
-                print("\nQuery cancelled, for deletion of table.\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+    table_name = input("      -> NAME OF TABLE TO BE DELETED: ")
+    if check(table_name):
+        opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to "
+                    f"delete the table '{table_name}'? (y/[n]) ")
+        if opt in ('y', 'Y'):
+            command = f"DROP TABLE {table_name}"
+            cursor.execute(command)
+            cnx.commit()
+            print(f"\nQuery OK, deleted the table [{table_name}]\n")
+        else:
+            print("\nQuery cancelled, for deletion of table.\n")
 
 
 def show_column():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            command = f"SHOW COLUMNS FROM {table_name}"
-            cursor.execute(command)
-            column_count = cursor.fetchall()
-            cursor.execute(command)
-            table = from_db_cursor(cursor)
-            table.align = "l"
-            print(table)
-            print(f"Column(s) count: {len(column_count)}\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        command = f"SHOW COLUMNS FROM {table_name}"
+        cursor.execute(command)
+        column_count = cursor.fetchall()
+        cursor.execute(command)
+        table = from_db_cursor(cursor)
+        table.align = "l"
+        print(table)
+        print(f"Column(s) count: {len(column_count)}\n")
 
 
 def add_column():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_data = input("       -> NEW COLUMN NAME AND DATA-TYPE: ")
-            if check(column_data):
-                command = f"ALTER TABLE {table_name} ADD {column_data}"
-                cursor.execute(command)
-                cnx.commit()
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_data = input("       -> NEW COLUMN NAME AND DATA-TYPE: ")
+        if check(column_data):
+            command = f"ALTER TABLE {table_name} ADD {column_data}"
+            cursor.execute(command)
+            cnx.commit()
 
-                column_name = column_data.split()[0]
-                data_type = column_data.split()[1]
+            column_name = column_data.split()[0]
+            data_type = column_data.split()[1]
 
-                print(f"\nQuery OK, added column [{column_name}] with data-type [{data_type}]"
-                      f" to the table '{table_name}'.\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+            print(f"\nQuery OK, added column [{column_name}] with data-type "
+                  f"[{data_type}] to the table '{table_name}'.\n")
 
 
 def modify_column():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> EXISTING COLUMN NAME: ")
-            if check(column_name):
-                data_type = input(
-                    "       -> NEW DATA-TYPE FOR THE COLUMN: ")
-                if check(data_type):
-                    command = f"ALTER TABLE {table_name} MODIFY {column_name} {data_type}"
-                    cursor.execute(command)
-                    cnx.commit()
-                    print(f"\nQuery OK, modified column [{column_name}] to new data-type ({data_type})"
-                          f" in table ({table_name}).\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> EXISTING COLUMN NAME: ")
+        if check(column_name):
+            data_type = input("       -> NEW DATA-TYPE FOR THE COLUMN: ")
+            if check(data_type):
+                command = f"ALTER TABLE {table_name} MODIFY {column_name} " \
+                          f"{data_type}"
+                cursor.execute(command)
+                cnx.commit()
+                print(f"\nQuery OK, modified column [{column_name}] to new "
+                      f"data-type ({data_type}) in table ({table_name}).\n")
 
 
 def delete_column():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> NAME OF COLUMN TO BE DELETED: ")
-            if check(column_name):
-                opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to delete the column "
-                            f"({column_name})? (y/n) ")
-                if opt in ('y', 'Y'):
-                    command = f"ALTER TABLE {table_name} DROP {column_name}"
-                    cursor.execute(command)
-                    cnx.commit()
-                    print(f"\nQuery OK, Deleted column [{column_name}] from table [{table_name}].\n")
-                else:
-                    print("\nQuery cancelled, for deletion of column.\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> NAME OF COLUMN TO BE DELETED: ")
+        if check(column_name):
+            opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want"
+                        f" to delete the column [{column_name}]? (y/n) ")
+            if opt in ('y', 'Y'):
+                command = f"ALTER TABLE {table_name} DROP {column_name}"
+                cursor.execute(command)
+                cnx.commit()
+                print(f"\nQuery OK, Deleted column [{column_name}] from "
+                      f"table [{table_name}].\n")
+            else:
+                print("\nQuery cancelled, for deletion of column.\n")
 
 
 def reveal():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            cursor.execute(f"SELECT * FROM {table_name}")
-            rows = cursor.fetchall()
-            cursor.execute(f"SELECT * FROM {table_name}")
-            table = from_db_cursor(cursor)
-            table.align = "l"
-            print(table)
-            print(f"Row(s) count: {len(rows)}\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        cursor.execute(f"SELECT * FROM {table_name}")
+        rows = cursor.fetchall()
+        cursor.execute(f"SELECT * FROM {table_name}")
+        table = from_db_cursor(cursor)
+        table.align = "l"
+        print(table)
+        print(f"Row(s) count: {len(rows)}\n")
 
 
 def insert():
@@ -494,12 +498,14 @@ def insert():
             if check(column_name):
                 values = input("       -> VALUES: ")
                 if check(values):
-                    command = f"INSERT INTO {table_name} ({column_name}) VALUES ({values})"
+                    command = f"INSERT INTO {table_name} ({column_name}) " \
+                              f"VALUES ({values})"
                     cursor.execute(command)
                     cnx.commit()
                     row_count = cursor.rowcount
-                    print(f"\nQuery OK, inserted value(s) [{values}] in column(s) [{column_name}]"
-                          f" in table [{table_name}].\n")
+                    print(f"\nQuery OK, inserted value(s) [{values}] in "
+                          f"column(s) [{column_name}] in table "
+                          f"[{table_name}].\n")
                     print(f"Affected row(s): {row_count}\n")
     except mysql.connector.Error as err:
         err = str(err.msg).split("; ")[0]
@@ -507,73 +513,67 @@ def insert():
 
 
 def update():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            condition = input("       -> CONDITION: ")
-            if check(condition):
-                attribute = input("       -> COLUMN/FIELD TO BE UPDATED: ")
-                if check(attribute):
-                    updated_value = input("       -> VALUE OF DATA-ITEM TO BE UPDATED: ")
-                    if check(updated_value):
-                        command = f"UPDATE {table_name} SET {attribute}={updated_value} WHERE {condition}"
-                        cursor.execute(command)
-                        cnx.commit()
-                        row_count = cursor.rowcount
-                        if row_count == 0:
-                            print("\nThe given condition was not satisfied!")
-                        else:
-                            print(f"\nQuery OK, updated the row(s)/record(s) in column/field [{attribute}]"
-                                  f" to [{updated_value}] where condition [{condition}] was satisfied.\n")
-                        print(f"Affected row(s): {row_count}")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        condition = input("       -> CONDITION: ")
+        if check(condition):
+            attribute = input("       -> COLUMN/FIELD TO BE UPDATED: ")
+            if check(attribute):
+                updated_value = input("       -> VALUE OF DATA-ITEM TO BE "
+                                      "UPDATED: ")
+                if check(updated_value):
+                    command = f"UPDATE {table_name} SET " \
+                              f"{attribute}={updated_value} WHERE {condition}"
+                    cursor.execute(command)
+                    cnx.commit()
+                    row_count = cursor.rowcount
+                    if row_count == 0:
+                        print("\nThe given condition was not satisfied!")
+                    else:
+                        print(f"\nQuery OK, updated the row(s)/record(s) in "
+                              f"column/field [{attribute}] to "
+                              f"[{updated_value}] where condition "
+                              f"[{condition}] was satisfied.\n")
+                    print(f"Affected row(s): {row_count}")
 
 
 def search():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_names = input("       -> COLUMN NAMES: ")
-            if check(column_names):
-                condition = input("       -> CONDITION: ")
-                if check(condition):
-                    if column_names in ("ALL", 'all', "All"):
-                        column_names = "*"
-                    command = f"SELECT {column_names} FROM {table_name} WHERE {condition}"
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_names = input("       -> COLUMN NAMES: ")
+        if check(column_names):
+            condition = input("       -> CONDITION: ")
+            if check(condition):
+                if column_names in ("ALL", 'all', "All"):
+                    column_names = "*"
+                command = f"SELECT {column_names} FROM {table_name} " \
+                          f"WHERE {condition}"
+                cursor.execute(command)
+                row_count = cursor.fetchall()
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("\nData not present in the table!\n")
+                else:
                     cursor.execute(command)
-                    row_count = cursor.fetchall()
-                    cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("\nData not present in the table!\n")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table)
-                        print(f"Row(s) count: {len(row_count)}\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table)
+                    print(f"Row(s) count: {len(row_count)}\n")
 
 
 def delete():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            condition = input("       -> CONDITION: ")
-            if check(condition):
-                command = f"DELETE FROM {table_name} WHERE {condition}"
-                cursor.execute(command)
-                cnx.commit()
-                row_count = cursor.rowcount
-                print(f"\nQuery OK, deleted the row(s)/record(s) where condition [{condition}] was satisfied.")
-                print("Affected row(s):", row_count, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        condition = input("       -> CONDITION: ")
+        if check(condition):
+            command = f"DELETE FROM {table_name} WHERE {condition}"
+            cursor.execute(command)
+            cnx.commit()
+            row_count = cursor.rowcount
+            print(f"\nQuery OK, deleted the row(s)/record(s) where condition "
+                  f"[{condition}] was satisfied.")
+            print("Affected row(s):", row_count, "\n")
 
 
 def group_insert():
@@ -593,457 +593,422 @@ def group_insert():
                         if check(row_data):
                             continue
                     for values in rows_values:
-                        command = f"INSERT INTO {table_name} ({column_name}) VALUES ({values})"
+                        command = f"INSERT INTO {table_name} ({column_name}) " \
+                                  f"VALUES ({values})"
                         cursor.execute(command)
                         cnx.commit()
                         row_num += 1
-                    print(f"\nQuery OK, inserted the given value(s) in column(s) [{column_name}]"
-                          f" in table [{table_name}]\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                    print(f"\nQuery OK, inserted the given value(s) in "
+                          f"column(s) [{column_name}] in table "
+                          f"[{table_name}]\n")
     finally:
         print(f"Affected row(s): {row_num}\n")
 
 
 def average():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                title = input("       -> TITLE: ")
-                if check(title):
-                    command = f'SELECT ROUND(AVG({column_name}), 2) "{title}" from {table_name}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            title = input("       -> TITLE: ")
+            if check(title):
+                command = f'SELECT ROUND(AVG({column_name}), 2) "{title}"' \
+                          f' from {table_name}'
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("Data not present in the table!")
+                else:
                     cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
 
 
 def conditional_average():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                condition = input("       -> CONDITION: ")
-                if check(condition):
-                    title = input("       -> TITLE: ")
-                    if check(title):
-                        command = f'SELECT ROUND(AVG({column_name}), 2) "{title}" FROM {table_name} WHERE {condition}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            condition = input("       -> CONDITION: ")
+            if check(condition):
+                title = input("       -> TITLE: ")
+                if check(title):
+                    command = f'SELECT ROUND(AVG({column_name}), 2) ' \
+                              f'"{title}" FROM {table_name} WHERE {condition}'
+                    cursor.execute(command)
+                    data = cursor.fetchall()
+                    if len(data) == 0:
+                        print("Data not present in the table!")
+                    else:
                         cursor.execute(command)
-                        data = cursor.fetchall()
-                        if len(data) == 0:
-                            print("Data not present in the table!")
-                        else:
-                            cursor.execute(command)
-                            table = from_db_cursor(cursor)
-                            table.align = "l"
-                            print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                        table = from_db_cursor(cursor)
+                        table.align = "l"
+                        print(table, "\n")
 
 
 def distinct_average():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                title = input("       -> TITLE: ")
-                if check(title):
-                    command = f'SELECT ROUND(AVG(DISTINCT {column_name}), 2) "{title}" from {table_name}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            title = input("       -> TITLE: ")
+            if check(title):
+                command = f'SELECT ROUND(AVG(DISTINCT {column_name}), 2) ' \
+                          f'"{title}" from {table_name}'
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("Data not present in the table!")
+                else:
                     cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
 
 
 def distinct_conditional_average():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                condition = input("       -> CONDITION: ")
-                if check(condition):
-                    title = input("       -> TITLE: ")
-                    if check(title):
-                        command = f'SELECT ROUND(AVG(DISTINCT {column_name}), 2) "{title}" FROM {table_name} WHERE ' \
-                                  f'{condition}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            condition = input("       -> CONDITION: ")
+            if check(condition):
+                title = input("       -> TITLE: ")
+                if check(title):
+                    command = f'SELECT ROUND(AVG(DISTINCT {column_name}), 2)' \
+                              f' "{title}" FROM {table_name} WHERE {condition}'
+                    cursor.execute(command)
+                    data = cursor.fetchall()
+                    if len(data) == 0:
+                        print("Data not present in the table!")
+                    else:
                         cursor.execute(command)
-                        data = cursor.fetchall()
-                        if len(data) == 0:
-                            print("Data not present in the table!")
-                        else:
-                            cursor.execute(command)
-                            table = from_db_cursor(cursor)
-                            table.align = "l"
-                            print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                        table = from_db_cursor(cursor)
+                        table.align = "l"
+                        print(table, "\n")
 
 
 def count():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                title = input("       -> TITLE: ")
-                if check(title):
-                    command = f'SELECT COUNT({column_name}) "{title}" FROM {table_name}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            title = input("       -> TITLE: ")
+            if check(title):
+                command = f'SELECT COUNT({column_name}) "{title}" ' \
+                          f'FROM {table_name}'
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("Data not present in the table!")
+                else:
                     cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
 
 
 def conditional_count():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                condition = input("       -> CONDITION: ")
-                if check(condition):
-                    title = input("       -> TITLE: ")
-                    if check(title):
-                        command = f'SELECT COUNT({column_name}) "{title}" FROM {table_name} WHERE {condition}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            condition = input("       -> CONDITION: ")
+            if check(condition):
+                title = input("       -> TITLE: ")
+                if check(title):
+                    command = f'SELECT COUNT({column_name}) "{title}" ' \
+                              f'FROM {table_name} WHERE {condition}'
+                    cursor.execute(command)
+                    data = cursor.fetchall()
+                    if len(data) == 0:
+                        print("Data not present in the table!")
+                    else:
                         cursor.execute(command)
-                        data = cursor.fetchall()
-                        if len(data) == 0:
-                            print("Data not present in the table!")
-                        else:
-                            cursor.execute(command)
-                            table = from_db_cursor(cursor)
-                            table.align = "l"
-                            print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                        table = from_db_cursor(cursor)
+                        table.align = "l"
+                        print(table, "\n")
 
 
 def distinct_count():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                title = input("       -> TITLE: ")
-                if check(title):
-                    command = f'SELECT COUNT(DISTINCT {column_name}) "{title}" FROM {table_name}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            title = input("       -> TITLE: ")
+            if check(title):
+                command = f'SELECT COUNT(DISTINCT {column_name}) "{title}"' \
+                          f' FROM {table_name}'
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("Data not present in the table!")
+                else:
                     cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
 
 
 def distinct_conditional_count():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                condition = input("       -> CONDITION: ")
-                if check(condition):
-                    title = input("       -> TITLE: ")
-                    if check(title):
-                        command = f'SELECT COUNT(DISTINCT {column_name}) "{title}" FROM {table_name} WHERE {condition}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            condition = input("       -> CONDITION: ")
+            if check(condition):
+                title = input("       -> TITLE: ")
+                if check(title):
+                    command = f'SELECT COUNT(DISTINCT {column_name}) ' \
+                              f'"{title}" FROM {table_name} WHERE {condition}'
+                    cursor.execute(command)
+                    data = cursor.fetchall()
+                    if len(data) == 0:
+                        print("Data not present in the table!")
+                    else:
                         cursor.execute(command)
-                        data = cursor.fetchall()
-                        if len(data) == 0:
-                            print("Data not present in the table!")
-                        else:
-                            cursor.execute(command)
-                            table = from_db_cursor(cursor)
-                            table.align = "l"
-                            print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                        table = from_db_cursor(cursor)
+                        table.align = "l"
+                        print(table, "\n")
 
 
 def mysql_max():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                title = input("       -> TITLE: ")
-                if check(title):
-                    command = f'SELECT ROUND(MAX({column_name}), 2) "{title}" FROM {table_name}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            title = input("       -> TITLE: ")
+            if check(title):
+                command = f'SELECT ROUND(MAX({column_name}), 2) "{title}"' \
+                          f' FROM {table_name}'
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("Data not present in the table!")
+                else:
                     cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
 
 
 def conditional_mysql_max():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                title = input("       -> TITLE: ")
-                if check(title):
-                    command = f'SELECT ROUND(MAX({column_name}), 2) "{title}" FROM {table_name}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            title = input("       -> TITLE: ")
+            if check(title):
+                command = f'SELECT ROUND(MAX({column_name}), 2) "{title}"' \
+                          f' FROM {table_name}'
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("Data not present in the table!")
+                else:
                     cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
 
 
 def distinct_mysql_max():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                title = input("       -> TITLE: ")
-                if check(title):
-                    command = f'SELECT ROUND(MAX(DISTINCT {column_name}), 2) "{title}" FROM {table_name}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            title = input("       -> TITLE: ")
+            if check(title):
+                command = f'SELECT ROUND(MAX(DISTINCT {column_name}), 2) ' \
+                          f'"{title}" FROM {table_name}'
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("Data not present in the table!")
+                else:
                     cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
 
 
 def distinct_conditional_max():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                condition = input("       -> CONDITION: ")
-                if check(condition):
-                    title = input("       -> TITLE: ")
-                    if check(title):
-                        command = f'SELECT ROUND(MAX(DISTINCT {column_name}), 2) "{title}" FROM {table_name} WHERE ' \
-                                  f'{condition}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            condition = input("       -> CONDITION: ")
+            if check(condition):
+                title = input("       -> TITLE: ")
+                if check(title):
+                    command = f'SELECT ROUND(MAX(DISTINCT {column_name}), 2)' \
+                              f' "{title}" FROM {table_name} WHERE ' \
+                              f'{condition}'
+                    cursor.execute(command)
+                    data = cursor.fetchall()
+                    if len(data) == 0:
+                        print("Data not present in the table!")
+                    else:
                         cursor.execute(command)
-                        data = cursor.fetchall()
-                        if len(data) == 0:
-                            print("Data not present in the table!")
-                        else:
-                            cursor.execute(command)
-                            table = from_db_cursor(cursor)
-                            table.align = "l"
-                            print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                        table = from_db_cursor(cursor)
+                        table.align = "l"
+                        print(table, "\n")
 
 
 def mysql_min():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                title = input("       -> TITLE: ")
-                if check(title):
-                    command = f'SELECT ROUND(MIN({column_name}), 2) "{title}" FROM {table_name}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            title = input("       -> TITLE: ")
+            if check(title):
+                command = f'SELECT ROUND(MIN({column_name}), 2) ' \
+                          f'"{title}" FROM {table_name}'
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("Data not present in the table!")
+                else:
                     cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
 
 
 def conditional_mysql_min():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                title = input("       -> TITLE: ")
-                if check(title):
-                    command = f'SELECT ROUND(MIN({column_name}), 2) "{title}" FROM {table_name}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            title = input("       -> TITLE: ")
+            if check(title):
+                command = f'SELECT ROUND(MIN({column_name}), 2) "{title}" ' \
+                          f'FROM {table_name}'
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("Data not present in the table!")
+                else:
                     cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
 
 
 def distinct_mysql_min():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                title = input("       -> TITLE: ")
-                if check(title):
-                    command = f'SELECT ROUND(MIN(DISTINCT {column_name}), 2) "{title}" FROM {table_name}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            title = input("       -> TITLE: ")
+            if check(title):
+                command = f'SELECT ROUND(MIN(DISTINCT {column_name}), 2) ' \
+                          f'"{title}" FROM {table_name}'
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("Data not present in the table!")
+                else:
                     cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
 
 
 def distinct_conditional_min():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                condition = input("       -> CONDITION: ")
-                if check(condition):
-                    title = input("       -> TITLE: ")
-                    if check(title):
-                        command = f'SELECT ROUND(MIN(DISTINCT {column_name}), 2) "{title}" FROM {table_name} WHERE ' \
-                                  f'{condition}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            condition = input("       -> CONDITION: ")
+            if check(condition):
+                title = input("       -> TITLE: ")
+                if check(title):
+                    command = f'SELECT ROUND(MIN(DISTINCT {column_name}), 2)' \
+                              f' "{title}" FROM {table_name} WHERE {condition}'
+                    cursor.execute(command)
+                    data = cursor.fetchall()
+                    if len(data) == 0:
+                        print("Data not present in the table!")
+                    else:
                         cursor.execute(command)
-                        data = cursor.fetchall()
-                        if len(data) == 0:
-                            print("Data not present in the table!")
-                        else:
-                            cursor.execute(command)
-                            table = from_db_cursor(cursor)
-                            table.align = "l"
-                            print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                        table = from_db_cursor(cursor)
+                        table.align = "l"
+                        print(table, "\n")
 
 
 def mysql_sum():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                title = input("       -> TITLE: ")
-                if check(title):
-                    command = f'SELECT ROUND(SUM({column_name}), 2) "{title}" FROM {table_name}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            title = input("       -> TITLE: ")
+            if check(title):
+                command = f'SELECT ROUND(SUM({column_name}), 2) "{title}" ' \
+                          f'FROM {table_name}'
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("Data not present in the table!")
+                else:
                     cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
 
 
 def conditional_mysql_sum():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                title = input("       -> TITLE: ")
-                if check(title):
-                    command = f'SELECT ROUND(SUM({column_name}), 2) "{title}" FROM {table_name}'
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            title = input("       -> TITLE: ")
+            if check(title):
+                command = f'SELECT ROUND(SUM({column_name}), 2) "{title}" ' \
+                          f'FROM {table_name}'
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("Data not present in the table!")
+                else:
                     cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
 
 
 def distinct_mysql_sum():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            title = input("       -> TITLE: ")
+            if check(title):
+                command = f'SELECT ROUND(SUM(DISTINCT {column_name}), 2) ' \
+                          f'"{title}" FROM {table_name}'
+                cursor.execute(command)
+                data = cursor.fetchall()
+                if len(data) == 0:
+                    print("Data not present in the table!")
+                else:
+                    cursor.execute(command)
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
+
+
+def distinct_conditional_mysql_sum():
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        column_name = input("       -> COLUMN/FIELD NAME: ")
+        if check(column_name):
+            condition = input("       -> CONDITION: ")
+            if check(condition):
                 title = input("       -> TITLE: ")
                 if check(title):
-                    command = f'SELECT ROUND(SUM(DISTINCT {column_name}), 2) "{title}" FROM {table_name}'
+                    command = f'SELECT ROUND(SUM(DISTINCT {column_name}), 2) ' \
+                              f'"{title}" FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
                     data = cursor.fetchall()
                     if len(data) == 0:
@@ -1053,139 +1018,89 @@ def distinct_mysql_sum():
                         table = from_db_cursor(cursor)
                         table.align = "l"
                         print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
-
-
-def distinct_conditional_mysql_sum():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN/FIELD NAME: ")
-            if check(column_name):
-                condition = input("       -> CONDITION: ")
-                if check(condition):
-                    title = input("       -> TITLE: ")
-                    if check(title):
-                        command = f'SELECT ROUND(SUM(DISTINCT {column_name}), 2) "{title}" FROM {table_name} WHERE ' \
-                                  f'{condition}'
-                        cursor.execute(command)
-                        data = cursor.fetchall()
-                        if len(data) == 0:
-                            print("Data not present in the table!")
-                        else:
-                            cursor.execute(command)
-                            table = from_db_cursor(cursor)
-                            table.align = "l"
-                            print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
 
 
 def create_user():
-    try:
-        new_usr_name = input("       -> NEW USER NAME: ")
-        if check(new_usr_name):
-            new_usr_pwd = input("       -> NEW USER's PASSWORD: ")
-            if check(new_usr_pwd):
-                host_name = input("       -> HOSTNAME: ")
-                create_command = f"CREATE USER '{new_usr_name}'@'{host_name}' IDENTIFIED BY '{new_usr_pwd}'"
-                cursor.execute(create_command)
-                cnx.commit()
-                grant_command = f"GRANT ALL ON * . * TO '{new_usr_name}'@'{host_name}'"
-                cursor.execute(grant_command)
-                cnx.commit()
-                print(f"\nQuery OK, created and granted all privileges to the user [{new_usr_name}].\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+    new_usr_name = input("       -> NEW USER NAME: ")
+    if check(new_usr_name):
+        new_usr_pwd = input("       -> NEW USER's PASSWORD: ")
+        if check(new_usr_pwd):
+            host_name = input("       -> HOSTNAME: ")
+            create_command = f"CREATE USER '{new_usr_name}'@'{host_name}' " \
+                             f"IDENTIFIED BY '{new_usr_pwd}'"
+            cursor.execute(create_command)
+            cnx.commit()
+            grant_command = f"GRANT ALL ON * . * TO " \
+                            f"'{new_usr_name}'@'{host_name}'"
+            cursor.execute(grant_command)
+            cnx.commit()
+            print(f"\nQuery OK, created and granted all privileges to the "
+                  f"user [{new_usr_name}].\n")
 
 
 def reveal_users():
-    try:
-        command = "SELECT * FROM INFORMATION_SCHEMA.USER_ATTRIBUTES"
-        cursor.execute(command)
-        table = from_db_cursor(cursor)
-        table.align = "l"
-        print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+    command = "SELECT * FROM INFORMATION_SCHEMA.USER_ATTRIBUTES"
+    cursor.execute(command)
+    table = from_db_cursor(cursor)
+    table.align = "l"
+    print(table, "\n")
 
 
 def delete_user():
-    try:
-        user_name = input("       -> USER-NAME: ")
-        if check(user_name):
-            host_name = input("       -> HOST: ")
-            opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want to remove the user [{user_name}]? (y/n) ")
-            if opt in ('y', 'Y'):
-                command = f"DROP USER '{user_name}'@'{host_name}'"
-                cursor.execute(command)
-                cnx.commit()
-                print(f"\nQuery OK, removed the user [{user_name}].\n")
-            else:
-                print(f"\nQuery cancelled, for removal of user [{user_name}].\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+    user_name = input("       -> USER-NAME: ")
+    if check(user_name):
+        host_name = input("       -> HOST: ")
+        opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want "
+                    f"to remove the user [{user_name}]? (y/n) ")
+        if opt in ('y', 'Y'):
+            command = f"DROP USER '{user_name}'@'{host_name}'"
+            cursor.execute(command)
+            cnx.commit()
+            print(f"\nQuery OK, removed the user [{user_name}].\n")
+        else:
+            print(f"\nQuery cancelled, for removal of user "
+                  f"[{user_name}].\n")
 
 
 def show_default_engine():
-    try:
-        command = "SHOW ENGINES"
+    command = "SHOW ENGINES"
+    cursor.execute(command)
+    table = from_db_cursor(cursor)
+    table.align = "l"
+    print(table, "\n")
+
+
+def change_default_engine():
+    engine_name = input("       -> NEW ENGINE NAME: ")
+    if check(engine_name):
+        command = f"SET default_storage_engine={engine_name}"
+        cursor.execute(command)
+        cnx.commit()
+        print(f"\nQuery OK, now using [{engine_name}] storage engine "
+              f"as default.\n")
+
+
+def show_table_engine():
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        command = f"SELECT TABLE_NAME,  ENGINE FROM " \
+                  f"INFORMATION_SCHEMA.TABLES WHERE table_name = '{table_name}'"
         cursor.execute(command)
         table = from_db_cursor(cursor)
         table.align = "l"
         print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
-
-
-def change_default_engine():
-    try:
-        engine_name = input("       -> NEW ENGINE NAME: ")
-        if check(engine_name):
-            command = f"SET default_storage_engine={engine_name}"
-            cursor.execute(command)
-            cnx.commit()
-            print(f"\nQuery OK, now using [{engine_name}] storage engine as default.\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
-
-
-def show_table_engine():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            command = f"SELECT TABLE_NAME, ENGINE FROM INFORMATION_SCHEMA.TABLES WHERE" \
-                      f" table_name = '{table_name}'"
-            cursor.execute(command)
-            table = from_db_cursor(cursor)
-            table.align = "l"
-            print(table, "\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
 
 
 def change_table_engine():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            engine_name = input("       -> NEW ENGINE NAME: ")
-            if check(engine_name):
-                command = f"ALTER TABLE {table_name} ENGINE = {engine_name}"
-                cursor.execute(command)
-                cnx.commit()
-                print(f"\nQuery OK, now using [{engine_name}] storage engine for table [{table_name}].\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+    table_name = input("       -> TABLE NAME: ")
+    if check(table_name):
+        engine_name = input("       -> NEW ENGINE NAME: ")
+        if check(engine_name):
+            command = f"ALTER TABLE {table_name} ENGINE = {engine_name}"
+            cursor.execute(command)
+            cnx.commit()
+            print(f"\nQuery OK, now using [{engine_name}] storage engine"
+                  f" for table [{table_name}].\n")
 
 
 def close():
@@ -1316,7 +1231,7 @@ def to_user():
     print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 4.4.14                                            |
+| Version: 4.4.15                                            |
 |                                                            |
 | Copyright (c) 2021 Shahibur Rahaman                        |
 |                                                            |
