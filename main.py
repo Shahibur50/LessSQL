@@ -1112,119 +1112,136 @@ def close():
 
 def program_help():
     print("""
-+----------------------------------------------------------------------------------------------------------------------+
-|                                                    INSTRUCTIONS                                                      |
-|                                                    ------------                                                      |
-|                                                                                                                      |
-| COMMANDS FOR DATABASE MANIPULATION:                                                                                  |
-|                                                                                                                      |
-| use db;    > To use a database.                                                                                      |
-| show db;   > To show all of the databases.                                                                           |
-| create db; > To create a new database.                                                                               |
-| delete db; > To delete an existing database.                                                                         |
-|                                                                                                                      |
-|______________________________________________________________________________________________________________________|
-|______________________________________________________________________________________________________________________|
-|                                                                                                                      |
-| COMMANDS FOR TABLE MANIPULATION:                                                                                     |
-|                                                                                                                      |
-| show tb;     > To show tables present in a database.                                                                 |
-| create tb;   > To create a new table.                                                                                |
-| describe tb; > To see the schema(structure) of a table.                                                              |
-| delete tb;   > To delete a table completely.                                                                         |
-|                                                                                                                      |
-|______________________________________________________________________________________________________________________|
-|______________________________________________________________________________________________________________________|
-|                                                                                                                      |
-| COMMANDS FOR COLUMN MANIPULATION:                                                                                    |
-|                                                                                                                      |
-| add column;    > To add a new column to an existing table.                                                           |
-| modify column; > To change data-type of a column in a table.                                                         |
-| delete column; > To delete an exiting column inside a table.                                                         |
-|                                                                                                                      |
-|______________________________________________________________________________________________________________________|
-|______________________________________________________________________________________________________________________|
-|                                                                                                                      |
-| COMMANDS FOR IN-TABLE QUERIES:                                                                                       |
-|                                                                                                                      |
-| reveal; > To show all of the data stored in a specific table.                                                        |
-| search; > To search for a particular row in a table.                                                                 |
-|                                                                                                                      |
-|______________________________________________________________________________________________________________________|
-|______________________________________________________________________________________________________________________|
-|                                                                                                                      |
-| COMMANDS FOR  IN-TABLE MANIPULATION:                                                                                 |
-|                                                                                                                      |
-| insert; > To insert data in a table.                                                                                 |
-| update; > To modify or change value of a data-item present in a column/field.                                        |
-| delete; > To delete row(s)/record(s).                                                                                |
-|                                                                                                                      |
-|______________________________________________________________________________________________________________________|
-|______________________________________________________________________________________________________________________|
-|                                                                                                                      |
-| COMMANDS FOR SPECIAL OPERATIONS:                                                                                     |
-|                                                                                                                      |
-| I. Group Data Insertion:                                                                                             |
-|     1. group insert; > To insert data in a grouped manner in a table.                                                |
-|                                                                                                                      |
-| II. Average Of Data-Items In A Column:                                                                               |
-|     1. average;                      > To get the average of data-items.                                             |
-|     2. conditional average;          > To get the average data-items based on condition.                             |
-|     3. distinct average;             > To get the average of distinct data-items.                                    |
-|     4. distinct conditional average; > To get the average of distinct data-items based on condition.                 |
-|                                                                                                                      |
-| III. Count Of Data-Items In A Column:                                                                                |
-|     1. count;                      > To count the number of NOT NULL data-items.                                     |
-|     2. conditional count;          > To count the number of NOT NULL data-items based on a condition.                |
-|     3. distinct count;             > To count the number of distinct NOT NULL data-items.                            |
-|     4. distinct conditional count; > To count the number of distinct NOT NULL data-items based on a condition.       |
-|                                                                                                                      |
-| IV. Maximum Value:                                                                                                   |
-|     1. max;                      > To get the value of biggest data-item.                                            |
-|     2. conditional max;          > To get the value of biggest data-item based on a condition.                       |
-|     3. distinct max;             > To get the value of biggest distinct data-item.                                   |
-|     4. distinct conditional max; > To get the value of biggest distinct data-item based on a condition.              |
-|                                                                                                                      |
-| V. Minimum Value:                                                                                                    |
-|     1. min;                      > To get the value of smallest data-item.                                           |
-|     2. conditional min;          > To get the value of smallest data-item based on a condition.                      |
-|     3. distinct min;             > To get the value of smallest distinct data-item.                                  |
-|     4. distinct conditional min; > To get the value of smallest distinct data-item based on a condition.             |
-|                                                                                                                      |
-| VI. Summation Of Data-Items In A Column:                                                                             |
-|     1. sum;                      > To get the sum of all data-items.                                                 |
-|     2. conditional sum;          > To get the sum of all data-items based on a condition.                            |
-|     3. distinct sum;             > To get the sum of all distinct data-items.                                        |
-|     4. distinct conditional sum; > To get the sum of all distinct data-items based on a condition.                   |
-|                                                                                                                      |
-|______________________________________________________________________________________________________________________|
-|______________________________________________________________________________________________________________________|
-|                                                                                                                      |
-| COMMANDS FOR USER MANAGEMENT:                                                                                        |
-|                                                                                                                      |
-| create user;  > To create a new user and granting all permissions to that user.                                      |
-| reveal users; > To show data-about all of the users.                                                                 |
-| delete user;  > To delete an user.                                                                                   |
-|                                                                                                                      |
-|______________________________________________________________________________________________________________________|
-|______________________________________________________________________________________________________________________|
-| COMMANDS FOR ENGINE MANAGEMENT:                                                                                      |
-|                                                                                                                      |
-| show default engine;   > To show the default engine.                                                                 |
-| change default engine; > To change the default engine.                                                               |
-| show table engine;     > To show the default engine for a table.                                                     |
-| change table engine;   > To change the default engine for a table.                                                   |
-|                                                                                                                      |
-|______________________________________________________________________________________________________________________|
-|______________________________________________________________________________________________________________________|
-|                                                                                                                      |
-| COMMAND TO EXIT THE PROGRAM:                                                                                         |
-|                                                                                                                      |
-| exit; > To quit the program.                                                                                         |
-|                                                                                                                      |
-|______________________________________________________________________________________________________________________|
-| For more help visit: https://github.com/Shahibur50/LessSQL                                                           |
-+----------------------------------------------------------------------------------------------------------------------+
++------------------------------------------------------------------------------+
+|                               INSTRUCTIONS                                   |
+|                               ------------                                   |
+|                                                                              |
+| COMMANDS FOR DATABASE MANIPULATION:                                          |
+|                                                                              |
+| use db;    > To use a database.                                              |
+| show db;   > To show all of the databases.                                   |
+| create db; > To create a new database.                                       |
+| delete db; > To delete an existing database.                                 |
+|                                                                              |
+|______________________________________________________________________________|
+|______________________________________________________________________________|
+|                                                                              |
+| COMMANDS FOR TABLE MANIPULATION:                                             |
+|                                                                              |
+| show tb;     > To show tables present in a database.                         |
+| create tb;   > To create a new table.                                        |
+| describe tb; > To see the schema(structure) of a table.                      |
+| delete tb;   > To delete a table completely.                                 |
+|                                                                              |
+|______________________________________________________________________________|
+|______________________________________________________________________________|
+|                                                                              |
+| COMMANDS FOR COLUMN MANIPULATION:                                            |
+|                                                                              |
+| add column;    > To add a new column to an existing table.                   |
+| modify column; > To change data-type of a column in a table.                 |
+| delete column; > To delete an exiting column inside a table.                 |
+|                                                                              |
+|______________________________________________________________________________|
+|______________________________________________________________________________|
+|                                                                              |
+| COMMANDS FOR IN-TABLE QUERIES:                                               |
+|                                                                              |
+| reveal; > To show all of the data stored in a specific table.                |
+| search; > To search for a particular row in a table.                         |
+|                                                                              |
+|______________________________________________________________________________|
+|______________________________________________________________________________|
+|                                                                              |
+| COMMANDS FOR  IN-TABLE MANIPULATION:                                         |
+|                                                                              |
+| insert; > To insert data in a table.                                         |
+| update; > To modify or change value of a data-item present in a column/field.|
+| delete; > To delete row(s)/record(s).                                        |
+|                                                                              |
+|______________________________________________________________________________|
+|______________________________________________________________________________|
+|                                                                              |
+| COMMANDS FOR SPECIAL OPERATIONS:                                             |
+|                                                                              |
+| I. Group Data Insertion:                                                     |
+|     1. group insert; > To insert data in a grouped manner in a table.        |
+|                                                                              |
+| II. Average Of Data-Items In A Column:                                       |
+|     1. average;                      > To get the average of data-items.     |
+|     2. conditional average;          > To get the average data-items based   |
+|                                        on condition.                         |
+|     3. distinct average;             > To get the average of distinct        |
+|                                        data-items.                           |
+|     4. distinct conditional average; > To get the average of distinct        |
+|                                        data-items based on condition.        |
+|                                                                              |
+| III. Count Of Data-Items In A Column:                                        |
+|     1. count;                      > To count the number of NOT NULL         |
+|                                      data-items.                             |
+|     2. conditional count;          > To count the number of NOT NULL         |
+|                                      data-items based on a condition.        |
+|     3. distinct count;             > To count the number of distinct         |
+|                                      NOT NULL data-items.                    |
+|     4. distinct conditional count; > To count the number of distinct         |
+|                                      NOT NULL data-items based on a          |
+|                                      condition.                              |
+|                                                                              |
+| IV. Maximum Value:                                                           |
+|     1. max;                      > To get the value of biggest data-item.    |
+|     2. conditional max;          > To get the value of biggest data-item     |
+|                                    based on a condition.                     |
+|     3. distinct max;             > To get the value of biggest distinct      |
+|                                    data-item.                                |
+|     4. distinct conditional max; > To get the value of biggest distinct      |
+|                                    data-item based on a condition.           |
+|                                                                              |
+| V. Minimum Value:                                                            |
+|     1. min;                      > To get the value of smallest data-item.   |
+|     2. conditional min;          > To get the value of smallest data-item    |
+|                                    based on a condition.                     |
+|     3. distinct min;             > To get the value of smallest distinct     |
+|                                    data-item.                                |
+|     4. distinct conditional min; > To get the value of smallest distinct     |
+|                                    data-item based on a condition.           |
+|                                                                              |
+| VI. Summation Of Data-Items In A Column:                                     |
+|     1. sum;                      > To get the sum of all data-items.         |
+|     2. conditional sum;          > To get the sum of all data-items based    |
+|                                    on a condition.                           |
+|     3. distinct sum;             > To get the sum of all distinct            |
+|                                    data-items.                               |
+|     4. distinct conditional sum; > To get the sum of all distinct            |
+|                                    data-items based on a condition.          |
+|                                                                              |
+|______________________________________________________________________________|
+|______________________________________________________________________________|
+|                                                                              |
+| COMMANDS FOR USER MANAGEMENT:                                                |
+|                                                                              |
+| create user;  > To create a new user and grant all permissions.              |
+| reveal users; > To show data-about all of the users.                         |
+| delete user;  > To delete an user.                                           |
+|                                                                              |
+|______________________________________________________________________________|
+|______________________________________________________________________________|
+| COMMANDS FOR ENGINE MANAGEMENT:                                              |
+|                                                                              |
+| show default engine;   > To show the default engine.                         |
+| change default engine; > To change the default engine.                       |
+| show table engine;     > To show the default engine for a table.             |
+| change table engine;   > To change the default engine for a table.           |
+|                                                                              |
+|______________________________________________________________________________|
+|______________________________________________________________________________|
+|                                                                              |
+| COMMAND TO EXIT THE PROGRAM:                                                 |
+|                                                                              |
+| exit; > To quit the program.                                                 |
+|                                                                              |
+|______________________________________________________________________________|
+| For more help visit: https://github.com/Shahibur50/LessSQL                   |
++------------------------------------------------------------------------------+
 """)
 
 
