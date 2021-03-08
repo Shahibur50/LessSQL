@@ -378,8 +378,9 @@ def create_tb():
             if is_query_cancelled:
                 pass
             else:
-                column_value_type = input(f"       -> COLUMN ({column_num + 1})"
-                                          f" NAME AND DATA-TYPE: ")
+                column_value_type = input(f"       -> COLUMN "
+                                          f"({column_num + 1}) "
+                                          f"NAME AND DATA-TYPE: ")
                 if check(column_value_type):
                     columns += column_value_type
                     primary_key = input("       -> PRIMARY KEY: ")
