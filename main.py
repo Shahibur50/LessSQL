@@ -1,6 +1,6 @@
 """
 LessSQL
-Version: 4.4.15
+Version: 4.4.16
 
 Copyright (c) 2021 Shahibur Rahaman
 Licensed under GNU GPLv3
@@ -482,13 +482,17 @@ def delete_column():
 def reveal():
     table_name = input("       -> TABLE NAME: ")
     if check(table_name):
-        cursor.execute(f"SELECT * FROM {table_name}")
-        rows = cursor.fetchall()
-        cursor.execute(f"SELECT * FROM {table_name}")
-        table = from_db_cursor(cursor)
-        table.align = "l"
-        print(table)
-        print(f"Row(s) count: {len(rows)}\n")
+        column_name = input("       -> COLUMN NAME: ")
+        if check(column_name):
+            if column_name.lower() == "all":
+                column_name = "*"
+            cursor.execute(f"SELECT {column_name} FROM {table_name}")
+            rows = cursor.fetchall()
+            cursor.execute(f"SELECT {column_name} FROM {table_name}")
+            table = from_db_cursor(cursor)
+            table.align = "l"
+            print(table)
+            print(f"Row(s) count: {len(rows)}\n")
 
 
 def insert():
@@ -602,6 +606,9 @@ def group_insert():
                     print(f"\nQuery OK, inserted the given value(s) in "
                           f"column(s) [{column_name}] in table "
                           f"[{table_name}]\n")
+    except mysql.connector.Error as err:
+        err = str(err.msg).split("; ")[0]
+        print(f"\nERROR! {err}\n")
     finally:
         print(f"Affected row(s): {row_num}\n")
 
@@ -1249,7 +1256,7 @@ def to_user():
     print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 4.4.15                                            |
+| Version: 4.4.16                                            |
 |                                                            |
 | Copyright (c) 2021 Shahibur Rahaman                        |
 |                                                            |
