@@ -1,6 +1,6 @@
 """
 LessSQL
-Version: 4.4.16
+Version: 4.4.17
 
 Copyright (c) 2021 Shahibur Rahaman
 Licensed under GNU GPLv3
@@ -15,11 +15,6 @@ from os import system
 from datetime import datetime
 from mysql.connector import errorcode
 from prettytable import PrettyTable, from_db_cursor
-
-cl_term = 'cls'
-
-if os.name == 'posix':
-    cl_term = 'clear'
 
 NO_DB_COMMANDS = [
     "use database;",
@@ -81,47 +76,47 @@ HELP_COMMANDS = ["help;", r"\h;", "?;"]
 PT = PrettyTable()
 is_connection = False
 db = None
-is_server_installed = False
 
+cl_term = 'cls'
+if os.name == 'posix':
+    cl_term = 'clear'
 system(cl_term)  # Clearing the screen
 
 for _ in range(3):
     try:
         usr_name = input("USER-NAME: ")
-        passwd = getpass.getpass()
+        passwd = getpass.getpass(prompt="PASSWORD: ")
         host = "localhost"
+        cnx = mysql.connector.connect(user=usr_name,
+                                      password=passwd,
+                                      host=host)
+        cursor = cnx.cursor()
+        time_now = datetime.now()
+        is_connection = True
+
+        print("Connecting to the server...")
+        time.sleep(2)
+        system(cl_term)  # Clearing the screen after successful connection
+
+        print(f"\nLOGGED IN AS: {usr_name}@{host}")
+        print(f"TIME: {time_now.strftime('%H:%M:%S %p')}")
+        print(f"\nMySQL server version: {cnx.get_server_info()}")
+        print(f"Connection ID: {cnx.connection_id}")
+        break
     except EOFError:
-        print("")
+        print()
         continue
     except KeyboardInterrupt:
         print("\nExiting...")
         time.sleep(1)
         sys.exit()
-    try:
-        cnx = mysql.connector.connect(user=usr_name,
-                                      password=passwd,
-                                      host=host)
-        cursor = cnx.cursor()
-        print("Connecting to the server...")
-        time.sleep(2)
-        system(cl_term)  # Clearing the screen after successful connection
-        print(f"\nLOGGED IN AS: {usr_name}@{host}")
-        now = datetime.now()
-        print(f"TIME: {now.strftime('%H:%M:%S %p')}")
-        print(f"\nMySQL server version: {cnx.get_server_info()}")
-        is_connection = True
-        is_server_installed = True
-        break
     except mysql.connector.Error as error:
-        is_server_installed = True
         if error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
-            print("Something is wrong with your user name or password!\n")
+            print("\nSomething is wrong with your user name or password!\n")
             continue
-        print(f"\n{error}\n")
-        if is_server_installed:
-            print("Please check if the server is online.")
-        time.sleep(2)
-        break
+        else:
+            print(f"\n{error}\n")
+            break
 else:
     print("Wrong credentials entered 3 times.")
     print("Exiting...\n")
@@ -148,30 +143,22 @@ def main():
         cursor.close()
         cnx.close()
     else:
-        print("\nLessSQL will exit automatically in 5 secs.\n")
+        print("LessSQL will exit automatically in 5 secs.\n")
         time.sleep(5)
         close()
 
 
 def cmd_execute(command):
-    if is_valid(command):
-        if command in DB_COMMANDS and not db:
-            print("\nERROR! No database is in use!\n")
-        else:
-            run(command)
-
-
-def is_valid(command):
-    valid = False
     if len(command) == 0:
-        print("")
+        print()
     elif ";" not in command[-1]:
         print("\nERROR! Not a valid command!\n")
     elif command not in NO_DB_COMMANDS and command not in DB_COMMANDS:
-        print("\nCommand not found!\n")
+        print("\nERROR! Command not found!\n")
+    elif command in DB_COMMANDS and not db:
+        print("\nERROR! No database is in use!\n")
     else:
-        valid = True
-    return valid
+        run(command)
 
 
 def run(command):
@@ -1256,7 +1243,7 @@ def to_user():
     print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 4.4.16                                            |
+| Version: 4.4.17                                            |
 |                                                            |
 | Copyright (c) 2021 Shahibur Rahaman                        |
 |                                                            |
