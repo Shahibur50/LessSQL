@@ -115,9 +115,8 @@ for _ in range(3):
         if error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             print("\nSomething is wrong with your user name or password!\n")
             continue
-        else:
-            print(f"\n{error}\n")
-            break
+        print(f"\n{error}\n")
+        break
 else:
     print("Wrong credentials entered 3 times.")
     print("Exiting...\n")
