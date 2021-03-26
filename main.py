@@ -1,6 +1,6 @@
 """
 LessSQL
-Version: 4.4.17
+Version: 5.0.1
 
 Copyright (c) 2021 Shahibur Rahaman
 Licensed under GNU GPLv3
@@ -30,7 +30,8 @@ NO_DB_COMMANDS = [
     "delete user;",
     "show default engine;",
     "change default engine;",
-    "license;"]
+    "license;",
+    "advance mode;"]
 
 DB_COMMANDS = [
     "show tables;",
@@ -252,6 +253,8 @@ def run(command):
         show_table_engine()
     elif command == "change table engine;":
         change_table_engine()
+    elif command == "advance mode;":
+        advance_mode()   
     elif command == "exit;":
         close()
         sys.exit()
@@ -1098,6 +1101,50 @@ def change_table_engine():
                   f" for table [{table_name}].\n")
 
 
+def advance_mode():
+    print()
+    while True:
+        try:
+            print("mysql> ", end="")
+
+            statement = input()
+
+            if statement == "":
+                print()
+                continue
+
+            while ";" not in statement:
+                print("    -> ", end="")
+                continued_statement = input()
+                if continued_statement != "":
+                    statement +=  " " + continued_statement
+                else:
+                    continue
+
+            if statement.lower() in ("exit;", "quit;"):
+                print("\nTo exit advance mode, type "\
+                    "'exit advance mode;'\n")
+            elif statement == "exit advance mode;":
+                print()
+                break
+            else:  
+                cursor.execute(statement)
+                affected_rows = cursor.rowcount
+                row_count = len(cursor.fetchall())
+
+                if cursor.with_rows:
+                    cursor.execute(statement)
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table)
+                    print(f"{row_count} rows in set")
+                    print()
+                else:
+                    print(f"\nQuery OK, affected rows: {affected_rows}\n")
+        except mysql.connector.Error as error:
+            print(f"\n{error}\n")
+
+
 def close():
     print("Exiting...")
     time.sleep(2)
@@ -1210,6 +1257,13 @@ def program_help():
 |                                                                              |
 |______________________________________________________________________________|
 |______________________________________________________________________________|
+| ADVANCE MODE FOR PURE MYSQL QUERY                                            |
+|                                                                              |
+| advance mode;      > To enter advance mode to execute pure MySQL query.      |
+| exit advance mode; > To exit advance mode and enter LessSQL mode.            |
+|                                                                              |
+|______________________________________________________________________________|
+|______________________________________________________________________________|
 |                                                                              |
 | COMMANDS FOR USER MANAGEMENT:                                                |
 |                                                                              |
@@ -1243,7 +1297,7 @@ def to_user():
     print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 4.4.17                                            |
+| Version: 5.0.1                                             |
 |                                                            |
 | Copyright (c) 2021 Shahibur Rahaman                        |
 |                                                            |
