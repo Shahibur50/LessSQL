@@ -115,9 +115,8 @@ for _ in range(3):
         if error.errno == errorcode.ER_ACCESS_DENIED_ERROR:
             print("\nSomething is wrong with your user name or password!\n")
             continue
-        else:
-            print(f"\n{error}\n")
-            break
+        print(f"\n{error}\n")
+        break
 else:
     print("Wrong credentials entered 3 times.")
     print("Exiting...\n")
@@ -254,7 +253,7 @@ def run(command):
     elif command == "change table engine;":
         change_table_engine()
     elif command == "advance mode;":
-        advance_mode()   
+        advance_mode()
     elif command == "exit;":
         close()
         sys.exit()
@@ -1117,17 +1116,17 @@ def advance_mode():
                 print("    -> ", end="")
                 continued_statement = input()
                 if continued_statement != "":
-                    statement +=  " " + continued_statement
+                    statement += " " + continued_statement
                 else:
                     continue
 
             if statement.lower() in ("exit;", "quit;"):
-                print("\nTo exit advance mode, type "\
-                    "'exit advance mode;'\n")
+                print("\nTo exit advance mode, type "
+                      "'exit advance mode;'\n")
             elif statement == "exit advance mode;":
                 print()
                 break
-            else:  
+            else:
                 cursor.execute(statement)
                 affected_rows = cursor.rowcount
                 row_count = len(cursor.fetchall())
