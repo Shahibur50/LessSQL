@@ -1,6 +1,6 @@
 """
 LessSQL
-Version: 5.0.1
+Version: 5.1.1
 
 Copyright (c) 2021 Shahibur Rahaman
 Licensed under GNU GPLv3
@@ -1108,7 +1108,10 @@ def advance_mode():
 
             statement = input()
 
-            if statement == "":
+            if r"\c" in statement:
+                print()
+                continue
+            elif statement == "":
                 print()
                 continue
 
@@ -1117,10 +1120,15 @@ def advance_mode():
                 continued_statement = input()
                 if continued_statement != "":
                     statement += " " + continued_statement
+                    if r"\c" in continued_statement:
+                        print()
+                        break
                 else:
                     continue
 
-            if statement.lower() in ("exit;", "quit;"):
+            if r"\c" in statement:
+                continue
+            elif statement.lower() in ("exit;", "quit;"):
                 print("\nTo exit advance mode, type "
                       "'exit advance mode;'\n")
             elif statement == "exit advance mode;":
@@ -1296,7 +1304,7 @@ def to_user():
     print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 5.0.1                                             |
+| Version: 5.1.1                                             |
 |                                                            |
 | Copyright (c) 2021 Shahibur Rahaman                        |
 |                                                            |
