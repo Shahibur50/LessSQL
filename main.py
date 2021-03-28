@@ -1140,8 +1140,8 @@ def advance_mode():
                     print()
                 else:
                     print(f"\nQuery OK, affected rows: {affected_rows}\n")
-        except mysql.connector.Error as error:
-            print(f"\n{error}\n")
+        except mysql.connector.Error as err:
+            print(f"\n{err}\n")
 
 
 def close():
