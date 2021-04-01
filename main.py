@@ -1043,7 +1043,7 @@ def change_table_engine():
 
 def advance_mode():
     global db
-    
+
     print()
     if db is not None:
         print(f"NOTE! Current Database: [{db}]\n")
