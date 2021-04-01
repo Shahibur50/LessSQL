@@ -1,6 +1,6 @@
 """
 LessSQL
-Version: 5.1.2
+Version: 5.2.3
 
 Copyright (c) 2021 Shahibur Rahaman
 Licensed under GNU GPLv3
@@ -137,6 +137,8 @@ def main():
             except KeyboardInterrupt:
                 print("\nSession forcefully closed by the user!\n")
                 break
+            except ValueError:
+                print("\nERROR! Please enter values properly!\n")
             except mysql.connector.Error as err:
                 err = str(err.msg).split("; ")[0]
                 print(f"\nERROR! {err}\n")
@@ -156,7 +158,7 @@ def cmd_execute(command):
     elif command not in NO_DB_COMMANDS and command not in DB_COMMANDS:
         print("\nERROR! Command not found!\n")
     elif command in DB_COMMANDS and not db:
-        print("\nERROR! No database is in use!\n")
+        print("\nERROR! No database selected!\n")
     else:
         run(command)
 
@@ -263,6 +265,11 @@ def run(command):
         lesssql_license()
 
 
+def get_input(prompt):
+    print("       -> ", end="")
+    return input(f"{prompt}")
+
+
 def check(usr_input):
     """
     Function to check whether the user
@@ -284,7 +291,7 @@ def check(usr_input):
 def use_db():
     global db
 
-    database_name = input("       -> DATABASE NAME: ")
+    database_name = get_input("DATABASE NAME: ")
     if check(database_name):
         command = f"USE {database_name}"
         cursor.execute(command)
@@ -295,16 +302,16 @@ def use_db():
 def show_db():
     command = "SHOW DATABASES"
     cursor.execute(command)
-    row_count = cursor.fetchall()
+    row_count = len(cursor.fetchall())
     cursor.execute(command)
     table = from_db_cursor(cursor)
     table.align = "l"
     print(table)
-    print(f"Database(s) count: {len(row_count)}\n")
+    print(f"Database(s) count: {row_count}\n")
 
 
 def create_db():
-    database_name = input("       -> DATABASE NAME: ")
+    database_name = get_input("DATABASE NAME: ")
     if check(database_name):
         command = f"CREATE DATABASE {database_name}"
         cursor.execute(command)
@@ -315,90 +322,93 @@ def create_db():
 def delete_db():
     global db
 
-    database_name = input("       -> DATABASE NAME: ")
+    database_name = get_input("DATABASE NAME: ")
     if check(database_name):
-        opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want to "
-                    f"delete the database [{database_name}]? (y/n) ")
-        if opt in ('y', 'Y'):
+        if db == database_name:
+            db = None
+
+        print()
+        opt = get_input(f"IRREVERSIBLE CHANGE! Do you really want "
+                        f"to delete the database [{database_name}]? (y/[n]) ")
+
+        if opt.lower() == 'y':
             command = f"DROP DATABASE {database_name}"
             cursor.execute(command)
             cnx.commit()
-            if db == database_name:
-                db = None
-            print(f"\nQuery OK, Deleted database '{database_name}'.\n")
+            print(f"\nQuery OK, Deleted database [{database_name}].\n")
         else:
             print(f"\nQuery cancelled, for deletion of the database "
-                  f"({database_name}).\n")
+                  f"[{database_name}].\n")
 
 
 def show_tb():
     command = "SHOW TABLES"
     cursor.execute(command)
-    row_count = cursor.fetchall()
+    row_count = len(cursor.fetchall())
     cursor.execute(command)
     table = from_db_cursor(cursor)
     table.align = "l"
     print(table)
-    print(f"Table(s) count: {len(row_count)}\n")
+    print(f"Table(s) count: {row_count}\n")
 
 
 def create_tb():
-    table_name = input("       -> NAME OF TABLE TO BE CREATED: ")
+    table_name = get_input("NAME OF TABLE TO BE CREATED: ")
     if check(table_name):
-        no_of_columns = input("       -> NO. OF COLUMNS: ")
+        no_of_columns = get_input("NO. OF COLUMNS: ")
         if check(no_of_columns):
-            try:
-                no_of_columns = int(no_of_columns)
-            except ValueError:
-                print("\nERROR! Please enter values properly!\n")
+            is_query_cancelled = False
 
+            no_of_columns = int(no_of_columns)
             columns = ""
             column_num = 0
 
-            is_query_cancelled = False
             for column_num in range(1, no_of_columns):
-                column_value_type = input(f"       -> COLUMN ({column_num}) "
-                                          f"NAME AND DATA-TYPE: ")
+                column_value_type = get_input(f"COLUMN ({column_num}) NAME "
+                                              f"AND DATA-TYPE: ")
                 if check(column_value_type):
                     columns += column_value_type + ', '
                 else:
                     is_query_cancelled = True
                     break
-            if is_query_cancelled:
-                pass
-            else:
-                column_value_type = input(f"       -> COLUMN "
-                                          f"({column_num + 1}) "
-                                          f"NAME AND DATA-TYPE: ")
+
+            if not is_query_cancelled:
+                column_value_type = get_input(f"COLUMN ({column_num + 1}) "
+                                              f"NAME AND DATA-TYPE: ")
                 if check(column_value_type):
                     columns += column_value_type
-                    primary_key = input("       -> PRIMARY KEY: ")
+                    primary_key = get_input("PRIMARY KEY: ")
                     if check(primary_key):
                         command = f"CREATE TABLE {table_name}({columns}, " \
                                   f"PRIMARY KEY ({primary_key}))"
                         cursor.execute(command)
                         cnx.commit()
-                        print(
-                            f"\nQuery OK, Created table [{table_name}].\n")
+                        print()
+                        print(f"Query OK, Created table [{table_name}].")
+                        print()
 
 
 def describe_tb():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
         command = f"DESCRIBE {table_name}"
+        cursor.execute(command)
+        column_count = len(cursor.fetchall())
         cursor.execute(command)
         table = from_db_cursor(cursor)
         table.align = "l"
         print(table)
-        print("")
+        print(f"Column(s) count {column_count}\n")
 
 
 def delete_tb():
-    table_name = input("      -> NAME OF TABLE TO BE DELETED: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want to "
-                    f"delete the table '{table_name}'? (y/[n]) ")
-        if opt in ('y', 'Y'):
+        print()
+        opt = get_input(f"IRREVERSIBLE CHANGE! Do you really want "
+                        f"to delete the table [{table_name}]? (y/[n]) ")
+
+        if opt.lower() == 'y':
             command = f"DROP TABLE {table_name}"
             cursor.execute(command)
             cnx.commit()
@@ -408,22 +418,22 @@ def delete_tb():
 
 
 def show_column():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
         command = f"SHOW COLUMNS FROM {table_name}"
         cursor.execute(command)
-        column_count = cursor.fetchall()
+        column_count = len(cursor.fetchall())
         cursor.execute(command)
         table = from_db_cursor(cursor)
         table.align = "l"
         print(table)
-        print(f"Column(s) count: {len(column_count)}\n")
+        print(f"Column(s) count: {column_count}\n")
 
 
 def add_column():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_data = input("       -> NEW COLUMN NAME AND DATA-TYPE: ")
+        column_data = get_input("COLUMN NAME AND DATA-TYPE: ")
         if check(column_data):
             command = f"ALTER TABLE {table_name} ADD {column_data}"
             cursor.execute(command)
@@ -433,32 +443,35 @@ def add_column():
             data_type = column_data.split()[1]
 
             print(f"\nQuery OK, added column [{column_name}] with data-type "
-                  f"[{data_type}] to the table '{table_name}'.\n")
+                  f"[{data_type}] to the table [{table_name}].\n")
 
 
 def modify_column():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> EXISTING COLUMN NAME: ")
-        if check(column_name):
-            data_type = input("       -> NEW DATA-TYPE FOR THE COLUMN: ")
-            if check(data_type):
-                command = f"ALTER TABLE {table_name} MODIFY {column_name} " \
-                          f"{data_type}"
-                cursor.execute(command)
-                cnx.commit()
-                print(f"\nQuery OK, modified column [{column_name}] to new "
-                      f"data-type ({data_type}) in table ({table_name}).\n")
+        column_data = get_input("COLUMN NAME AND DATA-TYPE: ")
+        if check(column_data):
+            command = f"ALTER TABLE {table_name} MODIFY {column_data}"
+            cursor.execute(command)
+            cnx.commit()
+
+            column_name = column_data.split()[0]
+            data_type = column_data.split()[1]
+
+            print(f"\nQuery OK, modified column [{column_name}] to new "
+                  f"data-type [{data_type}] in table [{table_name}].\n")
 
 
 def delete_column():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> NAME OF COLUMN TO BE DELETED: ")
+        column_name = get_input("NAME OF COLUMN TO BE DELETED: ")
         if check(column_name):
-            opt = input(f"\n      -> IRREVERSIBLE CHANGE! Do you really want"
-                        f" to delete the column [{column_name}]? (y/n) ")
-            if opt in ('y', 'Y'):
+            print()
+            opt = get_input(f"IRREVERSIBLE CHANGE! Do you really want "
+                            f"to delete the column [{column_name}]? (y/[n]) ")
+
+            if opt.lower() == 'y':
                 command = f"ALTER TABLE {table_name} DROP {column_name}"
                 cursor.execute(command)
                 cnx.commit()
@@ -469,55 +482,53 @@ def delete_column():
 
 
 def reveal():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
             if column_name.lower() == "all":
                 column_name = "*"
-            cursor.execute(f"SELECT {column_name} FROM {table_name}")
-            rows = cursor.fetchall()
-            cursor.execute(f"SELECT {column_name} FROM {table_name}")
+
+            command = f"SELECT {column_name} FROM {table_name}"
+            cursor.execute(command)
+            row_count = len(cursor.fetchall())
+            cursor.execute(command)
+
             table = from_db_cursor(cursor)
             table.align = "l"
             print(table)
-            print(f"Row(s) count: {len(rows)}\n")
+            print(f"Row(s) count: {row_count}\n")
 
 
 def insert():
-    try:
-        table_name = input("       -> TABLE NAME: ")
-        if check(table_name):
-            column_name = input("       -> COLUMN NAMES: ")
-            if check(column_name):
-                values = input("       -> VALUES: ")
-                if check(values):
-                    command = f"INSERT INTO {table_name} ({column_name}) " \
-                              f"VALUES ({values})"
-                    cursor.execute(command)
-                    cnx.commit()
-                    row_count = cursor.rowcount
-                    print(f"\nQuery OK, inserted value(s) [{values}] in "
-                          f"column(s) [{column_name}] in table "
-                          f"[{table_name}].\n")
-                    print(f"Affected row(s): {row_count}\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
+    table_name = get_input("TABLE NAME: ")
+    if check(table_name):
+        column_name = get_input("COLUMN NAMES: ")
+        if check(column_name):
+            values = get_input("VALUES: ")
+            if check(values):
+                command = f"INSERT INTO {table_name} ({column_name}) VALUES" \
+                          f"({values})"
+                cursor.execute(command)
+                cnx.commit()
+                row_count = cursor.rowcount
+                print(f"\nQuery OK, inserted value(s) [{values}] in "
+                      f"column(s) [{column_name}] into table [{table_name}].\n")
+                print(f"Affected row(s): {row_count}\n")
 
 
 def update():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        condition = input("       -> CONDITION: ")
+        condition = get_input("CONDITION: ")
         if check(condition):
-            attribute = input("       -> COLUMN/FIELD TO BE UPDATED: ")
-            if check(attribute):
-                updated_value = input("       -> VALUE OF DATA-ITEM TO BE "
-                                      "UPDATED: ")
+            column_name = get_input("COLUMN(s) TO BE UPDATED: ")
+            if check(column_name):
+                updated_value = get_input("VALUE OF DATA-ITEM TO BE "
+                                          "UPDATED: ")
                 if check(updated_value):
                     command = f"UPDATE {table_name} SET " \
-                              f"{attribute}={updated_value} WHERE {condition}"
+                              f"{column_name}={updated_value} WHERE {condition}"
                     cursor.execute(command)
                     cnx.commit()
                     row_count = cursor.rowcount
@@ -525,41 +536,38 @@ def update():
                         print("\nThe given condition was not satisfied!")
                     else:
                         print(f"\nQuery OK, updated the row(s)/record(s) in "
-                              f"column/field [{attribute}] to "
+                              f"column/field [{column_name}] to "
                               f"[{updated_value}] where condition "
                               f"[{condition}] was satisfied.\n")
                     print(f"Affected row(s): {row_count}")
 
 
 def search():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_names = input("       -> COLUMN NAMES: ")
+        column_names = get_input("COLUMN NAMES: ")
         if check(column_names):
-            condition = input("       -> CONDITION: ")
+            condition = get_input("CONDITION: ")
             if check(condition):
                 if column_names in ("ALL", 'all', "All"):
                     column_names = "*"
-                command = f"SELECT {column_names} FROM {table_name} " \
-                          f"WHERE {condition}"
+
+                command = f"SELECT {column_names} FROM {table_name} WHERE " \
+                          f"{condition}"
                 cursor.execute(command)
-                row_count = cursor.fetchall()
+                row_count = len(cursor.fetchall())
                 cursor.execute(command)
-                data = cursor.fetchall()
-                if len(data) == 0:
-                    print("\nData not present in the table!\n")
-                else:
-                    cursor.execute(command)
-                    table = from_db_cursor(cursor)
-                    table.align = "l"
-                    print(table)
-                    print(f"Row(s) count: {len(row_count)}\n")
+
+                table = from_db_cursor(cursor)
+                table.align = "l"
+                print(table)
+                print(f"Row(s) count: {row_count}\n")
 
 
 def delete():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        condition = input("       -> CONDITION: ")
+        condition = get_input("CONDITION: ")
         if check(condition):
             command = f"DELETE FROM {table_name} WHERE {condition}"
             cursor.execute(command)
@@ -573,25 +581,28 @@ def delete():
 def group_insert():
     row_num = 0
     try:
-        table_name = input("       -> TABLE NAME: ")
+        table_name = get_input("TABLE NAME: ")
         if check(table_name):
-            no_of_rows = input("       -> NO. OF ROWS: ")
+            no_of_rows = get_input("NO. OF ROWS: ")
             if check(no_of_rows):
-                column_name = input("       -> COLUMN NAMES: ")
+                column_name = get_input("COLUMN NAMES: ")
                 if check(column_name):
                     no_of_rows = int(no_of_rows)
                     rows_values = []
+
                     for _ in range(no_of_rows):
                         row_data = input("                     -> ")
                         rows_values.append(row_data)
                         if check(row_data):
                             continue
+
                     for values in rows_values:
                         command = f"INSERT INTO {table_name} ({column_name}) " \
                                   f"VALUES ({values})"
                         cursor.execute(command)
                         cnx.commit()
-                        row_num += 1
+                        row_count += 1
+
                     print(f"\nQuery OK, inserted the given value(s) in "
                           f"column(s) [{column_name}] in table "
                           f"[{table_name}]\n")
@@ -599,211 +610,183 @@ def group_insert():
         err = str(err.msg).split("; ")[0]
         print(f"\nERROR! {err}\n")
     finally:
-        print(f"Affected row(s): {row_num}\n")
+        print(f"Affected row(s): {row_count}\n")
 
 
 def average():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            title = input("       -> TITLE: ")
+            title = get_input("TITLE: ")
             if check(title):
                 command = f'SELECT ROUND(AVG({column_name}), 2) "{title}"' \
                           f' from {table_name}'
                 cursor.execute(command)
                 data = cursor.fetchall()
-                if len(data) == 0:
-                    print("Data not present in the table!")
-                else:
-                    cursor.execute(command)
-                    table = from_db_cursor(cursor)
-                    table.align = "l"
-                    print(table, "\n")
+                cursor.execute(command)
+                table = from_db_cursor(cursor)
+                table.align = "l"
+                print(table, "\n")
 
 
 def conditional_average():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            condition = input("       -> CONDITION: ")
+            condition = get_input("CONDITION: ")
             if check(condition):
-                title = input("       -> TITLE: ")
+                title = get_input("TITLE: ")
                 if check(title):
                     command = f'SELECT ROUND(AVG({column_name}), 2) ' \
                               f'"{title}" FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
                     data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
+                    cursor.execute(command)
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
 
 
 def distinct_average():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            title = input("       -> TITLE: ")
+            title = get_input("TITLE: ")
             if check(title):
                 command = f'SELECT ROUND(AVG(DISTINCT {column_name}), 2) ' \
                           f'"{title}" from {table_name}'
                 cursor.execute(command)
                 data = cursor.fetchall()
-                if len(data) == 0:
-                    print("Data not present in the table!")
-                else:
-                    cursor.execute(command)
-                    table = from_db_cursor(cursor)
-                    table.align = "l"
-                    print(table, "\n")
+                cursor.execute(command)
+                table = from_db_cursor(cursor)
+                table.align = "l"
+                print(table, "\n")
 
 
 def distinct_conditional_average():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            condition = input("       -> CONDITION: ")
+            condition = get_input("CONDITION: ")
             if check(condition):
-                title = input("       -> TITLE: ")
+                title = get_input("TITLE: ")
                 if check(title):
                     command = f'SELECT ROUND(AVG(DISTINCT {column_name}), 2)' \
                               f' "{title}" FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
                     data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
+                    cursor.execute(command)
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
 
 
 def count():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            title = input("       -> TITLE: ")
+            title = get_input("TITLE: ")
             if check(title):
                 command = f'SELECT COUNT({column_name}) "{title}" ' \
                           f'FROM {table_name}'
                 cursor.execute(command)
                 data = cursor.fetchall()
-                if len(data) == 0:
-                    print("Data not present in the table!")
-                else:
-                    cursor.execute(command)
-                    table = from_db_cursor(cursor)
-                    table.align = "l"
-                    print(table, "\n")
+                cursor.execute(command)
+                table = from_db_cursor(cursor)
+                table.align = "l"
+                print(table, "\n")
 
 
 def conditional_count():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            condition = input("       -> CONDITION: ")
+            condition = get_input("CONDITION: ")
             if check(condition):
-                title = input("       -> TITLE: ")
+                title = get_input("TITLE: ")
                 if check(title):
                     command = f'SELECT COUNT({column_name}) "{title}" ' \
                               f'FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
                     data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
+                    cursor.execute(command)
+                    table = from_db_cursor(cursor)
+                    table.align = "l"
+                    print(table, "\n")
 
 
 def distinct_count():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            title = input("       -> TITLE: ")
+            title = get_input("TITLE: ")
             if check(title):
                 command = f'SELECT COUNT(DISTINCT {column_name}) "{title}"' \
                           f' FROM {table_name}'
                 cursor.execute(command)
                 data = cursor.fetchall()
-                if len(data) == 0:
-                    print("Data not present in the table!")
-                else:
-                    cursor.execute(command)
-                    table = from_db_cursor(cursor)
-                    table.align = "l"
-                    print(table, "\n")
+                cursor.execute(command)
+                table = from_db_cursor(cursor)
+                table.align = "l"
+                print(table)
 
 
 def distinct_conditional_count():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            condition = input("       -> CONDITION: ")
+            condition = get_input("CONDITION: ")
             if check(condition):
-                title = input("       -> TITLE: ")
+                title = get_input("TITLE: ")
                 if check(title):
                     command = f'SELECT COUNT(DISTINCT {column_name}) ' \
                               f'"{title}" FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
                     data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-
-
-def mysql_max():
-    table_name = input("       -> TABLE NAME: ")
-    if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
-        if check(column_name):
-            title = input("       -> TITLE: ")
-            if check(title):
-                command = f'SELECT ROUND(MAX({column_name}), 2) "{title}"' \
-                          f' FROM {table_name}'
-                cursor.execute(command)
-                data = cursor.fetchall()
-                if len(data) == 0:
-                    print("Data not present in the table!")
-                else:
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
                     print(table, "\n")
 
 
-def conditional_mysql_max():
-    table_name = input("       -> TABLE NAME: ")
+def mysql_max():
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            title = input("       -> TITLE: ")
+            title = get_input("TITLE: ")
             if check(title):
                 command = f'SELECT ROUND(MAX({column_name}), 2) "{title}"' \
                           f' FROM {table_name}'
                 cursor.execute(command)
                 data = cursor.fetchall()
-                if len(data) == 0:
-                    print("Data not present in the table!")
-                else:
+                cursor.execute(command)
+                table = from_db_cursor(cursor)
+                table.align = "l"
+                print(table, "\n")
+
+
+def conditional_mysql_max():
+    table_name = get_input("TABLE NAME: ")
+    if check(table_name):
+        column_name = get_input("COLUMN NAME: ")
+        if check(column_name):
+            condition = get_input("CONDITION: ")
+            if check(condition):
+                title = get_input("TITLE: ")
+                if check(title):
+                    command = f'SELECT ROUND(MAX({column_name}), 2)'
+                    f'"{title}" FROM {table_name} WHERE {condition}'
+                    cursor.execute(command)
+                    data = cursor.fetchall()
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
@@ -811,82 +794,71 @@ def conditional_mysql_max():
 
 
 def distinct_mysql_max():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            title = input("       -> TITLE: ")
+            title = get_input("TITLE: ")
             if check(title):
                 command = f'SELECT ROUND(MAX(DISTINCT {column_name}), 2) ' \
                           f'"{title}" FROM {table_name}'
                 cursor.execute(command)
                 data = cursor.fetchall()
-                if len(data) == 0:
-                    print("Data not present in the table!")
-                else:
+                cursor.execute(command)
+                table = from_db_cursor(cursor)
+                table.align = "l"
+                print(table, "\n")
+
+
+def distinct_conditional_max():
+    table_name = get_input("TABLE NAME: ")
+    if check(table_name):
+        column_name = get_input("COLUMN NAME: ")
+        if check(column_name):
+            condition = get_input("CONDITION: ")
+            if check(condition):
+                title = get_input("TITLE: ")
+                if check(title):
+                    command = f'SELECT ROUND(MAX(DISTINCT {column_name}), 2) ' \
+                              f'"{title}" FROM {table_name} WHERE {condition}'
+                    cursor.execute(command)
+                    data = cursor.fetchall()
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
                     print(table, "\n")
 
 
-def distinct_conditional_max():
-    table_name = input("       -> TABLE NAME: ")
-    if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
-        if check(column_name):
-            condition = input("       -> CONDITION: ")
-            if check(condition):
-                title = input("       -> TITLE: ")
-                if check(title):
-                    command = f'SELECT ROUND(MAX(DISTINCT {column_name}), 2)' \
-                              f' "{title}" FROM {table_name} WHERE ' \
-                              f'{condition}'
-                    cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-
-
 def mysql_min():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            title = input("       -> TITLE: ")
+            title = get_input("TITLE: ")
             if check(title):
                 command = f'SELECT ROUND(MIN({column_name}), 2) ' \
                           f'"{title}" FROM {table_name}'
                 cursor.execute(command)
                 data = cursor.fetchall()
-                if len(data) == 0:
-                    print("Data not present in the table!")
-                else:
-                    cursor.execute(command)
-                    table = from_db_cursor(cursor)
-                    table.align = "l"
-                    print(table, "\n")
+                cursor.execute(command)
+                table = from_db_cursor(cursor)
+                table.align = "l"
+                print(table, "\n")
 
 
 def conditional_mysql_min():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            title = input("       -> TITLE: ")
-            if check(title):
-                command = f'SELECT ROUND(MIN({column_name}), 2) "{title}" ' \
-                          f'FROM {table_name}'
-                cursor.execute(command)
-                data = cursor.fetchall()
-                if len(data) == 0:
-                    print("Data not present in the table!")
-                else:
+            condition = get_input("CONDITION: ")
+            if check(condition):
+                title = get_input("TITLE: ")
+                if check(title):
+                    command = f'SELECT ROUND(MIN({column_name}), 2) ' \
+                              f'"{title}" FROM {table_name} WHERE {condition}'
+                    cursor.execute(command)
+                    data = cursor.fetchall()
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
@@ -894,81 +866,71 @@ def conditional_mysql_min():
 
 
 def distinct_mysql_min():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            title = input("       -> TITLE: ")
+            title = get_input("TITLE: ")
             if check(title):
                 command = f'SELECT ROUND(MIN(DISTINCT {column_name}), 2) ' \
                           f'"{title}" FROM {table_name}'
                 cursor.execute(command)
                 data = cursor.fetchall()
-                if len(data) == 0:
-                    print("Data not present in the table!")
-                else:
-                    cursor.execute(command)
-                    table = from_db_cursor(cursor)
-                    table.align = "l"
-                    print(table, "\n")
+                cursor.execute(command)
+                table = from_db_cursor(cursor)
+                table.align = "l"
+                print(table, "\n")
 
 
 def distinct_conditional_min():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            condition = input("       -> CONDITION: ")
+            condition = get_input("CONDITION: ")
             if check(condition):
-                title = input("       -> TITLE: ")
+                title = get_input("TITLE: ")
                 if check(title):
-                    command = f'SELECT ROUND(MIN(DISTINCT {column_name}), 2)' \
-                              f' "{title}" FROM {table_name} WHERE {condition}'
+                    command = f'SELECT ROUND(MIN(DISTINCT {column_name}), 2) ' \
+                              f'"{title}" FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
                     data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-
-
-def mysql_sum():
-    table_name = input("       -> TABLE NAME: ")
-    if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
-        if check(column_name):
-            title = input("       -> TITLE: ")
-            if check(title):
-                command = f'SELECT ROUND(SUM({column_name}), 2) "{title}" ' \
-                          f'FROM {table_name}'
-                cursor.execute(command)
-                data = cursor.fetchall()
-                if len(data) == 0:
-                    print("Data not present in the table!")
-                else:
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
                     print(table, "\n")
 
 
-def conditional_mysql_sum():
-    table_name = input("       -> TABLE NAME: ")
+def mysql_sum():
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            title = input("       -> TITLE: ")
+            title = get_input("TITLE: ")
             if check(title):
                 command = f'SELECT ROUND(SUM({column_name}), 2) "{title}" ' \
                           f'FROM {table_name}'
                 cursor.execute(command)
                 data = cursor.fetchall()
-                if len(data) == 0:
-                    print("Data not present in the table!")
-                else:
+                cursor.execute(command)
+                table = from_db_cursor(cursor)
+                table.align = "l"
+                print(table, "\n")
+
+
+def conditional_mysql_sum():
+    table_name = get_input("TABLE NAME: ")
+    if check(table_name):
+        column_name = get_input("COLUMN NAME: ")
+        if check(column_name):
+            condition = get_input("CONDITION: ")
+            if check(condition):
+                title = get_input("TITLE: ")
+                if check(title):
+                    command = f'SELECT ROUND(SUM({column_name}), 2) ' \
+                              f'"{title}" FROM {table_name}'
+                    cursor.execute(command)
+                    data = cursor.fetchall()
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
@@ -976,61 +938,58 @@ def conditional_mysql_sum():
 
 
 def distinct_mysql_sum():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
+        column_name = get_input("COLUMN NAME: ")
         if check(column_name):
-            title = input("       -> TITLE: ")
+            title = get_input("TITLE: ")
             if check(title):
                 command = f'SELECT ROUND(SUM(DISTINCT {column_name}), 2) ' \
                           f'"{title}" FROM {table_name}'
                 cursor.execute(command)
                 data = cursor.fetchall()
-                if len(data) == 0:
-                    print("Data not present in the table!")
-                else:
+                cursor.execute(command)
+                table = from_db_cursor(cursor)
+                table.align = "l"
+                print(table, "\n")
+
+
+def distinct_conditional_mysql_sum():
+    table_name = get_input("TABLE NAME: ")
+    if check(table_name):
+        column_name = get_input("COLUMN NAME: ")
+        if check(column_name):
+            condition = get_input("CONDITION: ")
+            if check(condition):
+                title = get_input("TITLE: ")
+                if check(title):
+                    command = f'SELECT ROUND(SUM(DISTINCT {column_name}), 2) ' \
+                              f'"{title}" FROM {table_name} WHERE {condition}'
+                    cursor.execute(command)
+                    data = cursor.fetchall()
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
                     print(table, "\n")
 
 
-def distinct_conditional_mysql_sum():
-    table_name = input("       -> TABLE NAME: ")
-    if check(table_name):
-        column_name = input("       -> COLUMN/FIELD NAME: ")
-        if check(column_name):
-            condition = input("       -> CONDITION: ")
-            if check(condition):
-                title = input("       -> TITLE: ")
-                if check(title):
-                    command = f'SELECT ROUND(SUM(DISTINCT {column_name}), 2) ' \
-                              f'"{title}" FROM {table_name} WHERE {condition}'
-                    cursor.execute(command)
-                    data = cursor.fetchall()
-                    if len(data) == 0:
-                        print("Data not present in the table!")
-                    else:
-                        cursor.execute(command)
-                        table = from_db_cursor(cursor)
-                        table.align = "l"
-                        print(table, "\n")
-
-
 def create_user():
-    new_usr_name = input("       -> NEW USER NAME: ")
+    new_usr_name = get_input("NEW USER NAME: ")
     if check(new_usr_name):
-        new_usr_pwd = input("       -> NEW USER's PASSWORD: ")
+        new_usr_pwd = get_input("NEW USER's PASSWORD: ")
         if check(new_usr_pwd):
-            host_name = input("       -> HOSTNAME: ")
+            host_name = get_input("HOSTNAME: ")
             create_command = f"CREATE USER '{new_usr_name}'@'{host_name}' " \
                              f"IDENTIFIED BY '{new_usr_pwd}'"
+
             cursor.execute(create_command)
             cnx.commit()
+
             grant_command = f"GRANT ALL ON * . * TO " \
                             f"'{new_usr_name}'@'{host_name}'"
             cursor.execute(grant_command)
             cnx.commit()
+
             print(f"\nQuery OK, created and granted all privileges to the "
                   f"user [{new_usr_name}].\n")
 
@@ -1044,19 +1003,21 @@ def reveal_users():
 
 
 def delete_user():
-    user_name = input("       -> USER-NAME: ")
+    user_name = get_input("USER-NAME: ")
     if check(user_name):
-        host_name = input("       -> HOST: ")
-        opt = input(f"\n       -> IRREVERSIBLE CHANGE! Do you really want "
-                    f"to remove the user [{user_name}]? (y/n) ")
-        if opt in ('y', 'Y'):
-            command = f"DROP USER '{user_name}'@'{host_name}'"
-            cursor.execute(command)
-            cnx.commit()
-            print(f"\nQuery OK, removed the user [{user_name}].\n")
-        else:
-            print(f"\nQuery cancelled, for removal of user "
-                  f"[{user_name}].\n")
+        host_name = get_input("HOST: ")
+        if check(host_name):
+            print()
+            opt = input(f"IRREVERSIBLE CHANGE! Do you really want "
+                        f"to remove the user [{user_name}]? (y/[n]) ")
+            if opt.lower() == 'y':
+                command = f"DROP USER '{user_name}'@'{host_name}'"
+                cursor.execute(command)
+                cnx.commit()
+                print(f"\nQuery OK, removed the user [{user_name}].\n")
+            else:
+                print(f"\nQuery cancelled, for removal of user "
+                      f"[{user_name}].\n")
 
 
 def show_default_engine():
@@ -1068,7 +1029,7 @@ def show_default_engine():
 
 
 def change_default_engine():
-    engine_name = input("       -> NEW ENGINE NAME: ")
+    engine_name = get_input("NEW ENGINE NAME: ")
     if check(engine_name):
         command = f"SET default_storage_engine={engine_name}"
         cursor.execute(command)
@@ -1078,7 +1039,7 @@ def change_default_engine():
 
 
 def show_table_engine():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
         command = f"SELECT TABLE_NAME,  ENGINE FROM " \
                   f"INFORMATION_SCHEMA.TABLES WHERE table_name = '{table_name}'"
@@ -1089,23 +1050,26 @@ def show_table_engine():
 
 
 def change_table_engine():
-    table_name = input("       -> TABLE NAME: ")
+    table_name = get_input("TABLE NAME: ")
     if check(table_name):
-        engine_name = input("       -> NEW ENGINE NAME: ")
+        engine_name = get_input("ENGINE NAME: ")
         if check(engine_name):
             command = f"ALTER TABLE {table_name} ENGINE = {engine_name}"
             cursor.execute(command)
             cnx.commit()
-            print(f"\nQuery OK, now using [{engine_name}] storage engine"
-                  f" for table [{table_name}].\n")
+            print(f"\nQuery OK, now using [{engine_name}] storage engine "
+                  f"for table [{table_name}].\n")
 
 
 def advance_mode():
+    global db
+    
     print()
+    if db != None:
+        print(f"NOTE! Current Database: [{db}]\n")
     while True:
         try:
             print("mysql> ", end="")
-
             statement = input()
 
             if r"\c" in statement:
@@ -1137,9 +1101,14 @@ def advance_mode():
             else:
                 cursor.execute(statement)
                 affected_rows = cursor.rowcount
-                row_count = len(cursor.fetchall())
 
-                if cursor.with_rows:
+                if "use" in statement:
+                    database_name = statement.strip(';').split()[1]
+                    if database_name != db:
+                        db = database_name
+                    print(f"\nDatabase changed\n")
+                elif cursor.with_rows:
+                    row_count = len(cursor.fetchall())
                     cursor.execute(statement)
                     table = from_db_cursor(cursor)
                     table.align = "l"
@@ -1304,7 +1273,7 @@ def to_user():
     print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 5.1.2                                             |
+| Version: 5.2.3                                             |
 |                                                            |
 | Copyright (c) 2021 Shahibur Rahaman                        |
 |                                                            |
