@@ -1,6 +1,6 @@
 """
 LessSQL
-Version: 5.2.3
+Version: 5.3.0
 
 Copyright (c) 2021 Shahibur Rahaman
 Licensed under GNU GPLv3
@@ -579,7 +579,7 @@ def delete():
 
 
 def group_insert():
-    row_num = 0
+    row_count = 0
     try:
         table_name = get_input("TABLE NAME: ")
         if check(table_name):
@@ -623,7 +623,6 @@ def average():
                 command = f'SELECT ROUND(AVG({column_name}), 2) "{title}"' \
                           f' from {table_name}'
                 cursor.execute(command)
-                data = cursor.fetchall()
                 cursor.execute(command)
                 table = from_db_cursor(cursor)
                 table.align = "l"
@@ -642,7 +641,6 @@ def conditional_average():
                     command = f'SELECT ROUND(AVG({column_name}), 2) ' \
                               f'"{title}" FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
-                    data = cursor.fetchall()
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
@@ -659,7 +657,6 @@ def distinct_average():
                 command = f'SELECT ROUND(AVG(DISTINCT {column_name}), 2) ' \
                           f'"{title}" from {table_name}'
                 cursor.execute(command)
-                data = cursor.fetchall()
                 cursor.execute(command)
                 table = from_db_cursor(cursor)
                 table.align = "l"
@@ -678,7 +675,6 @@ def distinct_conditional_average():
                     command = f'SELECT ROUND(AVG(DISTINCT {column_name}), 2)' \
                               f' "{title}" FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
-                    data = cursor.fetchall()
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
@@ -695,7 +691,6 @@ def count():
                 command = f'SELECT COUNT({column_name}) "{title}" ' \
                           f'FROM {table_name}'
                 cursor.execute(command)
-                data = cursor.fetchall()
                 cursor.execute(command)
                 table = from_db_cursor(cursor)
                 table.align = "l"
@@ -714,7 +709,6 @@ def conditional_count():
                     command = f'SELECT COUNT({column_name}) "{title}" ' \
                               f'FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
-                    data = cursor.fetchall()
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
@@ -731,7 +725,6 @@ def distinct_count():
                 command = f'SELECT COUNT(DISTINCT {column_name}) "{title}"' \
                           f' FROM {table_name}'
                 cursor.execute(command)
-                data = cursor.fetchall()
                 cursor.execute(command)
                 table = from_db_cursor(cursor)
                 table.align = "l"
@@ -750,7 +743,6 @@ def distinct_conditional_count():
                     command = f'SELECT COUNT(DISTINCT {column_name}) ' \
                               f'"{title}" FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
-                    data = cursor.fetchall()
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
@@ -767,7 +759,6 @@ def mysql_max():
                 command = f'SELECT ROUND(MAX({column_name}), 2) "{title}"' \
                           f' FROM {table_name}'
                 cursor.execute(command)
-                data = cursor.fetchall()
                 cursor.execute(command)
                 table = from_db_cursor(cursor)
                 table.align = "l"
@@ -786,7 +777,6 @@ def conditional_mysql_max():
                     command = f'SELECT ROUND(MAX({column_name}), 2)'
                     f'"{title}" FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
-                    data = cursor.fetchall()
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
@@ -803,7 +793,6 @@ def distinct_mysql_max():
                 command = f'SELECT ROUND(MAX(DISTINCT {column_name}), 2) ' \
                           f'"{title}" FROM {table_name}'
                 cursor.execute(command)
-                data = cursor.fetchall()
                 cursor.execute(command)
                 table = from_db_cursor(cursor)
                 table.align = "l"
@@ -822,7 +811,6 @@ def distinct_conditional_max():
                     command = f'SELECT ROUND(MAX(DISTINCT {column_name}), 2) ' \
                               f'"{title}" FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
-                    data = cursor.fetchall()
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
@@ -839,7 +827,6 @@ def mysql_min():
                 command = f'SELECT ROUND(MIN({column_name}), 2) ' \
                           f'"{title}" FROM {table_name}'
                 cursor.execute(command)
-                data = cursor.fetchall()
                 cursor.execute(command)
                 table = from_db_cursor(cursor)
                 table.align = "l"
@@ -858,7 +845,6 @@ def conditional_mysql_min():
                     command = f'SELECT ROUND(MIN({column_name}), 2) ' \
                               f'"{title}" FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
-                    data = cursor.fetchall()
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
@@ -875,7 +861,6 @@ def distinct_mysql_min():
                 command = f'SELECT ROUND(MIN(DISTINCT {column_name}), 2) ' \
                           f'"{title}" FROM {table_name}'
                 cursor.execute(command)
-                data = cursor.fetchall()
                 cursor.execute(command)
                 table = from_db_cursor(cursor)
                 table.align = "l"
@@ -894,7 +879,6 @@ def distinct_conditional_min():
                     command = f'SELECT ROUND(MIN(DISTINCT {column_name}), 2) ' \
                               f'"{title}" FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
-                    data = cursor.fetchall()
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
@@ -911,7 +895,6 @@ def mysql_sum():
                 command = f'SELECT ROUND(SUM({column_name}), 2) "{title}" ' \
                           f'FROM {table_name}'
                 cursor.execute(command)
-                data = cursor.fetchall()
                 cursor.execute(command)
                 table = from_db_cursor(cursor)
                 table.align = "l"
@@ -930,7 +913,6 @@ def conditional_mysql_sum():
                     command = f'SELECT ROUND(SUM({column_name}), 2) ' \
                               f'"{title}" FROM {table_name}'
                     cursor.execute(command)
-                    data = cursor.fetchall()
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
@@ -947,7 +929,6 @@ def distinct_mysql_sum():
                 command = f'SELECT ROUND(SUM(DISTINCT {column_name}), 2) ' \
                           f'"{title}" FROM {table_name}'
                 cursor.execute(command)
-                data = cursor.fetchall()
                 cursor.execute(command)
                 table = from_db_cursor(cursor)
                 table.align = "l"
@@ -966,7 +947,6 @@ def distinct_conditional_mysql_sum():
                     command = f'SELECT ROUND(SUM(DISTINCT {column_name}), 2) ' \
                               f'"{title}" FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
-                    data = cursor.fetchall()
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
                     table.align = "l"
@@ -1065,7 +1045,7 @@ def advance_mode():
     global db
     
     print()
-    if db != None:
+    if db is not None:
         print(f"NOTE! Current Database: [{db}]\n")
     while True:
         try:
@@ -1273,7 +1253,7 @@ def to_user():
     print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 5.2.3                                             |
+| Version: 5.3.0                                             |
 |                                                            |
 | Copyright (c) 2021 Shahibur Rahaman                        |
 |                                                            |
