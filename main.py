@@ -1,6 +1,6 @@
 """
 LessSQL
-Version: 5.3.0
+Version: 5.3.1
 
 Copyright (c) 2021 Shahibur Rahaman
 Licensed under GNU GPLv3
@@ -1073,14 +1073,12 @@ def advance_mode():
             if r"\c" in statement:
                 continue
             if statement.lower() in ("exit;", "quit;"):
-                print("\nTo exit advance mode, type "
-                      "'exit advance mode;'\n")
+                print("\nTo exit advance mode, type 'exit advance mode;'\n")
             elif statement == "exit advance mode;":
                 print()
                 break
             else:
                 cursor.execute(statement)
-                affected_rows = cursor.rowcount
 
                 if "use" in statement:
                     database_name = statement.strip(';').split()[1]
@@ -1096,6 +1094,8 @@ def advance_mode():
                     print(f"{row_count} rows in set")
                     print()
                 else:
+                    cnx.commit()
+                    affected_rows = cursor.rowcount
                     print(f"\nQuery OK, affected rows: {affected_rows}\n")
         except mysql.connector.Error as err:
             print(f"\n{err}\n")
@@ -1253,7 +1253,7 @@ def to_user():
     print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 5.3.0                                             |
+| Version: 5.3.1                                             |
 |                                                            |
 | Copyright (c) 2021 Shahibur Rahaman                        |
 |                                                            |
