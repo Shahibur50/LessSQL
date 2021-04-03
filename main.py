@@ -1,6 +1,6 @@
 """
 LessSQL
-Version: 5.3.1
+Version: 5.3.2
 
 Copyright (c) 2021 Shahibur Rahaman
 Licensed under GNU GPLv3
@@ -606,9 +606,6 @@ def group_insert():
                     print(f"\nQuery OK, inserted the given value(s) in "
                           f"column(s) [{column_name}] in table "
                           f"[{table_name}]\n")
-    except mysql.connector.Error as err:
-        err = str(err.msg).split("; ")[0]
-        print(f"\nERROR! {err}\n")
     finally:
         print(f"Affected row(s): {row_count}\n")
 
@@ -774,8 +771,8 @@ def conditional_mysql_max():
             if check(condition):
                 title = get_input("TITLE: ")
                 if check(title):
-                    command = f'SELECT ROUND(MAX({column_name}), 2)'
-                    f'"{title}" FROM {table_name} WHERE {condition}'
+                    command = f'SELECT ROUND(MAX({column_name}), 2)' \
+                              f'"{title}" FROM {table_name} WHERE {condition}'
                     cursor.execute(command)
                     cursor.execute(command)
                     table = from_db_cursor(cursor)
@@ -1052,10 +1049,7 @@ def advance_mode():
             print("mysql> ", end="")
             statement = input()
 
-            if r"\c" in statement:
-                print()
-                continue
-            elif statement == "":
+            if r"\c" in statement or statement == "":
                 print()
                 continue
 
@@ -1084,7 +1078,7 @@ def advance_mode():
                     database_name = statement.strip(';').split()[1]
                     if database_name != db:
                         db = database_name
-                    print(f"\nDatabase changed\n")
+                    print("\nDatabase changed\n")
                 elif cursor.with_rows:
                     row_count = len(cursor.fetchall())
                     cursor.execute(statement)
@@ -1213,6 +1207,7 @@ def program_help():
 |                                                                              |
 |______________________________________________________________________________|
 |______________________________________________________________________________|
+|                                                                              |
 | ADVANCE MODE FOR PURE MYSQL QUERY                                            |
 |                                                                              |
 | advance mode;      > To enter advance mode to execute pure MySQL query.      |
@@ -1229,6 +1224,7 @@ def program_help():
 |                                                                              |
 |______________________________________________________________________________|
 |______________________________________________________________________________|
+|                                                                              |
 | COMMANDS FOR ENGINE MANAGEMENT:                                              |
 |                                                                              |
 | show default engine;   > To show the default engine.                         |
@@ -1239,9 +1235,9 @@ def program_help():
 |______________________________________________________________________________|
 |______________________________________________________________________________|
 |                                                                              |
-| COMMAND TO EXIT THE PROGRAM:                                                 |
+| COMMAND TO EXIT LessSQL:                                                     |
 |                                                                              |
-| exit; > To quit the program.                                                 |
+| exit; > To exit LessSQL.                                                     |
 |                                                                              |
 |______________________________________________________________________________|
 | For more help visit: https://github.com/Shahibur50/LessSQL                   |
@@ -1253,9 +1249,11 @@ def to_user():
     print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 5.3.1                                             |
+| Version: 5.3.2                                             |
 |                                                            |
 | Copyright (c) 2021 Shahibur Rahaman                        |
+|                                                            |
+| This program comes with ABSOLUTELY NO WARRANTY.            |
 |                                                            |
 | For more info and updates visit:                           |
 | https://github.com/Shahibur50/LessSQL                      |
@@ -1271,8 +1269,8 @@ def to_user():
 
 
 def lesssql_license():
-    main_license = open("LICENSE", "r").read()
-    print(main_license)
+    with open("LICENSE", "r") as main_license:
+        print(main_license.read())
 
 
 if __name__ == "__main__":
