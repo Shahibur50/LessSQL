@@ -1,6 +1,6 @@
 """
 LessSQL
-Version: 5.3.2
+Version: 5.3.3
 
 Copyright (c) 2021 Shahibur Rahaman
 Licensed under GNU GPLv3
@@ -1109,20 +1109,20 @@ def program_help():
 |                                                                              |
 | COMMANDS FOR DATABASE MANIPULATION:                                          |
 |                                                                              |
-| use db;    > To use a database.                                              |
-| show db;   > To show all of the databases.                                   |
-| create db; > To create a new database.                                       |
-| delete db; > To delete an existing database.                                 |
+| use database;    > To use a database.                                        |
+| show databases;  > To show all of the databases.                             |
+| create database; > To create a new database.                                 |
+| delete database; > To delete an existing database.                           |
 |                                                                              |
 |______________________________________________________________________________|
 |______________________________________________________________________________|
 |                                                                              |
 | COMMANDS FOR TABLE MANIPULATION:                                             |
 |                                                                              |
-| show tb;     > To show tables present in a database.                         |
-| create tb;   > To create a new table.                                        |
-| describe tb; > To see the schema(structure) of a table.                      |
-| delete tb;   > To delete a table completely.                                 |
+| show tables;    > To show tables present in a database.                      |
+| create table;   > To create a new table.                                     |
+| describe table; > To see the schema(structure) of a table.                   |
+| delete table;   > To delete a table completely.                              |
 |                                                                              |
 |______________________________________________________________________________|
 |______________________________________________________________________________|
@@ -1138,8 +1138,8 @@ def program_help():
 |                                                                              |
 | COMMANDS FOR IN-TABLE QUERIES:                                               |
 |                                                                              |
-| reveal; > To show all of the data stored in a specific table.                |
-| search; > To search for a particular row in a table.                         |
+| reveal; > To show all of the data stored inside columns in a table.          |
+| search; > To search for specific data-items in a table.                      |
 |                                                                              |
 |______________________________________________________________________________|
 |______________________________________________________________________________|
@@ -1219,7 +1219,7 @@ def program_help():
 | COMMANDS FOR USER MANAGEMENT:                                                |
 |                                                                              |
 | create user;  > To create a new user and grant all permissions.              |
-| reveal users; > To show data-about all of the users.                         |
+| reveal users; > To show information about all of the users.                  |
 | delete user;  > To delete an user.                                           |
 |                                                                              |
 |______________________________________________________________________________|
@@ -1239,7 +1239,7 @@ def program_help():
 |                                                                              |
 | exit; > To exit LessSQL.                                                     |
 |                                                                              |
-|______________________________________________________________________________|
+|------------------------------------------------------------------------------|
 | For more help visit: https://github.com/Shahibur50/LessSQL                   |
 +------------------------------------------------------------------------------+
 """)
@@ -1249,7 +1249,7 @@ def to_user():
     print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 5.3.2                                             |
+| Version: 5.3.3                                             |
 |                                                            |
 | Copyright (c) 2021 Shahibur Rahaman                        |
 |                                                            |
