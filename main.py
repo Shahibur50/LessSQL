@@ -1,6 +1,6 @@
 """
 LessSQL
-Version: 5.3.3
+Version: 5.3.5
 
 Copyright (c) 2021 Shahibur Rahaman
 Licensed under GNU GPLv3
@@ -512,8 +512,8 @@ def insert():
                 cursor.execute(command)
                 cnx.commit()
                 row_count = cursor.rowcount
-                print(f"\nQuery OK, inserted value(s) [{values}] in "
-                      f"column(s) [{column_name}] into table [{table_name}].\n")
+                print(f"\nQuery OK, inserted value(s) [{values}] in column(s) "
+                      f"[{column_name}] into table [{table_name}].\n")
                 print(f"Affected row(s): {row_count}\n")
 
 
@@ -1249,7 +1249,7 @@ def to_user():
     print(r"""
 +------------------------------------------------------------+
 | Welcome to LessSQL Database Management Client              |
-| Version: 5.3.3                                             |
+| Version: 5.3.5                                             |
 |                                                            |
 | Copyright (c) 2021 Shahibur Rahaman                        |
 |                                                            |
